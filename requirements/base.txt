@@ -1,0 +1,7 @@
+
+# base.txt
+
+# updated to django 1.11.1 after some bug issues between debug_toolbar & django 1.8
+Django==1.11.1
+djangorestframework
+-e git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth	
