@@ -5,7 +5,7 @@
 --> journey of learning Django, lesson
 
 
-    # Web Development with Django Cookbook (Second Edition):  pg 45
+    # Web Development with Django Cookbook (Second Edition):  pg 66
     # Packt Publishing ltd - Over 90 practical recipes to help you create scalable websites using the Django 1.8 framework
     # Author: Aidas Bendoraitis, 
     ## First published: October 2014, 
@@ -29,8 +29,40 @@
 
         bits = urlparse(url)
         return urlunparse(("", "") + bits[2:])
+        
+          # Identified by me...
 
+        Errata type: Chapter 2: Code l Page no:36
 
+        This:
+        from utils.models import CreationModificationMixin
+
+        Should be:
+        from utils.models import CreationModificationDateMixin
+
+        This:
+        class Idea(UrlMixin, CreationModificationMixin, MetaTagsMixin)
+
+        Should be:
+
+        class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin)
+        
+        
+        Errata type: Chapter 2: Code 2 Page no:39
+
+        This:
+        get_url_path(self):
+            return reverse("idea_details", kwargs={
+            "idea_id": str(self.pk),
+        })
+
+        Should be:
+        def get_url_path(self):
+            return reverse("idea_details", kwargs={
+            "idea_id": str(self.pk),
+        })
+
+        
 # Setting up virtual environment
 
 C:\virtualenvs>virtualenv --version
@@ -75,17 +107,8 @@ Options:
 C:\virtualenvs>
 
 
-
 Microsoft Windows [Version 6.1.7601]
 Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
-
-C:\Users\OWNER>cd..
-
-C:\Users>cd..
-
-C:\>cd virtualenvs
-
-C:\virtualenvs>cd..
 
 C:\>pip install pillow      // PILLOW
 Collecting pillow
@@ -103,12 +126,6 @@ New python executable in C:\virtualenvs\myproject_env\Scripts\python.exe
 Installing setuptools, pip, wheel...
 done.
 
-
-C:\virtualenvs\myproject_env>
-
-
-C:\virtualenvs\myproject_env>cd Scripts
-
 C:\virtualenvs\myproject_env\Scripts>activate
 
 (myproject_env) C:\virtualenvs\myproject_env\Scripts>cd..
@@ -120,11 +137,6 @@ Collecting django==1.8
     100% |████████████████████████████████| 6.2MB 33kB/s
 Installing collected packages: django
 Successfully installed django-1.8
-
-
-(myproject_env) C:\virtualenvs\myproject_env>mkdir project
-
-(myproject_env) C:\virtualenvs\myproject_env>cd project
 
 
 (myproject_env) C:\virtualenvs\myproject_env>project>django-admin.py startproject myproject
@@ -146,8 +158,6 @@ Successfully installed django-1.8
 
 (myproject_env) C:\virtualenvs\myproject_env\project\myproject>cd..
 
-(myproject_env) C:\virtualenvs\myproject_env\project>
-
 (myproject_env) C:\virtualenvs\myproject_env\project>cd django-myproject    // renamed myproject (top-folder) to django-myproject
 
 (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>dir
@@ -162,7 +172,6 @@ Successfully installed django-1.8
                    3 Dir(s)  61,983,170,560 bytes free
 
 (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
-
 
 
 (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>pip install -r requirements/dev.txt
@@ -194,7 +203,7 @@ OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (ma
 $
 
 
-OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)                                                                       ster)
+OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
 $ pip install -r requirements/dev.txt
 Collecting Django==1.8 (from -r requirements\base.txt (line 4))
   Using cached https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl
@@ -361,7 +370,92 @@ $
 
 --> Project setup & configuration
 
-    - SETTINGS files...
+   - PLANNING the project
+            
+         # REMEMBER: All django apps (from command startapp) shall be created directly in this django-myproject (the startproject folder)
+            # We renamed the high-level folder "myproject" to "django-myproject"
+
+         # create the django-myproject/requirements dir with these text files: 
+         
+                - base.txt for shared modules, 
+                - dev.txt for development environment, 
+                - test.txt for testing environment, 
+                - staging.txt for staging environment, 
+                - and prod.txt for production. 
+                
+         # Create django-myprojecst/utils dir for different functionalities that are shared throughout the project
+       
+         # Add a django-myproject/locale dir for your project translations (if it is multilingual) 
+        
+         # Add django-myprojecst/fabfile.py (fabric file) for deployment script.
+         
+         # Create a .gitignore.txt (for version control ignore) and add a README.md file to guide other people who will interact with your project
+        
+         # Create django-myproject/externals dir for external dependencies that are included in this project (if you decide not to use pip requirements):
+         
+            - libs dir: for the Python modules that are required by your project, 
+                for example, boto, Requests, Twython, Whoosh, and so on.
+            - apps dir: for third-party Django apps, 
+                for example, django-cms, django-haystack, django-storages, and so on.
+        
+              # Note: 
+              I highly recommend that you create the README.txt files in the libs and apps directories, 
+              where you mention what each module is for, what the used version or revision is, and where it is taken from.
+
+         # In your project's Python package, django-myproject/myproject, 
+                # By default, the Django management commands use the settings from myproject/settings.py. 
+        
+          Using the method that is defined in this setup, we can keep all the required non-sensitive settings for all 
+          environments under version control in the conf directory.
+          
+          Whereas, the settings.py file itself would be ignored by version control and will only contain the 
+          settings that are necessary for the current development, testing, staging, or production environments.
+          
+              # Create myproject/conf
+                - add the base.py: should have the shared settings (as inititated by django)
+                - And dev.py, staging.py, test.py and prod.py (settings)
+                    All the other settings under myproject/conf/... should extend the 'base.py'
+                    Then myproject/settings.py can or should extend any of the conf/... eg. from .conf.dev import *
+ 
+ 
+              # Templates dir for project templates: And put your templates that are separated by the apps in your templates dir. 
+                - If a template file represents a page (for example, change_item.html or item_list.html), 
+                    then directly put it in the app's template directory. 
+                - If the template is included in another template (for example, similar_items.html), 
+                    put it in the includes subdirectory. 
+                - Also, your templates directory can contain a directory called utils for globally reusable snippets, 
+                    such as pagination, language chooser, and others. 
+            
+              # Create myproject/static dir for collected static files.           
+            
+              # Create mypproject/site_static dir for project-specific static files
+                - create the myproject/site directory as a namespace for site specific static files. 
+                    Then, separate the separated static files in directories in it, for instance,:
+                        - scss for Sass files (optional), 
+                        - css for the generated minified Cascading Style Sheets, 
+                        - img for styling images and logos, 
+                        - js for JavaScript, and 
+                        - Any third-party module combining all types of files such as the tinymce rich-text editor.
+                        
+                - Besides the site dir, the site_static dir might also contain overwritten static directories 
+                    of third-party apps, for example:
+                        - cms overwriting static files from Django CMS, 
+                
+                        # Note: To generate the CSS files from Sass and minify the JavaScript files, 
+                              # you can use the CodeKit or Prepros applications with a graphical user interface.
+            
+            
+              # Create myproject/tmp dir for the upload procedure
+            
+              # Add a myproject/media dir to contain any other files formats eg. video and music especially project uploads
+            
+              # Lastly, make sure that you myproject folder contain: settings.py, urls.py, models.py and wsgi.py (generated after startproject command)
+            
+            
+
+
+
+   - SETTINGS files...
     
         # Adding external libs/apps under python path:
         
@@ -1016,12 +1110,28 @@ $
                   # Good job, Git-flow now set, and develop branch is automatically created from current 'master' branch
                   # checkout or switch to 'develop' branch and start working...
                   # Off you go to greater heights, Mr. developer...
-            
+                
+                  # Pushed local 'develop' branch to origin 'github'
+
+                    git -c diff.mnemonicprefix=false -c core.quotepath=false --no-optional-locks -c credential.helper= -c credential.helper="C:/Users/OWNER/AppData/Local/ATLASS~1/SOURCE~1/GIT_EX~1/GIT-CR~1.EXE" push -v --tags --set-upstream origin develop:develop
+                    Pushing to git@github.com:Mwamitovi/django-myproject.git
+                    remote: 
+                    remote: Create a pull request for 'develop' on GitHub by visiting:        
+                    remote:      https://github.com/Mwamitovi/django-myproject/pull/new/develop        
+                    remote: 
+
+                    Branch 'develop' set up to track remote branch 'develop' from 'origin'.
+                    To github.com:Mwamitovi/django-myproject.git
+                     * [new branch]      develop -> develop
+                    updating local tracking ref 'refs/remotes/origin/develop'
+
+                    Completed successfully.
+ 
  
  
     - DATABASE STRUCTURE
     
-        # Introduction
+         # Introduction
         
             When you start a new app, the first thing to do is create the models that represent your database structure. 
             We are assuming that you have previously created Django apps or at least, you have read and understood the official Django tutorial. 
@@ -1032,7 +1142,7 @@ $
             in the process of development.
 
             
-        # Using model mixins
+         # Using model mixins
         
             In object-oriented languages, such as Python, a mixin class can be viewed as an interface with implemented features. 
             When a model extends a mixin, it implements the interface and includes all its fields, properties, and methods. 
@@ -1191,20 +1301,463 @@ $
                     For each generic relation, there is a content type of the related model that is saved as well as 
                     the ID of the instance of this model. In this section, we will see how to generalize the creation of generic 
                     relations in the model mixins.
-   
+                    
+                         # For this part to work, you need to have the contenttypes app installed. 
+                         # It should be in the INSTALLED_APPS directory by default, as shown in the following:
+                         # settings.py
+                        INSTALLED_APPS = (
+                                    # …
+                            "django.contrib.contenttypes",
+                        )
+                        
+                         # Again, make sure that you have the utils package for your model mixins already created.
+                         
+                     - How it works:
+                     
+                        - Add a function object_relation_mixin_factory to utils/models.py
+                        - Then, add class Like to myapp1/models.py that uses the two generic relationships (FavouriteObjectMixin, and OwnerMixin)
+                        
+                           # Explanation
+                           
+                           As you can notice, this code is more complex than the previous ones. 
+                           The object_relation_mixin_factory object is not a mixin itself; 
+                           it is a function that generates a model mixin, that is, an abstract model class to extend from. 
+                           The dynamically created mixin adds the content_type and object_id fields and the content_object generic foreign
+                           key that points to the related instance.
+                           
+                                   # Why couldn't we just define a simple model mixin with these three attributes? 
+                           A dynamically generated abstract class allows us to have prefixes for each field name; 
+                           therefore, we can have more than one generic relation in the same model. 
+                           
+                                   # For example, the "Like" model, which was shown previously, 
+                           will have the content_type, object_id, and content_object fields for the favorite object 
+                           and owner_content_type, owner_object_id, and owner_content_object for the one 
+                           (user or institution) who liked the object.
+                           
+                           The object_relation_mixin_factory() function adds a possibility to limit the content
+                           type choices by the limit_content_type_choices_to parameter. The preceding
+                           example limits the choices for owner_content_type only to the content types of the User
+                           and Institution models. Also, there is the limit_object_choices_to parameter that
+                           can be used by custom form validation to limit the generic relations only to specific objects, for
+                           example, the objects with published status.
 
-
-
-
-
-
-
-
-
-    
+                           
+         # Handling multilingual fields
+         
+              # Django uses the internationalization mechanism to translate verbose strings in the code and templates. 
+            
+            However, it's up to the developer to decide how to implement the multilingual content in the models. 
+            There are several third-party modules that handle translatable model fields; 
+            however, the simple solution that will be introduced to you in this section, was preferred.
+            
+            The advantages of the approach that you will learn about are as follows:
+            
+                - It is straightforward to define multilingual fields in the database
+                - It is simple to use the multilingual fields in database queries
+                - You can use contributed administration to edit models with the multilingual fields without additional modifications
+                - If you need it, you can easily show all the translations of an object in the same template
+                - You can use database migrations to add or remove languages
+                
+            - How it works:
+            
+                - create a fields.py within the utils package and add a multilingual character field
+                - To use the multilingual fields in your app:
+                    - First, set the multiple languages in your myproject/settings.py
+                                    # ...
+                            LANGUAGE_CODE = "en"
+                            LANGUAGES = (
+                                ("en", "English"),
+                                ("de", "Deutsch"),
+                                ("fr", "Français"),
+                                ("sw", "Swahili"),
+                            )
+                    - Then create the multilingual fields for your model, edited the Idea class within myapp1/models.py
+                                    # ...
+                            class Idea(...):
+                                title = MultilingualCharField(_("Title"), max_length=200, )
+                                description = MultilingualTextField(_("Description"), blank=True, )
+                                         # ...
+                                         
+                        The above code will create a model that is similar to the following:
+                            class Idea(...):
+                                title_en = models.CharField(_("Title(en)"), max_length=200, )
+                                title_de = models.CharField(_("Title(de)"), max_length=200, )
+                                title_fr = models.CharField(_("Title(fr)"), max_length=200, )
+                                title_sw = models.CharField(_("Title(sw)"), max_length=200, )
+                                description_en = models.TextField(_("Description (en)"), blank=True, )
+                                description_de = models.TextField(_("Description (de)"), blank=True, )
+                                description_fr = models.TextField(_("Description (fr)"), blank=True, )
+                                description_sw = models.TextField(_("Description (sw)"), blank=True, )
+                                
+                                   # In addition to this, there will be two properties: title and description 
+                                   # that will return the title and description in the currently active language.
+                                   
+                            The MultilingualCharField and MultilingualTextField fields will juggle the
+                            model fields dynamically, depending on your LANGUAGES setting. They will overwrite the
+                            contribute_to_class() method that is used when the Django framework creates the model classes.
+                            The multilingual fields dynamically add character or text fields for each language of the project.
+                            Also, the properties are created in order to return the translated value of the currently active
+                            language or the main language by default.
+                            
+                        For example, we can have the following in our template:
+                            <h1>{{ idea.title }}</h1>
+                            <div>{{ idea.description|urlize|linebreaks }}</div>
+                            
+                        This will show the text in English, German, French, or Swahili, depending on the currently
+                        selected language. However, it will fall back to English if the translation doesn't exist.
+                        
+                        Here is another example: 
+                            If you want to have your QuerySet ordered by the translated titles in the view, 
+                            you can define it as follows:
+                                qs = Idea.objects.order_by("title_%s" % request.LANGUAGE_CODE)
+                                
         
+         # Using migrations
+         
+              # It is not true that once you have created your database structure, it won't change in the future!
+            
+                As development happens iteratively, you can get updates on the business requirements in the
+                development process and you will need to perform database schema changes along the way.
+                With the Django migrations, you don't need to change the database tables and fields manually,
+                as most of it is done automatically using the command-line interface.
 
-      
+                - To create the database migrations, take a look at the following steps:
+                         # Activate your virtual environment
+
+                    1. When you create models in your new myapps1 app, you need to create an initial migration that will create
+                       the database tables for your app. This can be done using the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                            Migrations for 'myapp1':
+                               myapp1\migrations\0001_initial.py
+                                  - Create model Idea
+                                  - Create model Like
+
+                    2. If you want to execute the migrations for a specific app, 
+                       run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                            Operations to perform:
+                              Apply all migrations: myapp1
+                            Running migrations:
+                              Applying contenttypes.0001_initial... OK
+                              Applying contenttypes.0002_remove_content_type_name... OK
+                              Applying myapp1.0001_initial... OK
+
+                    3. The first time that you want to create all the tables for your project, 
+                       run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate
+                            Operations to perform:
+                              Apply all migrations: admin, auth, contenttypes, magazine, myapp1, sessions
+                            Running migrations:
+                              Applying auth.0001_initial... OK
+                              Applying admin.0001_initial... OK
+                              Applying admin.0002_logentry_remove_auto_add... OK
+                              Applying auth.0002_alter_permission_name_max_length... OK
+                              Applying auth.0003_alter_user_email_max_length... OK
+                              Applying auth.0004_alter_user_username_opts... OK
+                              Applying auth.0005_alter_user_last_login_null... OK
+                              Applying auth.0006_require_contenttypes_0002... OK
+                              Applying auth.0007_alter_validators_add_error_messages... OK
+                              Applying auth.0008_alter_user_username_max_length... OK
+                              Applying magazine.0001_initial... OK
+                              Applying sessions.0001_initial... OK
+
+                        It executes the usual database synchronization for all apps that have no database migrations,
+                        and in addition to this, it migrates all apps that have the migrations set.
+                        Also, run this command when you want to execute the new migrations for all your apps.
+
+                    4. If you make some changes in the database schema, you have to create a migration for that schema.
+                       For example, if we add a new subtitle field to the Idea model, 
+                       we can create the migration using the following command:
+                                   # (myproject_env)$ python manage.py makemigrations --name subtitle_added myapp1
+
+                    5. To create a data migration that modifies the data in the database table, 
+                        we can use the following command:
+                                   # (myproject_env)$ python manage.py makemigrations --empty --name populate_subtitle myapp1
+                        This creates a skeleton data migration, which you need to modify and add data manipulation to it before applying.
+
+                    6. To list all the available applied and unapplied migrations, 
+                        run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py showmigrations
+                            admin
+                             [X] 0001_initial
+                             [X] 0002_logentry_remove_auto_add
+                            auth
+                             [X] 0001_initial
+                             [X] 0002_alter_permission_name_max_length
+                             [X] 0003_alter_user_email_max_length
+                             [X] 0004_alter_user_username_opts
+                             [X] 0005_alter_user_last_login_null
+                             [X] 0006_require_contenttypes_0002
+                             [X] 0007_alter_validators_add_error_messages
+                             [X] 0008_alter_user_username_max_length
+                            contenttypes
+                             [X] 0001_initial
+                             [X] 0002_remove_content_type_name
+                            magazine
+                             [X] 0001_initial
+                            myapp1
+                             [X] 0001_initial
+                            sessions
+                             [X] 0001_initial
+
+                        The applied migrations will be listed with a [X] prefix.
+                        
+                    7. To list all the available migrations for a specific app, 
+                        run the following command:
+                                  # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py showmigrations myapp1
+                            myapp1
+                             [X] 0001_initial
+
+                - How it works:
+                
+                         # Django migrations are instruction files for the database migration mechanism.                    
+                         # The instruction files inform us which database tables to create or remove; which fields to add or remove; 
+                         # and which data to insert, update, or delete.
+                         
+                    There are two types of migrations in Django: 
+                    
+                        (1) schema migration - should be created when you add new models, or add or remove fields.
+
+                        (2) data migration - should be used when you want to fill the database with some values
+                            or massively delete values from the database. Data migrations should be created using a
+                            command in the command-line tool and then programmed in the migration file. 
+                            
+                    Migrations for each app are saved in their migrations directories. 
+                    The first migration will be usually called 0001_initial.py, and the other migrations 
+                    in our example app will be called 0002_subtitle_added.py and 0003_populate_subtitle.py. 
+                    Each migration gets a number prefix that is automatically incremented. 
+                    For each migration that is executed, there is an entry that is saved in the django_migrations database table.
+
+
+         # Switching from South migrations to Django migrations
+         
+            # This section is not relevant if using Django 1.7 and above...
+         
+            If you have been using Django since before database migrations existed in the core functionality,
+            that is, before Django 1.7; you have, more than likely, used third-party South migrations before. 
+            In this section, you will learn how to switch your project from South migrations to Django migrations.
+
+              # Make sure that all apps and their South migrations are up to date.
+              
+            - How to do it, Execute the following steps:
+            
+                1. Migrate all your apps to the latest South migrations, as follows:
+                            # (myproject_env)$ python manage.py migrate
+                
+                2. Remove south from INSTALLED_APPS in the settings.
+                
+                3. For each app with South migrations, delete the migration files and only leave the migrations directories.
+                
+                4. Create new migration files with the following command:
+                            # (my_project)$ python manage.py makemigrations
+                
+                5. Fake the initial Django migrations as the database schema has already been set correctly:
+                            # (my_project)$ python manage.py migrate --fake-initial
+                
+                6. If you have any circular foreign keys in the apps (that is, two models in different apps pointing to each other
+                    with a foreign key or many-to-many relation), separately apply the fake initial migrations to these apps:
+                            # (my_project)$ python manage.py migrate --fake-initial demo_app
+                
+            - How it works:
+            
+                There is no conflict in the database when switching to the new way of dealing with the database schema changes
+                as the South migration history is saved in the south_migrationhistory database table; 
+                whereas, the Django migration history is saved in the django_migrations database table.
+                
+                The only problem are the migration files that have different syntax and, therefore, 
+                the South migrations need to be completely replaced with the Django migrations.
+                Therefore, at first, we delete the South migration files. Then, the makemigrations command
+                recognizes the empty migrations directories and creates new initial Django migrations for
+                each app. Once these migrations are faked, the further Django migrations can be created
+                and applied.
+
+
+         # Changing a foreign key to the many-to-many field
+
+            This section is a practical example of how to change a many-to-one relation to many-to-many relationship,
+            while preserving the already existing data. We will use both schema and data migrations for this situation.
+            
+            - Within myapp1/models.py, create a Category models and add ForeignKey to the Idea model:
+            
+                    @python_2_unicode_compatible
+                    class Category(models.Model):
+                        title = models.CharField(_("Title"), max_length=200)
+                        
+                        def __str__(self):
+                            return self.title
+                            
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                               # ...
+                        category = models.ForeignKey(Category, verbose_name=_("Category"), null=True, blank=True)
+                               # ...
+
+            - After then, initiate and run migrations:
+            
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0002_auto_20190127_0741.py
+                        - Create model Category
+                        - Add field category to idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0002_auto_20190127_0741... OK
+
+            - The following steps will teach you how to switch from a foreign key relation to many-to-many relationship,
+                while preserving the already existing data:
+                
+                - Add a new many-to-many field called categories, as follows:
+
+                        # myapp1/models.py
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                        title = model.CharField(_("Title"), max_length=200)
+                        category = models.ForeignKey(Category, verbose_name=_("Category"), null=True, blank=True, )
+                        categories = models.ManyToManyField(Category, verbose_name=_("Categories"), blank=True, related_name="ideas", )
+
+                - Create and run a schema migration in order to add the new field to the database, as shown in the following:
+ 
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1 --name categories_added
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0003_categories_added.py
+                        - Add field categories to idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0003_categories_added... OK
+
+                - Create a data migration to copy categories from the foreign key to the many-to-many field, as follows:
+           
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations --empty --name copy_categories myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0004_copy_categories.py
+
+                - Open the newly created migration file (myapp1/migrations/0004_copy_categories.py), 
+                    and define the forward migration instructions, as shown below:
+                    
+                        # demo_app/migrations/0003_copy_categories.py
+                        # -*- coding: utf-8 -*-
+                    from __future__ import unicode_literals
+                    from django.db import models, migrations
+                    
+                    def copy_categories(apps, schema_editor):
+                        Idea = apps.get_model("myapp1", "Idea")
+                        for idea in Idea.objects.all():
+                            if idea.category:
+                                idea.categories.add(idea.category)
+                    
+                    class Migration(migrations.Migration):
+                        dependencies = [
+                                    # ...
+                        ]
+                        operations = [
+                            migrations.RunPython(copy_categories),
+                        ]
+
+                - Run the following data migration:
+                
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0004_copy_categories... OK
+            
+                - Delete the foreign key field category in the models.py file:
+                
+                        # myapp1/models.py
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                        title = model.CharField(_("Title"), max_length=200)
+                        categories = models.ManyToManyField(Category,verbose_name=_("Categories"),blank=True,related_name="ideas",)
+            
+                - Create and run a schema migration in order to delete the categories field from the
+                    database table, as follows:
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0005_remove_idea_category.py
+                        - Remove field category from idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0005_remove_idea_category... OK
+            
+                        - How it works:
+                            At first, we add a new many-to-many field to the Idea model. 
+                            Then, we copy the existing relations from a foreign key relation to the many-to-many relation. 
+                            Lastly, we remove the foreign key relation.
+
+
+
+    - FORMS & VIEWS
+
+         # Introduction
+
+            When the database structure is defined in the models, we need some views to let the users enter data 
+            or show the data to the people. In this section, we shall focus on the views managing forms, the list view, 
+            and views generating an alternative output than HTML. For the simplest examples, 
+            we will leave the creation of URL rules and templates up to you.
+
+         # Passing HttpRequest to the form
+
+            The first argument of every Django view is the HttpRequest object that is usually named request.
+                It contains metadata about the request. 
+                    For example, current language code, current user, current cookies, and current session.
+                    
+            By default, the forms that are used in the views accept the GET or POST parameters, files, initial data, and 
+                other parameters; however, not the HttpRequest object. 
+            
+            In some cases, it is useful to additionally pass HttpRequest to the form, 
+            especially when you want to filter out the choices of form fields using the request data or 
+            handle saving something such as the current user or IP in the form.
+            
+            In this part, we will see an example of a form where a person can choose a user and write a message to them.
+            We will pass the HttpRequest object to the form in order to exclude the current user from the recipient choices; 
+            we don't want anybody to write a message to themselves.
+            
+               # Create a new app called email_messages and put it in INSTALLED_APPS in the settings. 
+               # This app will have no models, just forms and views.
+               # Follow the steps below:
+            
+            - Add a new forms.py file with the message form containing two fields: 
+                    - the recipient selection and message text. 
+                Also, this form will have an initialization method, which will accept the request object and then, 
+                modify QuerySet for the recipient's selection field.
+            
+            - Then, within views.py, create the message_to_user() view in order to handle the form. 
+                As you can notice, the request object is passed as the first parameter to the form, as follows:
+                
+                   # How it works:
+                
+                    In the initialization method, we have the self variable that represents the instance of the form itself,
+                    we also have the newly added request variable, and then we have the rest of the positional arguments (*args)
+                    and named arguments (**kwargs). 
+                    
+                    We call the super() initialization method passing all the positional and named arguments to it so 
+                    that the form is properly initiated. We will then assign the request variable to a new request attribute 
+                    of the form for later access in other methods of the form. Then, we modify the queryset attribute of
+                    the recipient's selection field, excluding the current user from the request.
+                    
+                    In the view, we will pass the HttpRequest object as the first argument in both situations.
+                    when the form is posted, as well as when it is loaded for the first time.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             
