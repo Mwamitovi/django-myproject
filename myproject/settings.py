@@ -2,11 +2,11 @@
 # myproject/settings.py
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
-from .conf.dev import *
-from utils.misc import get_git_changeset
 import os
 import sys
 from django.utils.translation import ugettext_lazy as _
+from .conf.dev import *
+from utils.misc import get_git_changeset
 
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -46,6 +46,15 @@ FILE_UPLOAD_TEMP_DIR = os.path.join(
 	BASE_DIR, "myproject", "tmp"
 )
 
+LANGUAGE_CODE = "en"
+
+LANGUAGES = (
+	("en", "English"),
+	("de", "Deutsch"),
+	("fr", "Français"),
+	("sw", "Swahili"),
+)
+
 # overwrite the STATUS_CHOICE from magazine/app_settings.py
 MYAPP1_STATUS_CHOICES = (
 	("imported",   _("Imported")),
@@ -64,4 +73,4 @@ try:
 	).read() )
 except IOError:
     pass
-	
+
