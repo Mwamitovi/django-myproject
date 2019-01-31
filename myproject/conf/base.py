@@ -29,9 +29,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'debug_toolbar',
+    'crispy_forms',
     'magazine',
     'myapp1',
-    'email_messages',
+    'quotes',
+    # "bulletin_board",
+    # "cv",
+    # 'email_messages',
+    # "movies",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,11 +65,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
-                'django.template.context_processors.media',				
-                'django.template.context_processors.static',				
-                'django.template.context_processors.tz',				
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
             ],
-			'debug': DEBUG,
+            'debug': DEBUG,
         },
     },
 ]
@@ -98,3 +103,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Crispy forms template 
+CRISPY_TEMPLATE_PACK = "bootstrap4"
