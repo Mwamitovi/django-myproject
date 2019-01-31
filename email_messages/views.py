@@ -12,6 +12,7 @@ def message_to_user(request):
 		form = MessageForm(request, data=request.POST)
 		if form.is_valid():
 			# do something with the form
+			form.save()
 			return redirect("message_to_user_done")
 	else:
 		form = MessageForm(request)
