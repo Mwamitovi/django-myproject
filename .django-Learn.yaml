@@ -1,0 +1,2291 @@
+
+@copyright: Martin, Matovu - @mwamiTovi - matovu.synergy@gmail.com - 2019
+
+
+--> journey of learning Django, lesson
+
+
+    # Web Development with Django Cookbook (Second Edition):  pg 107
+    # Packt Publishing ltd - Over 90 practical recipes to help you create scalable websites using the Django 1.8 framework
+    # Author: Aidas Bendoraitis, 
+    ## First published: October 2014, 
+    ## Second Edition: January 2016
+    
+    ### Errata - 1 submitted: last submission 14 Mar 2017 
+
+        Errata type: Chapter 2: Code l Page no:37
+
+        This:
+        import urlparse
+
+        Should be:
+        from django.utils.six.moves.urllib.parse import urlparse, urlunparse
+
+        This:
+        bits = urlparse.urlparse(url)
+        return urlparse.urlunparse(("", "") + bits[2:])
+
+        Should be:
+
+        bits = urlparse(url)
+        return urlunparse(("", "") + bits[2:])
+        
+          # Identified by me...
+
+        Errata type: Chapter 2: Code l Page no:36
+
+        This:
+        from utils.models import CreationModificationMixin
+
+        Should be:
+        from utils.models import CreationModificationDateMixin
+
+        This:
+        class Idea(UrlMixin, CreationModificationMixin, MetaTagsMixin)
+
+        Should be:
+
+        class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin)
+        
+        
+        Errata type: Chapter 2: Code 2 Page no:39
+
+        This:
+        get_url_path(self):
+            return reverse("idea_details", kwargs={
+            "idea_id": str(self.pk),
+        })
+
+        Should be:
+        def get_url_path(self):
+            return reverse("idea_details", kwargs={
+            "idea_id": str(self.pk),
+        })
+
+        
+# Setting up virtual environment
+
+C:\virtualenvs>virtualenv --version
+ 16.2.0
+
+    C:\virtualenvs>virtualenv --help
+    Usage: virtualenv [OPTIONS] DEST_DIR
+
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -v, --verbose         Increase verbosity.
+      -q, --quiet           Decrease verbosity.
+      -p PYTHON_EXE, --python=PYTHON_EXE
+                            The Python interpreter to use, e.g.,
+                            --python=python3.5 will use the python3.5 interpreter to create the new environment.  
+                            The default is the interpreter that virtualenv was installed with (c:\python36\python.exe)
+      --clear               Clear out the non-root install and start from scratch.
+      --no-site-packages    DEPRECATED. Retained only for backward compatibility.
+                            Not having access to global site-packages is now the default behavior.
+      --system-site-packages
+                            Give the virtual environment access to the global site-packages.
+      --always-copy         Always copy files rather than symlinking.
+      --relocatable         Make an EXISTING virtualenv environment relocatable.
+                            This fixes up scripts and makes all .pth files relative.
+      --no-setuptools       Do not install setuptools in the new virtualenv.
+      --no-pip              Do not install pip in the new virtualenv.
+      --no-wheel            Do not install wheel in the new virtualenv.
+      --extra-search-dir=DIR
+                            Directory to look for setuptools/pip distributions in. This option can be used multiple times.
+      --download            Download pre-installed packages from PyPI.
+      --no-download, --never-download
+                            Do not download pre-installed packages from PyPI.
+      --prompt=PROMPT       Provides an alternative prompt prefix for this environment.
+      --setuptools          DEPRECATED. Retained only for backward compatibility.
+                            This option has no effect.
+      --distribute          DEPRECATED. Retained only for backward compatibility.
+                            This option has no effect.
+      --unzip-setuptools    DEPRECATED.  Retained only for backward compatibility.
+                            This option has no effect.
+
+    C:\virtualenvs>
+
+
+Microsoft Windows [Version 6.1.7601]
+    Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+    C:\>pip install pillow      // PILLOW
+    Collecting pillow
+      Downloading https://files.pythonhosted.org/packages/ec/ca/7af5b6628ecf770645f8cc3c9da3c2bb5c5ffc7384a9ff0666fdb818b4d5/Pillow-5.4.1-cp36-cp36m-win_amd64.whl 
+      (1.9MB)
+        100% |████████████████████████████████| 1.9MB 22kB/s
+    Installing collected packages: pillow
+    Successfully installed pillow-5.4.1
+
+    C:\>
+
+C:\virtualenvs\myproject_env>virtualenv --system-site-packages .  // Notice the 'dot' at the end, indicates to make this folder a virtual environment
+    Using base prefix 'c:\\python36'
+    New python executable in C:\virtualenvs\myproject_env\Scripts\python.exe
+    Installing setuptools, pip, wheel...
+    done.
+
+    C:\virtualenvs\myproject_env\Scripts>activate
+
+    (myproject_env) C:\virtualenvs\myproject_env\Scripts>cd..
+
+    (myproject_env) C:\virtualenvs\myproject_env>pip install django==1.8    // DJANGO
+    Collecting django==1.8
+      Downloading https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl 
+      (6.2MB)
+        100% |████████████████████████████████| 6.2MB 33kB/s
+    Installing collected packages: django
+    Successfully installed django-1.8
+
+
+(myproject_env) C:\virtualenvs\myproject_env>project>django-admin.py startproject myproject
+
+    (myproject_env) C:\virtualenvs\myproject_env>project>cd myproject
+
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>dir
+     Volume in drive C has no label.
+     Volume Serial Number is F215-C6CD
+        // We rename this folder as django-myproject:
+        Directory of C:\virtualenvs\myproject_env\project\myproject   
+
+        01/18/2019  12:44 AM               252 manage.py
+        01/18/2019  12:44 AM    <DIR>          myproject    
+                       1 File(s)            252 bytes
+                       3 Dir(s)  61,986,332,672 bytes free
+
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>
+
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>cd..
+
+    (myproject_env) C:\virtualenvs\myproject_env\project>cd django-myproject    // renamed myproject (top-folder) to django-myproject
+
+    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>dir
+     Volume in drive C has no label.
+     Volume Serial Number is F215-C6CD
+        // ...to be used under version control (.git):
+        Directory of C:\virtualenvs\myproject_env\project\django-myproject  
+
+        01/18/2019  12:44 AM               252 manage.py
+        01/18/2019  12:44 AM    <DIR>          myproject
+                       1 File(s)            252 bytes
+                       3 Dir(s)  61,983,170,560 bytes free
+
+    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+
+
+(myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>pip install -r requirements/dev.txt
+    Requirement already satisfied: Django==1.8 in c:\virtualenvs\myproject_env\lib\site-packages (from -r requirements\base.txt (line 4)) (1.8)
+    Collecting djangorestframework (from -r requirements\base.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl 
+    (950kB)
+        100% |████████████████████████████████| 952kB 234kB/s
+    Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
+      Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79)
+    to c:\virtualenvs\myproject_env\src\python-social-auth
+      Error [WinError 2] The system cannot find the file specified while executing command git clone -q git://github.com/omab/python-social-auth.git 
+      c:\virtualenvs\myproject_env\src\python-social-auth
+    Cannot find command 'git' - do you have 'git' installed and in your PATH?   // Because i had not yet "git init" django-myproject
+
+
+ (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+
+ # OWNER@OWNER-PC MINGW32 /c   // GIT  (Git was installed as a dependency for SourceTree)
+
+    $ cd virtualenvs/myproject_env/project/django-myproject
+
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject
+    $ git init
+    Initialized empty Git repository in C:/virtualenvs/myproject_env/project/django-myproject/.git/
+
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)   // django-project now has a .git file
+    $
+
+
+OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
+ $ pip install -r requirements/dev.txt
+    Collecting Django==1.8 (from -r requirements\base.txt (line 4))
+      Using cached https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl
+    Collecting djangorestframework (from -r requirements\base.txt (line 5))
+      Using cached https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl
+     
+    # You can directly install from a specific commit at the Git repository for the python-socialauth in our example. 
+    # In practice, installing from a specific commit would rarely be useful, for instance, only when having third-party dependencies 
+    # in your project with specific functionality that are not supported in the recent versions anymore.
+      
+    Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
+      Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79) to c:\virtualenvs\myproject_env/project/django-myproject                                                        yproject_env\project\django-myproject\src\python-social-auth
+      Did not find branch or tag '6b1e301c79', assuming revision or ref.
+    Collecting django-debug-toolbar (from -r requirements/dev.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/01/9a/3db232bd15882d90d3c53de1f34ce0a522327849593c9198899713267cfe/django_debug_toolbar-1.11-py2.py3-none-any.whl (201kB)
+    Collecting selenium (from -r requirements/dev.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/80/d6/4294f0b4bce4de0abf13e17190289f9d0613b0a44e5dd6a7f5ca98459853/selenium-3.141.0-py2.py3-none-any.whl (904kB)
+    Collecting python3-openid>=3.0.1 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/bd/de/52c5699f52dcee3037db587196dcaf63ffedf5fbeba3183afe9b21a3a89f/python3_openid-3.1.0-py3-none-any.whl (130kB)
+    Collecting requests>=1.1.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/7d/e3/20f3d364d6c8e5d2353c72a67778eb189176f08e873c9900e10c0287b84b/requests-2.21.0-py2.py3-none-any.whl (57kB)
+    Collecting oauthlib>=0.3.8 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/b8/03/ec2be6c125f330361afe33bff48ef7549c47da8fefc658a2df2242175b4b/oauthlib-3.0.0-py2.py3-none-any.whl (142kB)
+    Collecting requests-oauthlib>0.3.2 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/c2/e2/9fd03d55ffb70fe51f587f20bcf407a6927eb121de86928b34d162f0b1ac/requests_oauthlib-1.2.0-py2.py3-none-any.whl
+    Collecting six>=1.2.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
+    Collecting PyJWT>=1.0.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/87/8b/6a9f14b5f781697e51259d81657e6048fd31a113229cf346880bb7545565/PyJWT-1.7.1-py2.py3-none-any.whl
+    Collecting sqlparse>=0.2.0 (from django-debug-toolbar->-r requirements/dev.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/65/85/20bdd72f4537cf2c4d5d005368d502b2f464ede22982e724a82c86268eda/sqlparse-0.2.4-py2.py3-none-any.whl
+    Collecting urllib3 (from selenium->-r requirements/dev.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/62/00/ee1d7de624db8ba7090d1226aebefab96a2c71cd5cfa7629d6ad3f61b79e/urllib3-1.24.1-py2.py3-none-any.whl (118kB)
+    Collecting defusedxml (from python3-openid>=3.0.1->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/87/1c/17f3e3935a913dfe2a5ca85fa5ccbef366bfd82eb318b1f75dadbf0affca/defusedxml-0.5.0-py2.py3-none-any.whl
+    Collecting certifi>=2017.4.17 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/9f/e0/accfc1b56b57e9750eba272e24c4dddeac86852c2bebd1236674d7887e8a/certifi-2018.11.29-py2.py3-none-any.whl (154kB)
+    Collecting idna<2.9,>=2.5 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/14/2c/cd551d81dbe15200be1cf41cd03869a46fe7226e7450af7a6545bfc474c9/idna-2.8-py2.py3-none-any.whl (58kB)
+    Collecting chardet<3.1.0,>=3.0.2 (from requests>=1.1.0->python-social-auth->-r requirements\base.tx                                                          t (line 6))
+      Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
+    django-debug-toolbar 1.11 has requirement Django>=1.11, but you'll have django 1.8 which is incompatible.
+    Installing collected packages: Django, djangorestframework, defusedxml, python3-openid, certifi, urllib3, idna, 
+    chardet, requests, oauthlib, requests-oauthlib, six, PyJWT, python-social-auth, sqlparse, django-debug-toolbar, selenium
+      Running setup.py develop for python-social-auth
+    Successfully installed Django-1.8 PyJWT-1.7.1 certifi-2018.11.29 chardet-3.0.4 defusedxml-0.5.0 django-debug-toolbar-1.11 
+    djangorestframework-3.9.1 idna-2.8 oauthlib-3.0.0 python-social-auth python3-openid-3.1.0 requests-2.21.0 requests-oauthlib-1.2.0 
+    selenium-3.141.0 six-1.12.0 sqlparse-0.2.4 urllib3-1.24.1
+
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
+    $
+  
+
+# If you have already manually installed the project requirements with pip one by one, 
+# you can generate the requirements/base.txt file using the following command:
+(myproject_env)$ pip freeze > requirements/base.txt
+
+# Including External dependencies in your project:
+# Sometimes, it is better to include external dependencies in your project. 
+##   This ensures that whenever a developer upgrades third-party modules, all the other developers will receive the upgraded version
+##   in the next update from the version control system (Git, Subversion, or others).
+##   Also, it is better to have external dependencies included in your project when the libraries are taken from unofficial sources, 
+##   that is, somewhere other than Python Package Index (PyPI), or different version control systems.
+
+    // How this works:
+        # A module is meant to be under the Python path if you can run Python and import that module.
+        # One of the ways to put a module under the Python path is to modify the sys.path variable before importing a module that is 
+        # in an unusual location. The value of sys.path is a list of directories starting with an empty string for the current directory, 
+        # followed by the directories in the virtual environment, and finally the globally shared directories of the Python installation.
+    
+        # You can see the value of sys.path in the Python shell, as follows:
+
+        (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python
+        Python 3.6.3 (v3.6.3:2c5fed8, Oct  3 2017, 18:11:49) [MSC v.1900 64 bit (AMD64)] on win32
+        Type "help", "copyright", "credits" or "license" for more information.
+        >>>
+        >>> import sys
+        >>> sys.path
+        ['', 'C:\\virtualenvs\\myproject_env\\Scripts\\python36.zip', 
+             'C:\\virtualenvs\\myproject_env\\DLLs', 
+             'C:\\virtualenvs\\myproject_env\\lib', 
+             'C:\\virtualenvs\\myproject_env\\Scripts', 
+             'c:\\python36\\Lib', 
+             'c:\\python36\\DLLs', 
+             'C:\\virtualenvs\\myproject_env', 
+             'C:\\virtualenvs\\myproject_env\\lib\\site-packages', 
+             'c:\\python36', 
+             'c:\\python36\\lib\\site-packages', 
+             'c:\\virtualenvs\\myproject_env\\project\\django-myproject\\src\\python-social-auth'
+             ]
+        >>>        
+
+        // When trying to import a module:
+            # Python searches for the module in this list and returns the first result that is found.
+            # Therefore, we first define the BASE_DIR variable, which is the absolute path to one level higher than the settings.py file. 
+            # Then, we define the EXTERNAL_LIBS_PATH and EXTERNAL_APPS_PATH variables, which are relative to BASE_DIR. 
+            # Lastly, we modify the sys.path property, adding new paths to the beginning of the list.
+            
+            Note: that we also add an empty string as the first path to search, which means that the current directory of any module
+                  should always be checked first before checking other Python paths.
+                    # This way of including external libraries doesn't work cross-platform with the Python packages that have C language bindings, 
+                    # for example, lxml. For such dependencies, I would recommend using the pip requirements that were introduced 
+                    # in the Handling project dependencies with pip recipe.
+
+// Making your code COMPATIBLE with python 2.7 and python3+:
+
+# At the top of each module, add 
+    from __future__ import unicode_literals:
+  # and then use usual quotes without a u prefix for Unicode strings and a b prefix for bytestrings.
+  
+# To ensure that a value is bytestring, use the 
+    django.utils.encoding.smart_bytes function:
+  # To ensure that a value is Unicode, use the 
+    django.utils.encoding.smart_text: or 
+    django.utils.encoding.force_text function:
+    
+# For your models, instead of the __unicode__ method, use the 
+    __str__ method: and add the 
+    python_2_unicode_compatible decorator:
+    
+# To iterate through dictionaries, use iteritems(), iterkeys(), and itervalues() from django.utils.six. 
+    Take a look at the following:
+        # from django.utils.six import iteritems
+            d = {"imported": 25, "skipped": 12, "deleted": 3}
+            for k, v in iteritems(d):
+                print("{0}: {1}".format(k, v))
+                
+# When you capture exceptions, use the 'as' keyword, as follows:
+    try:
+        article = NewsArticle.objects.get(slug="hello-world")
+    except NewsArticle.DoesNotExist as exc:
+        pass
+    except NewsArticle.MultipleObjectsReturned as exc:
+        pass
+
+# To check the type of a value, use django.utils.six, as shown in the following:
+    from django.utils import six
+    
+    isinstance(val, six.string_types)  # previously basestring
+    isinstance(val, six.text_type)     # previously unicode
+    isinstance(val, bytes)             # previously str
+    isinstance(val, six.integer_types) # previously (int, long)
+    
+# Instead of xrange, use range from django.utils.six.moves, as follows:
+    from django.utils.six.moves import range
+    
+    for i in range(1, 11):
+        print(i)
+        
+# To check whether the current version is Python 2 or Python 3, you can use the following conditions:
+    from django.utils import six
+    
+    if six.PY2:
+        print("This is Python 2")
+    if six.PY3:
+        print("This is Python 3")
+        
+        
+# All strings in Django projects should be considered as Unicode strings. 
+# Only the input of HttpRequest and output of HttpResponse is usually in the UTF-8 encoded bytestring.
+# Many functions and methods in Python 3 now return the iterators instead of lists, which make the language more efficient. 
+# To make the code compatible with both the Python versions, you can use the six library that is bundled in Django.
+    Read more about writing compatible code in the official Django documentation at https://docs.djangoproject.com/en/1.8/topics/python3/.
+
+
+--> Project setup & configuration
+
+  1a - PLANNING the project
+            
+         # REMEMBER: All django apps (from command startapp) shall be created directly in this django-myproject (the startproject folder)
+            # We renamed the high-level folder "myproject" to "django-myproject"
+
+         # create the django-myproject/requirements dir with these text files: 
+         
+                - base.txt for shared modules, 
+                - dev.txt for development environment, 
+                - test.txt for testing environment, 
+                - staging.txt for staging environment, 
+                - and prod.txt for production. 
+                
+         # Create django-myprojecst/utils dir for different functionalities that are shared throughout the project
+       
+         # Add a django-myproject/locale dir for your project translations (if it is multilingual) 
+        
+         # Add django-myprojecst/fabfile.py (fabric file) for deployment script.
+         
+         # Create a .gitignore.txt (for version control ignore) and add a README.md file to guide other people who will interact with your project
+        
+         # Create django-myproject/externals dir for external dependencies that are included in this project (if you decide not to use pip requirements):
+         
+            - libs dir: for the Python modules that are required by your project, 
+                for example, boto, Requests, Twython, Whoosh, and so on.
+            - apps dir: for third-party Django apps, 
+                for example, django-cms, django-haystack, django-storages, and so on.
+        
+              # Note: 
+              I highly recommend that you create the README.txt files in the libs and apps directories, 
+              where you mention what each module is for, what the used version or revision is, and where it is taken from.
+
+         # In your project's Python package, django-myproject/myproject, 
+                # By default, the Django management commands use the settings from myproject/settings.py. 
+        
+          Using the method that is defined in this setup, we can keep all the required non-sensitive settings for all 
+          environments under version control in the conf directory.
+          
+          Whereas, the settings.py file itself would be ignored by version control and will only contain the 
+          settings that are necessary for the current development, testing, staging, or production environments.
+          
+              # Create myproject/conf
+                - add the base.py: should have the shared settings (as inititated by django)
+                - And dev.py, staging.py, test.py and prod.py (settings)
+                    All the other settings under myproject/conf/... should extend the 'base.py'
+                    Then myproject/settings.py can or should extend any of the conf/... eg. from .conf.dev import *
+ 
+ 
+              # Templates dir for project templates: And put your templates that are separated by the apps in your templates dir. 
+                - If a template file represents a page (for example, change_item.html or item_list.html), 
+                    then directly put it in the app's template directory. 
+                - If the template is included in another template (for example, similar_items.html), 
+                    put it in the includes subdirectory. 
+                - Also, your templates directory can contain a directory called utils for globally reusable snippets, 
+                    such as pagination, language chooser, and others. 
+            
+              # Create myproject/static dir for collected static files.           
+            
+              # Create mypproject/site_static dir for project-specific static files
+                - create the myproject/site directory as a namespace for site specific static files. 
+                    Then, separate the separated static files in directories in it, for instance,:
+                        - scss for Sass files (optional), 
+                        - css for the generated minified Cascading Style Sheets, 
+                        - img for styling images and logos, 
+                        - js for JavaScript, and 
+                        - Any third-party module combining all types of files such as the tinymce rich-text editor.
+                        
+                - Besides the site dir, the site_static dir might also contain overwritten static directories 
+                    of third-party apps, for example:
+                        - cms overwriting static files from Django CMS, 
+                
+                        # Note: To generate the CSS files from Sass and minify the JavaScript files, 
+                              # you can use the CodeKit or Prepros applications with a graphical user interface.
+            
+            
+              # Create myproject/tmp dir for the upload procedure
+            
+              # Add a myproject/media dir to contain any other files formats eg. video and music especially project uploads
+            
+              # Lastly, make sure that you myproject folder contain: settings.py, urls.py, models.py and wsgi.py (generated after startproject command)
+            
+
+  1b - SETTINGS files...
+    
+        # Adding external libs/apps under python path:
+        
+            Under mysite/settings.py: add External_libs_path, External_apps_path & sys.path
+            
+        # create 'conf' folder: add base.py, dev.py, test.py, staging.py and prod.py
+        
+        - Django requires you to define different file paths in the settings, such as the root of your
+          media, the root of your static files, the path to templates, the path to translation files, and so on. 
+          For each developer of your project, the paths may differ as the virtual environment can be set up anywhere and 
+          the user might be working on Mac OS X, Linux, or Windows. Anyway, there is a way to define these paths that are 
+          relative to your Django project directory.
+          
+          At first, we define BASE_DIR,: which is an absolute path to one level higher than the settings.py file. 
+          Then, we set all the paths relative to BASE_DIR using the os.path.join function.
+          
+            - media_root
+            - static_root
+            - staticfiles_dirs
+            - template_dirs
+            - locale_paths
+            - file_upload_temp_dirs
+            
+            # Configuration doesn't necessarily need to be complex. 
+            If you want to keep things simple, you can work with two settings files: 
+            settings.py for common configuration and local_settings.py for sensitive settings that shouldn't be under version control.
+            
+            Most of the settings for different environments will be shared and saved in version control.
+            However, there will be some settings that are specific to the environment of the project instance,
+            for example, database or e-mail settings. We will put them in the local_settings.py file.
+            
+            - At the end of settings.py, add a version of local_settings.py that claims to be in the same directory, as follows:
+                # settings.py
+                # … put this at the end of the file …
+                try:
+                    execfile(os.path.join(
+                        os.path.dirname(__file__), "local_settings.py"
+                    ))
+                except IOError:
+                    pass
+                    
+            - Create local_settings.py and put your environment-specific settings there, as shown in the following:
+                # local_settings.py
+                DATABASES = {
+                    "default": {
+                        "ENGINE": "django.db.backends.postgresql",
+                        "NAME": "myproject",
+                        "USER": "root",
+                        "PASSWORD": "root",
+                    }
+                }
+                EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+                INSTALLED_APPS += (
+                    "debug_toolbar",
+                )
+                
+                As you can see, the local settings are not normally imported, they are rather included and executed in the settings.py file itself. 
+                This allows you to not only create or overwrite the existing settings, but also adjust the tuples or lists from the settings.py file. 
+                For example, we add debug_toolbar to INSTALLED_APPS here in order to be able to debug the SQL queries, template context variables, 
+                and so on.
+                
+               # Setting up STATIC_URL dynamically for Git users:
+                If you don't want to refresh the browser cache each time you change your CSS and JavaScript files, 
+                or while styling images, you need to set STATIC_URL dynamically with a varying path component. 
+                With the dynamically changing URL, whenever the code is updated, the visitor's browser will force loading of all-new uncached static files. 
+                In this recipe, we will set a dynamic path for STATIC_URL when you use the Git version control system.
+                
+                - Make sure that your project is under the Git version control and you have BASE_DIR defined in your settings, 
+                  as shown in the Defining relative paths in the settings recipe.
+                  
+                - create the utils module in your Django project. Also, create a misc.py file there.
+                
+                    # The procedure to put the Git timestamp in the STATIC_URL setting consists of the following two steps:
+                        # create a get_git_changeset() function , within the misc.py
+                        # then import the newly created get_git_changeset() function in the settings and use it for the STATIC_URL path,
+            
+                    - How it works: The get_git_changeset() function takes the absolute_path directory as a parameter
+                        and calls the git show shell command with the parameters to show the Unix timestamp of the HEAD revision in the directory. 
+                        As stated in the previous recipe, we pass BASE_DIR to the function as we are sure that it is under version control. 
+                        The timestamp is parsed; converted to a string consisting of year, month, day, hour, minutes, and seconds; returned; 
+                        and included in the definition of STATIC_URL.
+                        
+         # Default encoding set as UTF-8
+            Note: if you don't set this encoding in the database configuration, you might get into a situation where LATIN1 
+            is used by default with your UTF-8 encoded data. This will lead to database errors whenever symbols such as € are used. 
+            Also, this recipe will save you from the difficulties of converting the database data from LATIN1 to UTF-8, 
+            especially when you have some tables encoded in LATIN1 and others in UTF-8.
+              
+            - Later to understand this in PostgreSQL
+
+        # Creating the .gitignore file, at the project root
+        
+            The .gitignore file specifies the paths that should intentionally be untracked by the Git version control system. 
+            The .gitignore file that we created in this recipe will ignore the Python-compiled files, local settings, collected static files, 
+            temporary directory for uploads, and media directory with the uploaded files.
+            
+            Note: If you keep all your settings in a conf Python package as described in the Configuring settings for development, 
+            testing, staging, and production environments recipe, add settings.py to the ignored files too.
+        
+        # Deleting Python-compiled files
+
+            When you run your project for the first time, Python compiles all your *.py code in bytecode-compiled files, *.pyc, 
+            which are used later for execution. Normally, when you change the *.py files, *.pyc is recompiled; however, sometimes
+            when switching branches or moving the directories, you need to clean up the compiled files manually.  
+
+                # Use your favorite editor and edit or create a .bash_profile file in your home directory.
+                    ## In windows, i created it under /c/users/OWNER which is the home directory
+              
+              Add this alias at the end of .bash_profile, as follows:
+                    # ~/.bash_profile
+                    alias delpyc="find . -name \"*.pyc\" -delete"
+                    
+                    # .bash_profile is a configuration file for bash shell. It is a script that is executed each time you start a new shell.
+                    # On linux, it's called under different circumstances than .bashrc, but on OS X, they work exactly the same way.
+                    # Any command you add to the file will be run whenever you open a new terminal window.
+                        # .bash_profile is just a normal plain text file - you can create/edit it with any text editor,
+                        # just remember to save it as a plain-text file.
+                        # .bash_profile is executed for login shells, while .bashrc is executed for interactive non-login shells.
+
+              Now, to clean the Python-compiled files, go to your project directory and type the following command in the command line:
+                    # I used git bash to run this command
+                    $ delpyc
+                    
+                    # Work done:
+                    OWNER@OWNER-PC MINGW64 /c
+                    $ cd virtualenvs/myproject_env/project/django-myproject
+
+                    OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                    $ delpyc
+
+                    OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                    $
+                    
+                    # Description
+                    At first, we created a Unix alias that searches for the *.pyc files and deletes them in the current directory and its children. 
+                    The .bash_profile file is executed when you start a new session in the bash tool.
+                    
+         
+        # Respecting the import order in Python files
+         
+            When you create the Python modules, it is good practice to stay consistent with the structure in the files. 
+            This makes it easier for other developers and yourself to read the code. This recipe will show you how to structure your imports.
+            
+                # Use the following structure in a Python file that you create. 
+                
+                Just after the first line that defines UTF-8 as the default Python file encoding, 
+                put the imports categorized in sections, as follows:
+                        # -*- coding: UTF-8 -*-
+                        # System libraries - for packages in the default installation of Python
+                        from __future__ import unicode_literals
+                        import os
+                        import re
+                        from datetime import datetime
+                        # Third-party libraries - for the additionally installed Python packages
+                        import boto
+                        from PIL import Image
+                        # Django modules - for different modules from the Django framework
+                        from django.db import models
+                        from django.conf import settings
+                        # Django apps - for third-party and local apps
+                        from cms.models import Page
+                        # Current-app modules - for relative imports from the current app
+                        from . import app_settings
+                        
+                # When coding in Python and Django, use the official style guide for Python code, PEP 8. 
+                    # You can find it at https://www.python.org/dev/peps/pep-0008/.
+
+            
+  1c - APP Configuration...
+    
+        # Creating app configuration
+        
+            When developing a website with Django, you create one module for the project itself and then, 
+            multiple Python modules called applications or apps that combine the different modular functionalities and 
+            usually consist of models, views, forms, URL configurations, management commands, migrations, signals, tests, and so on. 
+            The Django framework has application registry, where all apps and models are collected and later used for configuration
+            and introspection. Since Django 1.7, meta information about apps can be saved in the AppConfig instance for each used app. 
+            
+            # create a sample magazine app to take a look at how to use the app configuration there.
+            
+                Either create your Django app manually or using this command in your virtual environment, as follows:
+                
+                C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp magazine
+                Traceback (most recent call last):
+                  File "manage.py", line 10, in <module>
+                    execute_from_command_line(sys.argv)
+                  File "C:\Python36\lib\site-packages\django\core\management\__init__.py", line338, in execute_from_command_line
+                    utility.execute()
+                     # ...
+                  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+                  File "C:\virtualenvs\myproject_env\project\django-myproject\myproject\settings.py", line 5, in <module>
+                    from .conf.dev import *
+                  File "C:\virtualenvs\myproject_env\project\django-myproject\myproject\conf\dev.py", line 5, in <module>
+                    from .base import *
+                  File "C:\virtualenvs\myproject_env\project\django-myproject\myproject\conf\base.py", line 7, in <module>
+                    from conf.dev import *
+                ModuleNotFoundError: No module named 'conf'
+                   # Had to reference the module properly as "myproject.conf.dev"
+                
+                C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp magazine
+                Traceback (most recent call last):
+                  File "manage.py", line 10, in <module>
+                    execute_from_command_line(sys.argv)
+                     # ...
+                  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+                  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+                  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+                  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+                  File "C:\virtualenvs\myproject_env\project\django-myproject\myproject\settings.py", line 55, in <module>
+                    execfile(os.path.join(
+                NameError: name 'execfile' is not defined
+                  # execfile was removed in python 3+, had to use exec(open(fn).read())
+
+                C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp magazine
+                Traceback (most recent call last):
+                  File "C:\Python36\lib\site-packages\django\db\utils.py", line 111, in load_backend
+                    return import_module('%s.base' % backend_name)
+                    # ...
+                  File "C:\Python36\lib\site-packages\django\db\utils.py", line 240, in __getitem__
+                    backend = load_backend(db['ENGINE'])
+                  File "C:\Python36\lib\site-packages\django\db\utils.py", line 129, in load_backend
+                    raise ImproperlyConfigured(error_msg)
+                django.core.exceptions.ImproperlyConfigured: 'django.db.backends.postgresql' isn't an available database backend.
+                Try using 'django.db.backends.XXX', where XXX is one of:
+                    'base', 'mysql', 'oracle', 'postgresql_psycopg2', 'sqlite3'
+                Error was: No module named 'django.db.backends.postgresql'
+                  # Had mis-referenced the postgresql path in the local_settings.py/DATABASE
+
+                C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp magazine
+                Traceback (most recent call last):
+                  File "C:\Python36\lib\site-packages\django\db\backends\postgresql_psycopg2\base.py", line 16, in <module>
+                    import psycopg2 as Database
+                ModuleNotFoundError: No module named 'psycopg2'
+                During handling of the above exception, another exception occurred:
+                Traceback (most recent call last):
+                  File "manage.py", line 10, in <module>
+                    execute_from_command_line(sys.argv)
+                  File "C:\Python36\lib\site-packages\django\core\management\__init__.py", line 338, in execute_from_command_line
+                    utility.execute()
+                     # ... 
+                  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+                  File "<frozen importlib._bootstrap_external>", line 678, in exec_module
+                  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+                  File "C:\Python36\lib\site-packages\django\db\backends\postgresql_psycopg2\base.py", line 20, in <module>
+                    raise ImproperlyConfigured("Error loading psycopg2 module: %s" % e)
+                django.core.exceptions.ImproperlyConfigured: Error loading psycopg2 module: No module named 'psycopg2'
+                   # Required to install psycopg2, the most popular PostgreSQL database adapter for python language
+                   
+                  # Installing psycopg2
+                  
+                    Microsoft Windows [Version 6.1.7601]
+                    Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+                    C:\Users\OWNER>pip install psycopg2==2.7.1
+                    Collecting psycopg2==2.7.1
+                      Using cached https://files.pythonhosted.org/packages/10/12/dd2d3bd7bd9e2a728b709d19e4546ea258fa6bb4ed301c5d33ae0fb1323e/psycopg2-2.7.1-cp36-cp36m-win_amd64.whl
+                    Installing collected packages: psycopg2
+                    Successfully installed psycopg2-2.7.1
+
+                    C:\Users\OWNER>pip freeze
+                    backports.functools-lru-cache==1.5
+                    certifi==2018.11.29
+                    ...
+                    Django==1.8
+                    django-debug-toolbar==1.11
+                    djangorestframework==3.9.1
+                    ...
+                    psycopg2==2.7.1     # Global package
+                    ...
+                    virtualenv==16.2.0
+                    zc.lockfile==1.4
+
+                    C:\Users\OWNER>
+                
+                  # Starting the Apps
+                   
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp magazine
+
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+                    
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp myapp1
+                    
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+                    
+                    # More work...
+                    
+                    Add some NewsArticle model to models.py, create administration for the model in admin.py, 
+                    and put "magazine" in INSTALLED_APPS in the settings. If you are not yet familiar with these tasks, 
+                    study the official Django tutorial at https://docs.djangoproject.com/en/1.8/intro/tutorial01/ (django-official)
+                    
+                        # Create/Edit the magazine/apps.py, magazine/__init__.py and magazine/signals.py
+                        
+                        # How it works...
+                        
+                            # When you run an HTTP server or invoke a management command, django.setup() is called. 
+                            # It loads the settings, sets up logging, and initializes app registry. 
+                        The app registry is initialized in three steps, as shown in the following:
+                        
+                        - Django imports the configurations for each item from INSTALLED_APPS in the settings. 
+                          These items can point to app names or configuration directly, for example,"magazine" or "magazine.apps.NewsAppConfig".
+                          
+                        - Django tries to import models.py from each app in INSTALLED_APPS and collect all the models.
+                        
+                        - Finally, Django runs the ready() method for each app configuration. This method is a correct place to 
+                          register signal handlers, if you have any. The ready() method is optional.
+                          
+                        - In this example, the MagazineAppConfig class sets the configuration for the magazine app. 
+                          The name parameter defines the name of the current app. The verbose_name parameter is used in the 
+                          Django model administration, where models are presented and grouped by apps. 
+                          The ready() method imports and activates the signal handlers that, when in DEBUG mode, print in the terminal
+                          that a NewsArticle was saved or deleted.
+                          
+                               # Ran the steps below after successfully 'makemigrations' and 'migrate' the app                        
+
+                                (myproject_env) C:\virtualenvs\myproject_env>cd project\django-myproject
+
+                                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python
+                                Python 3.6.3 (v3.6.3:2c5fed8, Oct  3 2017, 18:11:49) [MSC v.1900 64 bit (AMD64)] on win32
+                                Type "help", "copyright", "credits" or "license" for more information.
+                                >>>
+                                >>> import django
+                                >>> from django.conf import settings
+                                >>> from myproject import settings
+                                >>> import os
+                                >>>
+                                >>> os.environ['DJANGO_SETTINGS_MODULE'] = 'myproject.settings'
+                                >>>
+                                >>> django.setup()
+                                >>>
+                                >>> from django.apps import apps as django_apps
+                                >>>
+                                >>> magazine_app_config = django_apps.get_app_config("magazine")
+                                >>>
+                                >>> magazine_app_config
+                                <MagazineAppConfig: magazine>
+                                >>>
+                                >>> magazine_app_config.models_module
+                                <module 'magazine.models' from 'C:\\virtualenvs\\myproject_env\\project\\django-myproject\\magazine\\models.py'>
+                                >>>
+
+            
+                    # Defining overwritable app settings
+                    
+                     Here, we show you how to define settings for your app that can be then overwritten in your project's 
+                     settings.py or local_settings.py file. This is useful especially for reusable apps.
+                     
+                     If you just have one or two settings, you can use the following pattern in your models.py file. 
+                     If the settings are extensive and you want to have them organized better, create an app_settings.py file in the app
+                     and put the settings in the following way:
+                     
+                            # created magazine/app_settings.py
+                            
+                            # from .app_settings import STATUS_CHOICES
+                            
+                         If you want to overwrite the STATUS_CHOICES setting for just one project, 
+                         you simply open myproject/settings.py and add the following:
+                         
+                                # settings.py
+
+                                    # from django.utils.translation import ugettext_lazy as _
+                                
+                                MYAPP1_STATUS_CHOICES = (
+                                    ("imported",   _("Imported")),
+                                    ("draft",      _("Draft")),
+                                    ("published",  _("Published")),
+                                    ("not_listed", _("Not Listed")),
+                                    ("expired",    _("Expired")),
+                                )
+            
+                                # The getattr(object, attribute_name[, default_value]) Python function tries to get the attribute_name attribute 
+                                from object and returns default_value if it is not found. 
+                                In this case, different settings are tried in order to be taken from the Django project
+                                settings module, and if they are not found, the default values are assigned.
+
+                                
+                                
+                             # Ran into a middleware bug,with the debug_toolbar and django 1.8 is no longer supported. Thus decided to uninstall 
+
+                                # C:\Python36>pip uninstall django
+                                Uninstalling Django-1.8:
+                                  Would remove:
+                                    c:\python36\lib\site-packages\django-1.8.dist-info\*
+                                    c:\python36\lib\site-packages\django\*
+                                    c:\python36\scripts\django-admin.exe
+                                    c:\python36\scripts\django-admin.py
+                                Proceed (y/n)? y
+                                  Successfully uninstalled Django-1.8
+
+                                C:\Python36>
+                             
+                                # (myproject_env) C:\virtualenvs\myproject_env\Scripts>pip uninstall django==1.8
+                                Uninstalling Django-1.8:
+                                  Would remove:
+                                    c:\virtualenvs\myproject_env\lib\site-packages\django-1.8.dist-info\*
+                                    c:\virtualenvs\myproject_env\lib\site-packages\django\*
+                                    c:\virtualenvs\myproject_env\scripts\django-admin.exe
+                                    c:\virtualenvs\myproject_env\scripts\django-admin.py
+                                Proceed (y/n)? y
+                                  Successfully uninstalled Django-1.8
+
+                                (myproject_env) C:\virtualenvs\myproject_env\Scripts>   
+                                
+                                # Installed django==1.11.1 globally (NOT in virtualenv)
+                                # C:\Python36\Lib\site-packages>pip install django==1.11.1
+                                Collecting django==1.11.1
+                                  Using cached https://files.pythonhosted.org/packages/2b/2c/019d6d5f7ed2889082ed96f849bf462c57265087a3a568a19b0d4c53bc55/Django-1.11.1-py2.py3-none-any.whl
+                                Requirement already satisfied: pytz in c:\python36\lib\site-packages (from django==1.11.1) (2018.9)
+                                Installing collected packages: django
+                                Successfully installed django-1.11.1
+
+                                C:\Python36\Lib\site-packages>    
+
+                                # Trying to migrate the apps
+
+                                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations
+                                System check identified some issues:
+
+                                WARNINGS:
+                                ?: (1_8.W001) The standalone TEMPLATE_* settings were deprecated in Django 1.8 and the TEMPLATES dictionary takes precedence. 
+                                You must put the values of the following settings into your default TEMPLATES dict: TEMPLATE_DIRS.
+                                Traceback (most recent call last):
+                                  File "c:\python36\lib\site-packages\django\db\backends\base\base.py", line 213, in ensure_connection
+                                    self.connect()
+                                       # ...
+                                  File "c:\python36\lib\site-packages\psycopg2\__init__.py", line 130, in connect
+                                    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+                                django.db.utils.OperationalError: FATAL:  password authentication failed for user "root"
+
+                                # The above error was because i had not yet created the "myproject" database and "root" user
+                                # After creating the database, i run the command below
+
+                                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations
+                                System check identified some issues:
+
+                                WARNINGS:
+                                ?: (1_8.W001) The standalone TEMPLATE_* settings were deprecated in Django 1.8 and the TEMPLATES dictionary takes precedence. 
+                                You must put the values of the following settings into your default TEMPLATES dict: TEMPLATE_DIRS.
+                                Migrations for 'magazine':
+                                  magazine\migrations\0001_initial.py
+                                    - Create model NewsArticle
+
+                                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+                                
+                                    # When i upgraded to django=1.11.1 from django=1.8, i got the above warning beacuse TEMPLATE_DIRS was now deprecated
+                                    # So from myproject/settings.py, i removed the lines below...
+
+                                    TEMPLATE_DIRS = (
+                                        os.path.join(BASE_DIR, "myproject", "templates"),
+                                    ) 
+                                    # And i placed the above path under 'DIRS' within TEMPLATES...
+                                    # See myproject/conf/base.py   
+
+                                    TEMPLATES = [{
+                                            ...
+                                            'DIRS': [os.path.join(BASE_DIR, "myproject", "templates")],
+                                            ...
+                                        }]
+
+                                     # Then i ran the 'makemigrations' again, this time there is no WARNING
+                                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations
+                                    No changes detected
+
+                                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+
+                                     # Then i ran 'migrate'...
+                                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate
+                                    Operations to perform:
+                                      Apply all migrations: admin, auth, contenttypes, magazine, sessions
+                                    Running migrations:
+                                      Applying contenttypes.0001_initial... OK
+                                      Applying auth.0001_initial... OK
+                                      Applying admin.0001_initial... OK
+                                      Applying admin.0002_logentry_remove_auto_add... OK
+                                      Applying contenttypes.0002_remove_content_type_name... OK
+                                      Applying auth.0002_alter_permission_name_max_length... OK
+                                      Applying auth.0003_alter_user_email_max_length... OK
+                                      Applying auth.0004_alter_user_username_opts... OK
+                                      Applying auth.0005_alter_user_last_login_null... OK
+                                      Applying auth.0006_require_contenttypes_0002... OK
+                                      Applying auth.0007_alter_validators_add_error_messages... OK
+                                      Applying auth.0008_alter_user_username_max_length... OK
+                                      Applying magazine.0001_initial... OK
+                                      Applying sessions.0001_initial... OK
+
+                                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject> 
+
+    
+    
+    
+  1d - INITIATING GIT (works with GitHub)
+       
+         # Using Git bash to push our local repository (first time)
+         
+             # Proving that the :origin: repository is not yet setup
+
+                OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                $ ssh -T git@github.com
+                Permission denied (publickey).
+
+                OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                $ cd ~/
+
+                OWNER@OWNER-PC MINGW64 ~
+                $ cd ~/.ssh
+                
+             # Generate keys for this project    
+
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ssh-keygen -f ~/.ssh/projects_github_id -C "projects_github_id"
+                Generating public/private rsa key pair.
+                Enter passphrase (empty for no passphrase):
+                Enter same passphrase again:
+                Your identification has been saved in /c/Users/OWNER/.ssh/projects_github_id.
+                Your public key has been saved in /c/Users/OWNER/.ssh/projects_github_id.pub.
+                The key fingerprint is:
+                SHA256:...
+                The key's randomart image is:
+                  # ...
+                  
+                  
+                  # COnfirm that keys are created
+
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ls -ltr
+                total 20
+                  # ...
+                -rw-r--r-- 1 OWNER 197121   93 Jan 19 00:28 config
+                -rw-r--r-- 1 OWNER 197121 1598 Jan 23 11:21 known_hosts
+                -rw-r--r-- 1 OWNER 197121 1679 Jan 23 11:25 projects_github_id
+                -rw-r--r-- 1 OWNER 197121  400 Jan 23 11:25 projects_github_id.pub
+
+                  # Starting the key-agent
+                
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ eval "$(ssh-agent)"
+                Agent pid 4420
+
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ssh-add -l
+                The agent has no identities.
+
+                  # Adding the keys to the agent for handling
+                
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ssh-add ~/.ssh/projects_github_id
+                Identity added: /c/Users/OWNER/.ssh/projects_github_id (/c/Users/OWNER/.ssh/projects_github_id)
+
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ssh-add -l
+                2048 SHA256:... /c/Users/OWNER/.ssh/projects_github_id (RSA)
+
+                  # Proving that the public keys are not yet offered to GitHub
+                
+                OWNER@OWNER-PC MINGW64 ~/.ssh
+                $ ssh -T git@github.com
+                Permission denied (publickey).
+                
+         # Do the following steps via your Github account (online)
+             
+            - click '+' to create a 'new repository'
+            - Give the repo the same name as your local repo, in this case 'django-myproject' (where we ran 'git init')
+            - On the next window loaded, copy this link 'git remote add origin git@github.com:Mwamitovi/django-myproject.git'
+                and ran locally in your Git bash.
+                
+                  # The origin is now added to your project for tracking
+                  # But local git can't yet read from remote since SSH keys are not yet created
+                
+                    OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myprojecst (master)
+                    $ git remote add origin git@github.com:Mwamitovi/django-myproject.git
+
+                    OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                    $ git push -u origin master
+                    The authenticity of host 'github.com (140.82.118.3)' can't be established.
+                    RSA key fingerprint is SHA256:...
+                    Are you sure you want to continue connecting (yes/no)? y
+                    Please type 'yes' or 'no': yes
+                    Warning: Permanently added 'github.com,140.82.118.3' (RSA) to the list of known hosts.
+                    Permission denied (publickey).
+                    fatal: Could not read from remote repository.
+
+                    Please make sure you have the correct access rights and the repository exists.
+                    
+                       # Copy the public key, and add it to your GitHub account
+
+                    OWNER@OWNER-PC MINGW64 ~/.ssh
+                    $ cat projects_github_id.pub
+                    ssh-rsa ... projects_github_id
+
+                       # Now, you have access to the remote, and be ready to push the local project
+                    
+                    OWNER@OWNER-PC MINGW64 ~/.ssh
+                    $ ssh -T git@github.com
+                    Hi Mwamitovi! You've successfully authenticated, but GitHub does not provide shell access.
+
+                    OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+                    $ git remote add origin git@github.com:Mwamitovi/django-myproject.git
+                    fatal: remote origin already exists.
+
+         # Now ran command to push the local repository to GitHub (remote)
+             # After this command is successful, refresh the your current gitHub page, and it will now show your origin repository 
+                    
+            OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+            $ git push -u origin master
+            Warning: Permanently added the RSA host key for IP address ...
+            Counting objects: 64, done.
+            Delta compression using up to 2 threads.
+            Compressing objects: 100% (53/53), done.
+            Writing objects: 100% (64/64), 225.87 KiB | 0 bytes/s, done.
+            Total 64 (delta 12), reused 0 (delta 0)
+            remote: Resolving deltas: 100% (12/12), done.
+            To github.com:Mwamitovi/django-myproject.git
+             * [new branch]      master -> master
+            Branch master set up to track remote branch master from origin.
+
+            OWNER@OWNER-PC MINGW64 /c/virtualenvs/myproject_env/project/django-myproject (master)
+            $
+
+         # I wanted to work on the project from SourceTree, and i performed these steps:
+             
+                - Open the 'django-myproject' folder within SourceTree
+                - Once the project is added, it keep showing a red exclamation mark on the 'Remote' link
+                - Go to settings, add 'Add a new account' to SourceTree (already have a bitbucket account there)
+                - Select to load your gitHub account, authentication will be done by GitHub to accept SourceTree
+                - Once account is setup, go to 'remote settings' then click 'advanced' and add account (GitHub) for this project
+                - Now, everything is completely set.
+                - Congs! Mr. developer...
+                
+         # Initialize the workflow pattern. I prefer the Git-flow (as adapted from my friend - dikuj)...
+            
+             # Initialized git-flow in SourceTree
+                  # Click the Git-flow (up there in SourceTree), then click ok in the open dialog box
+
+                    sh.exe C:\Users\OWNER\AppData\Local\Atlassian\SourceTree\git_local\usr\bin\git-flow init -d
+                    Using default branch names.
+
+                    Which branch should be used for bringing forth production releases?
+
+                       - master
+                    Branch name for production releases: [master] 
+                    Branch name for "next release" development: [develop] 
+
+                    How to name your supporting branch prefixes?
+                    Feature branches? [feature/] 
+                    Bugfix branches? [bugfix/] 
+                    Release branches? [release/] 
+                    Hotfix branches? [hotfix/] 
+                    Support branches? [support/] 
+                    Version tag prefix? [] 
+                    Hooks and filters directory? [/c/virtualenvs/myproject_env/project/django-myproject/.git/hooks] 
+                    Completed successfully.
+            
+                  # Good job, Git-flow now set, and develop branch is automatically created from current 'master' branch
+                  # checkout or switch to 'develop' branch and start working...
+                  # Off you go to greater heights, Mr. developer...
+                
+                  # Pushed local 'develop' branch to origin 'github'
+
+                    git -c diff.mnemonicprefix=false -c core.quotepath=false --no-optional-locks -c credential.helper= -c credential.helper="C:/Users/OWNER/AppData/Local/ATLASS~1/SOURCE~1/GIT_EX~1/GIT-CR~1.EXE" push -v --tags --set-upstream origin develop:develop
+                    Pushing to git@github.com:Mwamitovi/django-myproject.git
+                    remote: 
+                    remote: Create a pull request for 'develop' on GitHub by visiting:        
+                    remote:      https://github.com/Mwamitovi/django-myproject/pull/new/develop        
+                    remote: 
+
+                    Branch 'develop' set up to track remote branch 'develop' from 'origin'.
+                    To github.com:Mwamitovi/django-myproject.git
+                     * [new branch]      develop -> develop
+                    updating local tracking ref 'refs/remotes/origin/develop'
+
+                    Completed successfully.
+ 
+ 
+ 
+  2 - DATABASE STRUCTURE
+    
+         # Introduction
+        
+            When you start a new app, the first thing to do is create the models that represent your database structure. 
+            We are assuming that you have previously created Django apps or at least, you have read and understood the official Django tutorial. 
+            
+            In this section, we will see a few interesting techniques that make your database structure consistent throughout different
+            apps in your project. Then, we will see how to create custom model fields in order to handle internationalization of your data
+            in the database. At the end of this section, we will see how to use migrations to change your database structure 
+            in the process of development.
+
+            
+         # Using model mixins
+        
+            In object-oriented languages, such as Python, a mixin class can be viewed as an interface with implemented features. 
+            When a model extends a mixin, it implements the interface and includes all its fields, properties, and methods. 
+            Mixins in Django models can be used when you want to reuse the generic functionalities in different models multiple times.
+            
+            First, you will need to create reusable mixins. Some typical examples of mixins are given later in this section. 
+            A good place to keep your model mixins is in the utils module. 
+            
+                  # idea: If you create a reusable app that you will share with others,
+                  # keep the model mixins in the reusable app, for example, in the base.py file.
+                  
+                - Open the models.py file of any Django app, where you want to use the mixins and type the: class idea
+                        # added it to myapps1/models.py
+                        
+                - How it works:
+                
+                        # Django model inheritance supports three types of inheritance: 
+                        (1) abstract base classes, (2) multi-table inheritance, and (3) proxy models.
+                        
+                        Model mixins are abstract model classes with specified fields, properties, and methods. 
+                        When you create a model such as Idea, as shown in the preceding example (within myapps1/models.py), 
+                        it inherits all the features from UrlMixin, CreationModificationMixin, and MetaTagsMixin. 
+                        
+                        All the fields of the abstract classes are saved in the same database table as the fields of the extending model. 
+                        In the following section, you will learn how to define your model mixins.
+                            # Note that we are using the @python_2_unicode_compatible decorator for our Idea model.
+                        As you might remember from the Making your code compatible with both Python 2.7 and  Python 3 section 
+                        in part 1, Getting Started with Django 1.8 (i later upgraded), it's purpose is to make the __str__() method 
+                        compatible with Unicode for both the following Python versions: 2.7 and 3.
+                        
+                        
+             # Creating a model mixin with URL-related methods
+             
+                  # For every model that has its own page, it is good practice to define the get_absolute_url() method. 
+                
+                    This method can be used in templates and also in the Django admin site to preview the saved object. 
+                    However, get_absolute_url() is ambiguous as it returns the URL path instead of the full URL. 
+                    In this section, we will see how to create a model mixin that allows you to define either the URL path 
+                    or the full URL by default, generate the other out of the box, and take care of the
+                    get_absolute_url() method that is being set.
+                    
+                      # If you haven't done it yet, create the utils package to save your mixins. 
+                      # Then, create the models.py file in the utils package 
+                      # (alternatively, if you create a reusable app, put the mixins in the base.py file in your app).
+                      
+                     - How it works:
+                     
+                        - Add the a class UrlMixin to the models.py file of your utils package
+                        - To use the mixin in your app (myapp1), import it from the utils package, inherit the mixin in your model class, 
+                            and define the get_url_path() method as follows:                            
+                                         # myapp1/models.py
+                                         # -*- coding: UTF-8 -*-
+                                    from __future__ import unicode_literals
+                                    ...
+                                    from utils.models import UrlMixin
+                                        
+                                    @python_2_unicode_compatible
+                                    class Idea(UrlMixin):
+                                        title = models.CharField(_("Title"), max_length=200)
+                                              # …
+                                              
+                                        get_url_path(self):
+                                            return reverse("idea_details", kwargs={ "idea_id": str(self.pk), })
+                        - If you check this code in the staging or production environment or run a local server with a different IP 
+                            or port than the defaults, set DEFAULT_WEBSITE_URL in your local settings (without the trailing slash), 
+                            as follows:
+                                         # settings.py
+                                         # …
+                                    DEFAULT_WEBSITE_URL = "http://www.example.com"
+                                    
+                           # Explanation                           
+                           The UrlMixin class is an abstract model that has three methods: 
+                               (1) get_url(), (2) get_url_path(), and (3) get_absolute_url(). 
+                               
+                           The get_url() or get_url_path() methods are expected to be overwritten in the extended model class, 
+                           for example, Idea. You can define get_url(), which is the full URL of the object, and then
+                           get_url_path() will strip it to the path. 
+                           
+                           You can also define get_url_path(), which is the absolute path of the object, and then 
+                           get_url() will prepend the website URL to the beginning of the path. 
+                           The get_absolute_url() method will mimic the get_url_path() method.
+                               # The rule of thumb is to always overwrite the get_url_path() method.
+                               
+                     - In the templates, use:
+                           # <a href="{{ idea.get_url_path }}">{{ idea.title }}</a> 
+                           when you need a link of an object in the same website. 
+                           
+                     - Use:
+                           # <a href="{{ idea.get_url }}">{{ idea.title }}</a> 
+                           for the links in e-mails, RSS feeds, or APIs.
+                           
+                     - The default get_absolute_url() method will be used in the Django model administration
+                           for the View on site functionality and might also be used by some third-party Django apps.
+                           
+                           
+             # Creating a model mixin to handle creation and modification dates
+             
+                  # It is a common behavior to have timestamps in your models for the creation and modification of your model instances. 
+                
+                    In this section, we will see how to create a simple model mixin that saves the creation and modification dates and times 
+                    for your model. Using such a mixin will ensure that all the models use the same field names for the timestamps and 
+                    have the same behavior.
+                    
+                     - How it works:
+                     
+                        - Add the class CreationModificationDateMixin to utils/models.py
+                        
+                           # Explanation
+                        
+                            The CreationModificationDateMixin class is an abstract model:
+                                which means that extending model classes will create all the fields in the same database table, 
+                                that is, there will be no one-to-one relationships that make the table difficult to handle. 
+                                
+                            This mixin has two datetime fields and the save() method that will be called when saving the extended model. 
+                            - The save() method checks whether the model has no primary key, which is the case of a new not-yet-saved instance. 
+                                In this case, it sets the creation date to the current date and time. 
+                                If the primary key exists, the modification date is set to the current date and time.
+                                Alternatively, instead of the save() method, you can use the auto_now_add and auto_now attributes 
+                                for the created and modified fields, which will add creation and modification timestamps automatically.
+                                
+                       
+             # Creating a model mixin to take care of meta tags
+             
+                  # If you want to optimize your site for search engines, 
+                  # you need to not only set the semantic markup for each page but also the appropriate meta tags. 
+                
+                    For maximum flexibility, you need to have a way to define specific meta tags for each object, 
+                    which has its own page on your website. In this section, we will see how to create a model mixin for the 
+                    fields and methods related to the meta tags.
+                    
+                     - How it works:
+                     
+                        - Add class MetaTagsMixin to utils/models.py
+                        
+                           # Explanation
+                           
+                           This mixin adds four fields to the model that extends from it: 
+                              (1) meta_keywords, (2) meta_description, (3) meta_author, and (4) meta_copyright. 
+                               
+                                  # The methods to render the meta tags in HTML are also added.
+                              If you use this mixin in a model such as Idea (within myapps1/models.py) which is shown in the first section, 
+                              then you can put the following in the HEAD section of your detail page template to render all the meta tags:
+                                    {{ idea.get_meta_tags }}
+                              You can also render a specific meta tag using the following line:
+                                    {{ idea.get_meta_description }}
+                              As you may have noticed from the code snippet, the rendered meta tags are marked as safe, that is, 
+                              they are not escaped and we don't need to use the safe template filter. 
+                              Only the values that come from the database are escaped in order to guarantee that the final HTML is well-formed.
+                              
+                              
+             # Creating a model mixin to handle generic relations
+             
+                  # Besides normal database relationships such as a foreign-key relationship or many-to-many relationship, 
+                  # Django has a mechanism to relate a model to an instance of any other model. This concept is called generic relations. 
+                  
+                    For each generic relation, there is a content type of the related model that is saved as well as 
+                    the ID of the instance of this model. In this section, we will see how to generalize the creation of generic 
+                    relations in the model mixins.
+                    
+                         # For this part to work, you need to have the contenttypes app installed. 
+                         # It should be in the INSTALLED_APPS directory by default, as shown in the following:
+                         # settings.py
+                        INSTALLED_APPS = (
+                                    # …
+                            "django.contrib.contenttypes",
+                        )
+                        
+                         # Again, make sure that you have the utils package for your model mixins already created.
+                         
+                     - How it works:
+                     
+                        - Add a function object_relation_mixin_factory to utils/models.py
+                        - Then, add class Like to myapp1/models.py that uses the two generic relationships (FavouriteObjectMixin, and OwnerMixin)
+                        
+                           # Explanation
+                           
+                           As you can notice, this code is more complex than the previous ones. 
+                           The object_relation_mixin_factory object is not a mixin itself; 
+                           it is a function that generates a model mixin, that is, an abstract model class to extend from. 
+                           The dynamically created mixin adds the content_type and object_id fields and the content_object generic foreign
+                           key that points to the related instance.
+                           
+                                   # Why couldn't we just define a simple model mixin with these three attributes? 
+                           A dynamically generated abstract class allows us to have prefixes for each field name; 
+                           therefore, we can have more than one generic relation in the same model. 
+                           
+                                   # For example, the "Like" model, which was shown previously, 
+                           will have the content_type, object_id, and content_object fields for the favorite object 
+                           and owner_content_type, owner_object_id, and owner_content_object for the one 
+                           (user or institution) who liked the object.
+                           
+                           The object_relation_mixin_factory() function adds a possibility to limit the content
+                           type choices by the limit_content_type_choices_to parameter. The preceding
+                           example limits the choices for owner_content_type only to the content types of the User
+                           and Institution models. Also, there is the limit_object_choices_to parameter that
+                           can be used by custom form validation to limit the generic relations only to specific objects, for
+                           example, the objects with published status.
+
+                           
+         # Handling multilingual fields
+         
+              # Django uses the internationalization mechanism to translate verbose strings in the code and templates. 
+            
+            However, it's up to the developer to decide how to implement the multilingual content in the models. 
+            There are several third-party modules that handle translatable model fields; 
+            however, the simple solution that will be introduced to you in this section, was preferred.
+            
+            The advantages of the approach that you will learn about are as follows:
+            
+                - It is straightforward to define multilingual fields in the database
+                - It is simple to use the multilingual fields in database queries
+                - You can use contributed administration to edit models with the multilingual fields without additional modifications
+                - If you need it, you can easily show all the translations of an object in the same template
+                - You can use database migrations to add or remove languages
+                
+            - How it works:
+            
+                - create a fields.py within the utils package and add a multilingual character field
+                - To use the multilingual fields in your app:
+                    - First, set the multiple languages in your myproject/settings.py
+                                    # ...
+                            LANGUAGE_CODE = "en"
+                            LANGUAGES = (
+                                ("en", "English"),
+                                ("de", "Deutsch"),
+                                ("fr", "Français"),
+                                ("sw", "Swahili"),
+                            )
+                    - Then create the multilingual fields for your model, edited the Idea class within myapp1/models.py
+                                    # ...
+                            class Idea(...):
+                                title = MultilingualCharField(_("Title"), max_length=200, )
+                                description = MultilingualTextField(_("Description"), blank=True, )
+                                         # ...
+                                         
+                        The above code will create a model that is similar to the following:
+                            class Idea(...):
+                                title_en = models.CharField(_("Title(en)"), max_length=200, )
+                                title_de = models.CharField(_("Title(de)"), max_length=200, )
+                                title_fr = models.CharField(_("Title(fr)"), max_length=200, )
+                                title_sw = models.CharField(_("Title(sw)"), max_length=200, )
+                                description_en = models.TextField(_("Description (en)"), blank=True, )
+                                description_de = models.TextField(_("Description (de)"), blank=True, )
+                                description_fr = models.TextField(_("Description (fr)"), blank=True, )
+                                description_sw = models.TextField(_("Description (sw)"), blank=True, )
+                                
+                                   # In addition to this, there will be two properties: title and description 
+                                   # that will return the title and description in the currently active language.
+                                   
+                            The MultilingualCharField and MultilingualTextField fields will juggle the
+                            model fields dynamically, depending on your LANGUAGES setting. They will overwrite the
+                            contribute_to_class() method that is used when the Django framework creates the model classes.
+                            The multilingual fields dynamically add character or text fields for each language of the project.
+                            Also, the properties are created in order to return the translated value of the currently active
+                            language or the main language by default.
+                            
+                        For example, we can have the following in our template:
+                            <h1>{{ idea.title }}</h1>
+                            <div>{{ idea.description|urlize|linebreaks }}</div>
+                            
+                        This will show the text in English, German, French, or Swahili, depending on the currently
+                        selected language. However, it will fall back to English if the translation doesn't exist.
+                        
+                        Here is another example: 
+                            If you want to have your QuerySet ordered by the translated titles in the view, 
+                            you can define it as follows:
+                                qs = Idea.objects.order_by("title_%s" % request.LANGUAGE_CODE)
+                                
+        
+         # Using migrations
+         
+              # It is not true that once you have created your database structure, it won't change in the future!
+            
+                As development happens iteratively, you can get updates on the business requirements in the
+                development process and you will need to perform database schema changes along the way.
+                With the Django migrations, you don't need to change the database tables and fields manually,
+                as most of it is done automatically using the command-line interface.
+
+                - To create the database migrations, take a look at the following steps:
+                         # Activate your virtual environment
+
+                    1. When you create models in your new myapps1 app, you need to create an initial migration that will create
+                       the database tables for your app. This can be done using the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                            Migrations for 'myapp1':
+                               myapp1\migrations\0001_initial.py
+                                  - Create model Idea
+                                  - Create model Like
+
+                    2. If you want to execute the migrations for a specific app, 
+                       run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                            Operations to perform:
+                              Apply all migrations: myapp1
+                            Running migrations:
+                              Applying contenttypes.0001_initial... OK
+                              Applying contenttypes.0002_remove_content_type_name... OK
+                              Applying myapp1.0001_initial... OK
+
+                    3. The first time that you want to create all the tables for your project, 
+                       run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate
+                            Operations to perform:
+                              Apply all migrations: admin, auth, contenttypes, magazine, myapp1, sessions
+                            Running migrations:
+                              Applying auth.0001_initial... OK
+                              Applying admin.0001_initial... OK
+                              Applying admin.0002_logentry_remove_auto_add... OK
+                              Applying auth.0002_alter_permission_name_max_length... OK
+                              Applying auth.0003_alter_user_email_max_length... OK
+                              Applying auth.0004_alter_user_username_opts... OK
+                              Applying auth.0005_alter_user_last_login_null... OK
+                              Applying auth.0006_require_contenttypes_0002... OK
+                              Applying auth.0007_alter_validators_add_error_messages... OK
+                              Applying auth.0008_alter_user_username_max_length... OK
+                              Applying magazine.0001_initial... OK
+                              Applying sessions.0001_initial... OK
+
+                        It executes the usual database synchronization for all apps that have no database migrations,
+                        and in addition to this, it migrates all apps that have the migrations set.
+                        Also, run this command when you want to execute the new migrations for all your apps.
+
+                    4. If you make some changes in the database schema, you have to create a migration for that schema.
+                       For example, if we add a new subtitle field to the Idea model, 
+                       we can create the migration using the following command:
+                                   # (myproject_env)$ python manage.py makemigrations --name subtitle_added myapp1
+
+                    5. To create a data migration that modifies the data in the database table, 
+                        we can use the following command:
+                                   # (myproject_env)$ python manage.py makemigrations --empty --name populate_subtitle myapp1
+                        This creates a skeleton data migration, which you need to modify and add data manipulation to it before applying.
+
+                    6. To list all the available applied and unapplied migrations, 
+                        run the following command:
+                                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py showmigrations
+                            admin
+                             [X] 0001_initial
+                             [X] 0002_logentry_remove_auto_add
+                            auth
+                             [X] 0001_initial
+                             [X] 0002_alter_permission_name_max_length
+                             [X] 0003_alter_user_email_max_length
+                             [X] 0004_alter_user_username_opts
+                             [X] 0005_alter_user_last_login_null
+                             [X] 0006_require_contenttypes_0002
+                             [X] 0007_alter_validators_add_error_messages
+                             [X] 0008_alter_user_username_max_length
+                            contenttypes
+                             [X] 0001_initial
+                             [X] 0002_remove_content_type_name
+                            magazine
+                             [X] 0001_initial
+                            myapp1
+                             [X] 0001_initial
+                            sessions
+                             [X] 0001_initial
+
+                        The applied migrations will be listed with a [X] prefix.
+                        
+                    7. To list all the available migrations for a specific app, 
+                        run the following command:
+                                  # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py showmigrations myapp1
+                            myapp1
+                             [X] 0001_initial
+
+                - How it works:
+                
+                         # Django migrations are instruction files for the database migration mechanism.                    
+                         # The instruction files inform us which database tables to create or remove; which fields to add or remove; 
+                         # and which data to insert, update, or delete.
+                         
+                    There are two types of migrations in Django: 
+                    
+                        (1) schema migration - should be created when you add new models, or add or remove fields.
+
+                        (2) data migration - should be used when you want to fill the database with some values
+                            or massively delete values from the database. Data migrations should be created using a
+                            command in the command-line tool and then programmed in the migration file. 
+                            
+                    Migrations for each app are saved in their migrations directories. 
+                    The first migration will be usually called 0001_initial.py, and the other migrations 
+                    in our example app will be called 0002_subtitle_added.py and 0003_populate_subtitle.py. 
+                    Each migration gets a number prefix that is automatically incremented. 
+                    For each migration that is executed, there is an entry that is saved in the django_migrations database table.
+
+
+         # Switching from South migrations to Django migrations
+         
+            # This section is not relevant if using Django 1.7 and above...
+         
+            If you have been using Django since before database migrations existed in the core functionality,
+            that is, before Django 1.7; you have, more than likely, used third-party South migrations before. 
+            In this section, you will learn how to switch your project from South migrations to Django migrations.
+
+              # Make sure that all apps and their South migrations are up to date.
+              
+            - How to do it, Execute the following steps:
+            
+                1. Migrate all your apps to the latest South migrations, as follows:
+                            # (myproject_env)$ python manage.py migrate
+                
+                2. Remove south from INSTALLED_APPS in the settings.
+                
+                3. For each app with South migrations, delete the migration files and only leave the migrations directories.
+                
+                4. Create new migration files with the following command:
+                            # (my_project)$ python manage.py makemigrations
+                
+                5. Fake the initial Django migrations as the database schema has already been set correctly:
+                            # (my_project)$ python manage.py migrate --fake-initial
+                
+                6. If you have any circular foreign keys in the apps (that is, two models in different apps pointing to each other
+                    with a foreign key or many-to-many relation), separately apply the fake initial migrations to these apps:
+                            # (my_project)$ python manage.py migrate --fake-initial demo_app
+                
+            - How it works:
+            
+                There is no conflict in the database when switching to the new way of dealing with the database schema changes
+                as the South migration history is saved in the south_migrationhistory database table; 
+                whereas, the Django migration history is saved in the django_migrations database table.
+                
+                The only problem are the migration files that have different syntax and, therefore, 
+                the South migrations need to be completely replaced with the Django migrations.
+                Therefore, at first, we delete the South migration files. Then, the makemigrations command
+                recognizes the empty migrations directories and creates new initial Django migrations for
+                each app. Once these migrations are faked, the further Django migrations can be created
+                and applied.
+
+
+         # Changing a foreign key to the many-to-many field
+
+            This section is a practical example of how to change a many-to-one relation to many-to-many relationship,
+            while preserving the already existing data. We will use both schema and data migrations for this situation.
+            
+            - Within myapp1/models.py, create a Category models and add ForeignKey to the Idea model:
+            
+                    @python_2_unicode_compatible
+                    class Category(models.Model):
+                        title = models.CharField(_("Title"), max_length=200)
+                        
+                        def __str__(self):
+                            return self.title
+                            
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                               # ...
+                        category = models.ForeignKey(Category, verbose_name=_("Category"), null=True, blank=True)
+                               # ...
+
+            - After then, initiate and run migrations:
+            
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0002_auto_20190127_0741.py
+                        - Create model Category
+                        - Add field category to idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0002_auto_20190127_0741... OK
+
+            - The following steps will teach you how to switch from a foreign key relation to many-to-many relationship,
+                while preserving the already existing data:
+                
+                - Add a new many-to-many field called categories, as follows:
+
+                        # myapp1/models.py
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                        title = model.CharField(_("Title"), max_length=200)
+                        category = models.ForeignKey(Category, verbose_name=_("Category"), null=True, blank=True, )
+                        categories = models.ManyToManyField(Category, verbose_name=_("Categories"), blank=True, related_name="ideas", )
+
+                - Create and run a schema migration in order to add the new field to the database, as shown in the following:
+ 
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1 --name categories_added
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0003_categories_added.py
+                        - Add field categories to idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0003_categories_added... OK
+
+                - Create a data migration to copy categories from the foreign key to the many-to-many field, as follows:
+           
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations --empty --name copy_categories myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0004_copy_categories.py
+
+                - Open the newly created migration file (myapp1/migrations/0004_copy_categories.py), 
+                    and define the forward migration instructions, as shown below:
+                    
+                        # demo_app/migrations/0003_copy_categories.py
+                        # -*- coding: utf-8 -*-
+                    from __future__ import unicode_literals
+                    from django.db import models, migrations
+                    
+                    def copy_categories(apps, schema_editor):
+                        Idea = apps.get_model("myapp1", "Idea")
+                        for idea in Idea.objects.all():
+                            if idea.category:
+                                idea.categories.add(idea.category)
+                    
+                    class Migration(migrations.Migration):
+                        dependencies = [
+                                    # ...
+                        ]
+                        operations = [
+                            migrations.RunPython(copy_categories),
+                        ]
+
+                - Run the following data migration:
+                
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0004_copy_categories... OK
+            
+                - Delete the foreign key field category in the models.py file:
+                
+                        # myapp1/models.py
+                    @python_2_unicode_compatible
+                    class Idea(models.Model):
+                        title = model.CharField(_("Title"), max_length=200)
+                        categories = models.ManyToManyField(Category,verbose_name=_("Categories"),blank=True,related_name="ideas",)
+            
+                - Create and run a schema migration in order to delete the categories field from the
+                    database table, as follows:
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations myapp1
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0005_remove_idea_category.py
+                        - Remove field category from idea
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate myapp1
+                    Operations to perform:
+                      Apply all migrations: myapp1
+                    Running migrations:
+                      Applying myapp1.0005_remove_idea_category... OK
+            
+                        - How it works:
+                            At first, we add a new many-to-many field to the Idea model. 
+                            Then, we copy the existing relations from a foreign key relation to the many-to-many relation. 
+                            Lastly, we remove the foreign key relation.
+
+
+
+  3 - FORMS & VIEWS
+
+         # Introduction
+
+            When the database structure is defined in the models, we need some views to let the users enter data 
+            or show the data to the people. In this section, we shall focus on the views managing forms, the list view, 
+            and views generating an alternative output than HTML. For the simplest examples, 
+            we will leave the creation of URL rules and templates up to you.
+
+         # Passing HttpRequest to the form
+
+            The first argument of every Django view is the HttpRequest object that is usually named request.
+                It contains metadata about the request. 
+                    For example, current language code, current user, current cookies, and current session.
+                    
+            By default, the forms that are used in the views accept the GET or POST parameters, files, initial data, and 
+                other parameters; however, not the HttpRequest object. 
+            
+            In some cases, it is useful to additionally pass HttpRequest to the form, 
+            especially when you want to filter out the choices of form fields using the request data or 
+            handle saving something such as the current user or IP in the form.
+            
+            In this part, we will see an example of a form where a person can choose a user and write a message to them.
+            We will pass the HttpRequest object to the form in order to exclude the current user from the recipient choices; 
+            we don't want anybody to write a message to themselves.
+            
+               # Create a new app called email_messages and put it in INSTALLED_APPS in the settings. 
+               # This app will have no models, just forms and views.
+               # Follow the steps below:
+            
+            - Add a new forms.py file with the message form containing two fields: 
+                    - the recipient selection and message text. 
+                Also, this form will have an initialization method, which will accept the request object and then, 
+                modify QuerySet for the recipient's selection field.
+            
+            - Then, within views.py, create the message_to_user() view in order to handle the form. 
+                As you can notice, the request object is passed as the first parameter to the form, as follows:
+                
+                   # How it works:
+                
+                    In the initialization method, we have the self variable that represents the instance of the form itself,
+                    we also have the newly added request variable, and then we have the rest of the positional arguments (*args)
+                    and named arguments (**kwargs). 
+                    
+                    We call the super() initialization method passing all the positional and named arguments to it so 
+                    that the form is properly initiated. We will then assign the request variable to a new request attribute 
+                    of the form for later access in other methods of the form. Then, we modify the queryset attribute of
+                    the recipient's selection field, excluding the current user from the request.
+                    
+                    In the view, we will pass the HttpRequest object as the first argument in both situations.
+                    when the form is posted, as well as when it is loaded for the first time.
+            
+        
+         # Utilizing the save method of the form
+        
+            To make your views clean and simple, it is good practice to move the handling of the form data to the form itself
+            whenever possible and makes sense. The common practice is to have a save() method that will save the data,
+            perform search, or do some other smart actions. We will extend the form that is defined in the previous
+            recipe with the save() method, which will send an e-mail to the selected recipient.
+            
+            To complete this section, execute the following two steps:
+            
+                - From Django, import the function in order to send an e-mail. 
+                    Then, add the save() method to MessageForm. It will try to send an e-mail to the selected recipient,
+                    and will fail silently if any errors occur.
+                    
+                            # The save() method uses the cleaned data from the form to read the recipient's e-mail address and the message.
+                            # The sender of the e-mail is the current user from the request.
+                            # If the e-mail cannot be sent due to an incorrect mail server configuration or another reason,
+                            # it will fail silently; that is, no error will be raised.
+                    
+                - Then, call the save() method from the form in the view if the posted data is valid.
+                
+                            # Now, let's look at the view. When the posted form is valid, the save() method of the form will be called
+                            # and the user will be redirected to the success page.
+            
+            
+         # Uploading images
+         
+            In this section, we will take a look at the easiest way to handle image uploads. 
+            You will see an example of an app, where the visitors can upload images with inspirational quotes.
+            
+                   # Make sure to have Pillow or PIL installed in your virtual environment or globally.
+                
+                - Create a "quotes" app and put it in INSTALLED_APPS in the settings. 
+                
+                - To the quotes/models.py, we add an InspirationalQuote model with three fields; 
+                    (1) the author, (2) quote text, and (3) picture.
+                
+                - Create the quotes/forms.py file and put a simple model form there.
+                
+                - In the quotes/views.py file, put a view that handles the form. 
+                    Don't forget to pass the FILES dictionary-like object to the form. 
+                    When the form is valid, trigger the save method.
+                
+                - And then, create a template for the view in templates/quotes/change_quote.html. 
+                    It is very important to set the "enctype" attribute to "multipart/form-data" for the HTML form,
+                    otherwise the file upload won't work:
+                    
+                         # Django model forms are forms that are created from models. 
+                         # They provide all the fields from the model so you don't need to define them again. 
+                         
+                         # In the preceding example, we created a `model form for the InspirationalQuote model. 
+                         # When we save the form, the form knows how to save each field in the database, 
+                         # as well as to upload the files and save them in the media directory.
+                
+                - There is more:
+                    As an option, we will see an example of how to generate a thumbnail out of the uploaded image.
+                    Using this technique, you could also generate several other specific versions of the image,
+                    such as the list version, mobile version, and desktop computer version.
+                    
+                    We will add three methods to the InspirationalQuote model (quotes/models.py).
+                    They are save(), create_thumbnail(), and get_thumbnail_picture_url(). 
+                    When the model is being saved, we will trigger the creation of the thumbnail. 
+                    When we need to show the thumbnail in a template, we can get its URL using 
+                        {{ quote.get_thumbnail_picture_url }}.
+                    
+                    - How does the creating the thumbnail work?:
+                        If we had the original file saved as quotes/2014/04/20140424140000.png, 
+                        we check whether the quotes/2014/04/20140424140000_thumbnail.jpg file doesn't exist and, 
+                        in that case, we open the original image, cropping it from the center, 
+                        resizing it to 50 x 50 pixels, and saving it to the storage.
+                        
+                        The get_thumbnail_picture_url() method checks whether the thumbnail version exists
+                        in the storage and returns its URL. If the thumbnail version does not exist, the URL of
+                        the original image is returned as a fallback.
+                        
+                              # From Python
+                        
+                          - os.path.splitext(path):
+                            Split the pathname path into a pair (root, ext) such that root + ext == path, 
+                            and ext is empty or begins with a period and contains at most one period.  
+                            Leading periods on the basename are ignored; splitext('.cshrc') returns ('.cshrc', '').
+
+                            Changed in version 3.6: Accepts a path-like object.
+
+                            path-like object:
+                            An object representing a file system path.
+                            A path-like object is either a str or bytes object representing a path, 
+                            or an object implementing the os.PathLike protocol. An object that supports the os.PathLike protocol 
+                            can be converted to a str or bytes file system path by calling the os.fspath() function; 
+                            os.fsdecode() and os.fsencode() can be used to guarantee a str or bytes result instead, respectively.
+        
+        
+         # Creating a form layout with django-crispy-forms
+         
+            The django-crispy-forms app allows you to build, customize, and reuse forms using one of these CSS frameworks:
+                (1) Uni-Form, (2) Bootstrap, or (3) Foundation. 
+                
+            The usage of django-crispy-forms is analogous to fieldsets in the Django contributed administration;
+            however, it is more advanced and customizable. You define form layout in the Python code and you don't need
+            to worry about how each field is presented in HTML. 
+            
+            However, if you need to add specific HTML attributes or wrapping, you can easily do that too. 
+            Moreover, all the markup used by django-crispy-forms is located in the templates that can be overwritten
+            for specific needs.
+            
+            In this section, we will see an example of how to use django-crispy-forms with Bootstrap 3,
+            which is the most popular frontend framework to develop responsive, mobile-first web projects.
+            
+            - To install django-cripy-forms, i copied it's files (crispy_forms and django_crispy_forms-1.7.2.dist-info)
+                from another project and copied the folder to (C:\Python36\Lib\site-packages)
+                
+                   # Run pip install django-crispy-forms confirms that the app is already a global python package now
+                C:\Users\OWNER>pip install django-crispy-forms
+                Requirement already satisfied: django-crispy-forms in c:\python36\lib\site-packages (1.7.2)
+                
+                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>pip freeze
+                    backports.functools-lru-cache==1.5
+                    certifi==2018.11.29
+                          # .....
+                    Django==1.11.1
+                    django-crispy-forms==1.7.2
+                    django-debug-toolbar==1.11
+                    djangorestframework==3.9.1
+                          # .....
+                    virtualenv==16.2.0
+                    zc.lockfile==1.4
+
+            - Also for bootstrap, i copied it's folder (bootstrap or bootstrap-material-design) from another project and 
+                copied it to the path (C:\Users\OWNER\AppData\Roaming\npm\node_modules)
+            
+                   # Run npm -g list confirms that the app is already a global node package now (opted to use the bootstrap-material-design/bmd)
+                C:\Users\OWNER>npm -g list --depth=0
+                    C:\Users\OWNER\AppData\Roaming\npm
+                        +-- bootstrap@3.3.7
+                        +-- bootstrap-material-design@4.1.1
+                        +-- gulp-cli@2.0.1
+                        +-- jasmine@3.3.1
+                        +-- karma@3.1.4
+                        `-- stylelint-cli@1.0.0
+            
+            - Create a "bulletin_board app" to utilize django-crispy-forms and put it in INSTALLED_APPS in the 'base' settings.
+                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp bulletin_board
+            
+                Then we will have a Bulletin model there with these fields: 
+                    (1) bulletin_type, (2) title, (3) description, (4) contact_person, (5) phone, (6) email, and (7) image
+            
+            - Then add a model form for the bulletin in the newly created app. 
+                We will attach a form helper to the form in the initialization method itself. 
+                The form helper will have the layout property that will define the layout for the form.
+                
+                Note: 
+                      # All the fields are grouped by fieldsets. 
+                    The first argument of the Fieldset object defines the legend, 
+                    the other positional arguments define the fields.
+                    
+                      # You can also pass named arguments to define the HTML attributes for the fieldset; 
+                    for example, for the second fieldset, we pass title and css_id to set the title and id HTML attributes.
+                    
+                      # Fields can also have additional attributes passed by named arguments; 
+                    for example, for the description field, we pass css_class and rows to set the class and rows HTML attributes.
+                    
+                      # Besides the normal fields, you can pass HTML snippets 
+                    as this is done with the help block for the image field. 
+                    
+                      # You can also have prepended text fields in the layout. 
+                    For example, we added a phone icon to the Phone field and an @ sign for the Email field. 
+                    
+                      # Notice from the example with the contact fields, 
+                    we can easily wrap fields in the HTML <div> elements using the Div objects. 
+                    This is useful when specific JavaScript needs to be applied to some form fields.
+                    
+                      # The action attribute for the HTML form is defined by the form_action property of the form helper. 
+                    If you use the empty string as an action, the form will be submitted to the same view, 
+                    where the form is included. 
+                    
+                      # The method attribute of the HTML form is defined by the form_method property of the form helper. 
+                    As you know, the HTML forms allow the GET and POST methods. 
+                    
+                      # Finally, there is a Submit object 
+                    in order to render the submit button, which takes the name of the button as the first positional argument
+                    and the value of the button as the second argument.
+                    
+                Remember: 
+                    If you need a specific markup for the forms in your project, 
+                    you can still overwrite and modify templates of the django-crispy-forms app 
+                    as there is no markup hardcoded in the Python files, rather all the generated markup 
+                    is rendered through the templates. Just copy the templates from the django-crispy-forms app
+                    to your project's template directory and change them as required.
+            
+            - To render the form in the template, we just need to load the crispy_forms_tags template tag library 
+                and use the {% crispy %} template tag as follows.
+                   # We shall create the base.html template.
+                    {# templates/bulletin_board/change_form.html #}
+                    {% extends "base.html" %}
+                    {% load crispy_forms_tags %}
+                    
+                    {% block content %}
+                       {% crispy form %}
+                    {% endblock content %}
+            
+            
+         # Downloading authorized files
+         
+            Sometimes, you might need to allow only specific people to download intellectual property from your website.
+            For example, music, videos, literature, or other artistic works should be accessible only to the paid members.
+            In this section, we'll learn how to restrict image downloads only to the authenticated users using 
+            the contributed Django auth app.
+            
+            Using the "quotes" app, please execute these steps one by one:
+            
+                - Within the quotes/views.py, create a view function that will require authentication to download a file
+                
+                - Add the view function to the URL configuration (quotes/urls.py)
+                
+                - Then, we need to set the login view in project URL configuration (myproject/urls.py). 
+                        # Note how we are also adding login_helper for django-crispy-forms
+                
+                - Create a template for the login form, within templates/registration/login.html
+                
+                - Create the login.css file to add some style to the login form. 
+                    Lastly, you should restrict the users from bypassing Django and downloading restricted files directly.
+                    To do so on an Apache web server, you can put the .htaccess file in the media/quotes directory 
+                    with the following content if you are using Apache 2.2:
+                            # media/quotes/.htaccess
+                        Order deny,allow
+                        Deny from all
+                        
+                    You can put the following content if you are using Apache 2.4:
+                            # media/quotes/.htaccess
+                            Require all denied
+                    
+                    - How it works:
+                    
+                        The download_quote_picture() view streams the picture from a specific inspirational quote. 
+                        The Content-Disposition header that is set to attachment makes the file downloadable instead of being
+                        immediately shown in the browser. The filename for the file will be something similar to
+                                    # walt-disney---if-you-can-dream-it-you-can-do-it.png
+                        
+                        The @login_required decorator will redirect the visitor to the login page if he or she tries to
+                        access the downloadable file without being logged in.
+                        
+                        As we want to have a nice Bootstrap-style login form, we are using django-crispy-forms again
+                        and define a helper for the login_helper form. The helper is passed to the authorization form as an
+                        extra context variable and then used as the second parameter in the {% crispy %} template tag.
+        
+        
+         # Filtering object lists
+         
+            In web development, besides views with forms, it is typical to have object-list views and detail views.
+            List views can simply list objects that are ordered, for example, alphabetically or by creation date;
+            however, that is not very user-friendly with huge amounts of data. For the best accessibility 
+            and convenience, you should be able to filter the content by all possible categories.
+            In this section, we will see the pattern that is used to filter list views by any number
+            of categories. What we'll be creating is a list view of movies that can be filtered by genre, 
+            director, actor, or rating.
+            
+            For this filtering example, we will use the Movie model with relations to genres, directors, and
+            actors to filter by. It will also be possible to filter by ratings, which is PositiveIntegerField with choices. 
+            
+            - Create a "movies" app, put it in INSTALLED_APPS in the settings, and define the mentioned models in the new app.
+            
+            - Then, create MovieFilterForm with all the possible categories to be used in filtering.
+            
+            - Now, create a movie_list view that will use MovieFilterForm to validate the request query parameters and 
+                perform the filtering for chosen categories. Note the facets dictionary that is used here to list the 
+                categories and also the currently selected choices.
+            
+            - Finally, create the template for the list view (templates/movies/movie_list.html dir). 
+                We will use the facets dictionary here to list the categories and know which category is currently selected. 
+                To generate URLs for the filters, we will use the {% modify_query %} template tag, which will be described 
+                later in the Creating a template tag to modify request query parameters recipe in section 5, 
+                Custom Template Filters and Tags.
+            
+            - Add then, just add a simple base template with two-column layout
+            
+            - Create the base.html template. You can utilize the example provided in the Arranging the base.html 
+                template recipe in section 4, Templates and JavaScript.
+                
+            - How it work:
+            
+                   # We are using the facets dictionary that is passed to the template context to know which filters we have and which filters are selected.
+                
+                To look deeper, the facets dictionary consists of two sections:
+                    (1) the categories dictionary which contains QuerySets or choices of all filterable categories
+                and (2) the selected dictionary which contains the currently selected values for each category.
+                
+                In the view, we check whether the query parameters are valid in the form and then drill down
+                QuerySet of objects from the selected categories. Additionally, we set the selected values to
+                the facets dictionary, which will be passed to the template.
+                
+                In the template, for each categorization from the facets dictionary, we list all the categories
+                and mark the currently selected category as active. It is as simple as that.
+            
+            
+         # Managing paginated lists
+         
+            If you have dynamically changing lists of objects or the amount of them is greater than 30,
+            you will surely need pagination for the list. With pagination, instead of the full QuerySet,
+            you provide a fraction of the dataset that is limited to a specific amount per page and you will
+            also show the links to get to the other pages of the list. Django has classes to manage the paginated data,
+            and we will see how to do that in this section for the example provided in the previous section.
+            
+              # Let's start with the forms and views of the movies app from the Filtering object lists section.
+            
+            - To add pagination to the list view of the movies, follow these steps:
+            
+                - First, import the necessary pagination classes from Django. 
+                    We will add pagination management to the movie_list view just after filtering. 
+                    Also, we will slightly modify the context dictionary by assigning page instead 
+                    of the movie QuerySet to the object_list key.
+                
+                - In the movie_list.html, we will add pagination controls after the list of movies.
+                
+                - How do we achieve this?:
+
+                    When the QuerySet is filtered out, we will create a paginator object passing QuerySet 
+                    and the maximal amount of items that we want to show per page, which is 15 here. 
+                    Then, we will read the current page number from the query parameter, page. 
+                    
+                    The next step is to retrieve the current page object from paginator. 
+                    If the page number is not an integer, we get the first page. 
+                    If the number exceeds the amount of possible pages, the last page is retrieved. 
+                    
+                    The page object has methods and attributes necessary for the pagination widget. 
+                    Also, the page object acts like QuerySet so that we can iterate through it and 
+                    get the items from the fraction of the page.
+                    
+                    The snippet marked in the template creates a pagination widget with the markup for the
+                    Bootstrap 3 frontend framework (to be edited for b-m-d). We show the pagination controls 
+                    only if there are more pages than the current one. We have the links to the previous and next pages, 
+                    and the list of all page numbers in the widget. The current page number is marked as active.
+                    
+                    To generate URLs for the links, we use the {% modify_query %} template tag, which will be described
+                    later in the Creating a template tag to modify request query parameters recipe in Section 5,
+                    Custom Template Filters and Tags.
+            
+            
+         # Composing class-based views
+         
+              # Django views are callables that take requests and return responses. 
+              
+            In addition to the function-based views, Django provides an alternative way to define views as classes. 
+            This approach is useful when you want to create reusable modular views or combine views of the
+            generic mixins. In this section, we will convert the previously shown function-based movie_list view 
+            to a class-based MovieListView view.
+            
+            - We will need to create a URL rule in the URL configuration and add a class-based view. 
+                To include a class-based view in the URL rules, use the as_view() method.
+            
+            - Our class-based view, MovieListView, will inherit the Django View class and override the 
+                get() and post() methods, which are used to distinguish between the requests by GET and POST.
+                We will also add the get_queryset_and_facets() and get_page() methods to make the class more modular.
+                
+                   # How it work:
+                
+                    The following are the things happening in the get() method:
+                    
+                        - First, we create the form object passing the GET dictionary-like object to it. 
+                            The GET object contains all the query variables that are passed using the GET method.
+                        
+                        - Then, the form is passed to the get_queryset_and_facets() method, 
+                            which returns a tuple of the following two elements: 
+                                the QuerySet and the facets dictionary respectively.
+                    
+                        - Then, the current request object and QuerySet is passed to the get_page() method,
+                            which returns the current page object.
+                        
+                        - Lastly, we create a context dictionary and render the response.
+                
+                   # There's more:
+                    As you see, the get(), post(), and get_page() methods are generic so that we could
+                    create a generic FilterableListView class with these methods in the utils app. 
+                    Then, in any app that requires a filterable list, we could create a class-based view that extends
+                    FilterableListView and defines only the form_class and template_name attributes
+                    and the get_queryset_and_facets() method. This is how class-based views work.
+        
+        
+         # Generating PDF documents
+         
+              # Django views allow you to create much more than just HTML pages. 
+            
+                You can generate files of any type. 
+                For example, you can create PDF documents for invoices, tickets, booking confirmations, and so on. 
+                In this section, we will show you how to generate resumes (curriculum vitae) in the PDF format out of 
+                the data from the database. We will be using the Pisa xhtml2pdf library, 
+                which is very practical as it allows you to use HTML templates to make PDF documents.
+                
+                - First of all, we need to install the xhtml2pdf Python library in your virtual environment
+                        # Decided to install this package globally
+                        # C:\Users\OWNER>pip install xhtml2pdf
+                    Collecting xhtml2pdf
+                      Downloading https://files.pythonhosted.org/packages/d1/94/a9b4e0ecb472f4d2bcb277524b586d9c8ee6c50745614f1b340c69bf2a3e/xhtml2pdf-0.2.3.tar.gz 
+                    (99kB)
+                        100% |████████████████████████████████| 102kB 85kB/s
+                    Collecting html5lib>=1.0 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/a5/62/bbd2be0e7943ec8504b517e62bab011b4946e1258842bc159e5dfde15b96/html5lib-1.0.1-py2.py3-none-any.whl 
+                    (117kB)
+                        100% |████████████████████████████████| 122kB 117kB/s
+                    Collecting pyPdf2 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/b4/01/68fcc0d43daf4c6bdbc6b33cc3f77bda531c86b174cac56ef0ffdb96faab/PyPDF2-1.26.0.tar.gz 
+                    (77kB)
+                        100% |████████████████████████████████| 81kB 201kB/s
+                    Requirement already satisfied: Pillow in c:\python36\lib\site-packages (from xhtml2pdf) (5.4.1)
+                    Collecting reportlab>=3.0 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/ac/2d/f25099332ac11ade06321690c3343fc3d46e7b935dc37f672b154940fc9f/reportlab-3.5.13-cp36-cp36m-win_amd64.whl 
+                    (2.2MB)
+                        100% |████████████████████████████████| 2.2MB 44kB/s
+                    Requirement already satisfied: six in c:\python36\lib\site-packages (from xhtml2pdf) (1.12.0)
+                    Collecting webencodings (from html5lib>=1.0->xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl
+
+                    Installing collected packages: webencodings, html5lib, pyPdf2, reportlab, xhtml2pdf
+                      Running setup.py install for pyPdf2 ... done
+                      Running setup.py install for xhtml2pdf ... done
+                    Successfully installed html5lib-1.0.1 pyPdf2-1.26.0 reportlab-3.5.13 webencoding s-0.5.1 xhtml2pdf-0.2.3
+                        # You are using pip version 18.1, however version 19.0.1 is available.
+                        # You should consider upgrading via the 'python -m pip install --upgrade pip' command.
+                
+                - Then, let's create a cv app containing a simple CV model with the Experience model that is
+                    attached to it through a foreign key. The CV model will have these fields - first name, last name, and e-mail.
+                    The Experience model will have these fields - the start date of a job, the end date of a job, company, 
+                    position at that company, and the skills gained.
+                
+                - In the URL rules, let's create a rule for the view that will download a PDF document 
+                    of a resume by the ID of the CV model.
+                
+                - Now, let's create the download_cv_pdf() view. 
+                    This view renders an HTML template and then passes the rendered string to the pisaDocument PDF creator.
+                
+                - Lastly, we will create the template (cv/cv_pdf.html) with which the document will be rendered.
+                
+                - Go to model administration and enter a CV document. 
+                    Then, if you access the document's URL at http://127.0.0.1:8000/en/cv/1/pdf/, 
+                    you will be asked to download a PDF document.
+                
+                   # How does the view work? 
+                   
+                - First, we load a curriculum vitae by its ID, if it exists, or raise the page not found error, if it doesn't.
+                
+                - Then, we create the response object with the content type of the PDF document. 
+                
+                - We set the Content-Disposition header to attachment with the specified filename. 
+                    This will force the browsers to open a dialog box prompting us to save the PDF document and 
+                    suggesting the specified name for the file. 
+                
+                - Then, we render the HTML template as a string passing cv object and the MEDIA_ROOT and STATIC_ROOT paths.
+                
+                            # Note that the src attribute of the <img> tag that is used for the PDF creation needs to point to the file in the filesystem
+                            # or the full URL of the online image. Pisa xhtml2pdf will download the image and include it in the PDF document.
+
+                - Then, we create a pisaDocument file with the UTF-8-encoded HTML as source and response object as the destination. 
+                    The response object is a file-like object and pisaDocument writes the content of the document to it. 
+                    The response object is returned by the view as expected.
+                
+                   # Let's take a look at the HTML template that is used to create this document. 
+                   # The template has some unusual markup tags and CSS rules. 
+                    
+                    If we want to have some elements on each page of the document, we can create CSS frames for that. 
+                    In the preceding example, the <div> tag with the footerContent ID is marked as a frame, 
+                    which will be repeated at the bottom of each page. 
+                    
+                    In a similar way, we can have a header or background image for each page.
+                    The following are the specific markup tags used in this document:
+                        - <pdf:nextpage> tag sets a manual page break
+                        - <pdf:pagenumber> tag returns the number of the current page
+                        - <pdf:pagecount> tag returns the total number of pages
+                    
+                    The version 0.0.6 (My version is xhtml2pdf-0.2.3) of the Pisa xhtml2pdf library doesn't fully support 
+                    all HTML tags and CSS rules. There are no publicly-accessible benchmarks to see what exactly is 
+                    supported and at what level. Therefore, you would need to experiment in order to make a PDF document 
+                    look like in the design requirements. However, this library is still mighty enough for customized
+                    layouts, which can be basically created just with the knowledge of HTML and CSS.
+                
+                
+         # Implementing a multilingual search with Haystack
+        
+              # One of the main functionalities of content-driven websites is a full-text search. 
+            
+            Haystack is a modular search API that supports the Solr, Elasticsearch, Whoosh, and Xapian search engines. 
+            For each model in your project that has to be findable in the search, you need to define an index that will 
+            read out the textual information from the models and place it into the backend. 
+            In this section, you will learn how to set up a search with Haystack and the Python-based 
+            Whoosh search engine for a multilingual website.
+            
+            - The "myapp1" app with Ideas and Category models shall be indexed in the search.
+            
+            - The "quotes" app with the InspirationalQuote model, where each quote can just be in any one language from the
+                languages defined in the settings.LANGUAGES and each quote doesn't necessarily have a translation.
+            
+            - Put these two apps in INSTALLED_APPS in the settings, 
+                create and apply database migrations, and create the model administration for these models to add some data. 
+                Also, create list and detail views for these models and plug them in the URL rules.
+            
+                   # Applying database migrations...
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations --name changes_in_myapp1_and_quotes
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0006_changes_in_myapp1_and_quotes.py
+                        - Change Meta options on category
+                        - Remove field title from category
+                        - Add field title_sw to category
+                        - Add field is_original to idea
+                        - Add field subtitle_sw to idea
+
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate
+                    Operations to perform:
+                      Apply all migrations: admin, auth, contenttypes, magazine, myapp1, quotes, sessions
+                    Running migrations:
+                      Applying myapp1.0006_changes_in_myapp1_and_quotes... OK
+                      Applying quotes.0001_initial... OK
+
+                   # I registered the respective models from myapp1 and quotes, to their admin.py
+                
+                   Using "admin.site.register(models.class)"
+                
+                   # Then i creates a superuser to access the Django admin site
+                
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py createsuperuser
+                    Username (leave blank to use 'owner'): tovi
+                    Email address:
+                    Password: mee2uu
+                    Password (again): mee2uu
+                    Superuser created successfully.
+
+                        # Then i ran the command "manage.py runserver" to launch the app
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py runserver
+                    Performing system checks...
+                    System check identified no issues (0 silenced).
+                    January 31, 2019 - 20:01:24
+                    Django version 1.11.1, using settings 'myproject.settings'
+                    Starting development server at http://127.0.0.1:8000/
+                    Quit the server with CTRL-BREAK.
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            

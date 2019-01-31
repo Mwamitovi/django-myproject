@@ -1,0 +1,14 @@
+{# templates/registration/login.html #}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block stylesheet %}
+   {{ block.super }}
+   <link rel="stylesheet" href="{{ STATIC_URL }}site/css/login.css">
+{% endblock stylesheet %}
+
+{% block content %}
+   <div class="container">
+     {% crispy form login_helper %}
+   </div>
+{% endblock content %}

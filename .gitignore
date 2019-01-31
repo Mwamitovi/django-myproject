@@ -1,6 +1,9 @@
 
 # .gitignore
 
+# Personal guideline
+.django-Learn.yaml
+
 # Project files and directories
 /myproject/local_settings.py
 /myproject/static/

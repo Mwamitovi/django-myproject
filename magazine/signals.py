@@ -12,8 +12,8 @@ from .models import NewsArticle
 def news_save_handler(sender, **kwargs):
 	if settings.DEBUG:
 		print("%s saved." % kwargs['instance'])
-		
-		
+
+
 @receiver(post_delete, sender=NewsArticle)
 def news_delete_handler(sender, **kwargs):
 	if settings.DEBUG:
