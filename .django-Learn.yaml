@@ -5,7 +5,7 @@
 --> journey of learning Django, lesson
 
 
-    # Web Development with Django Cookbook (Second Edition):  pg 66
+    # Web Development with Django Cookbook (Second Edition):  pg 107
     # Packt Publishing ltd - Over 90 practical recipes to help you create scalable websites using the Django 1.8 framework
     # Author: Aidas Bendoraitis, 
     ## First published: October 2014, 
@@ -66,195 +66,195 @@
 # Setting up virtual environment
 
 C:\virtualenvs>virtualenv --version
-16.2.0
+ 16.2.0
 
-C:\virtualenvs>virtualenv --help
-Usage: virtualenv [OPTIONS] DEST_DIR
+    C:\virtualenvs>virtualenv --help
+    Usage: virtualenv [OPTIONS] DEST_DIR
 
-Options:
-  --version             show program's version number and exit
-  -h, --help            show this help message and exit
-  -v, --verbose         Increase verbosity.
-  -q, --quiet           Decrease verbosity.
-  -p PYTHON_EXE, --python=PYTHON_EXE
-                        The Python interpreter to use, e.g.,
-                        --python=python3.5 will use the python3.5 interpreter to create the new environment.  
-                        The default is the interpreter that virtualenv was installed with (c:\python36\python.exe)
-  --clear               Clear out the non-root install and start from scratch.
-  --no-site-packages    DEPRECATED. Retained only for backward compatibility.
-                        Not having access to global site-packages is now the default behavior.
-  --system-site-packages
-                        Give the virtual environment access to the global site-packages.
-  --always-copy         Always copy files rather than symlinking.
-  --relocatable         Make an EXISTING virtualenv environment relocatable.
-                        This fixes up scripts and makes all .pth files relative.
-  --no-setuptools       Do not install setuptools in the new virtualenv.
-  --no-pip              Do not install pip in the new virtualenv.
-  --no-wheel            Do not install wheel in the new virtualenv.
-  --extra-search-dir=DIR
-                        Directory to look for setuptools/pip distributions in. This option can be used multiple times.
-  --download            Download pre-installed packages from PyPI.
-  --no-download, --never-download
-                        Do not download pre-installed packages from PyPI.
-  --prompt=PROMPT       Provides an alternative prompt prefix for this environment.
-  --setuptools          DEPRECATED. Retained only for backward compatibility.
-                        This option has no effect.
-  --distribute          DEPRECATED. Retained only for backward compatibility.
-                        This option has no effect.
-  --unzip-setuptools    DEPRECATED.  Retained only for backward compatibility.
-                        This option has no effect.
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -v, --verbose         Increase verbosity.
+      -q, --quiet           Decrease verbosity.
+      -p PYTHON_EXE, --python=PYTHON_EXE
+                            The Python interpreter to use, e.g.,
+                            --python=python3.5 will use the python3.5 interpreter to create the new environment.  
+                            The default is the interpreter that virtualenv was installed with (c:\python36\python.exe)
+      --clear               Clear out the non-root install and start from scratch.
+      --no-site-packages    DEPRECATED. Retained only for backward compatibility.
+                            Not having access to global site-packages is now the default behavior.
+      --system-site-packages
+                            Give the virtual environment access to the global site-packages.
+      --always-copy         Always copy files rather than symlinking.
+      --relocatable         Make an EXISTING virtualenv environment relocatable.
+                            This fixes up scripts and makes all .pth files relative.
+      --no-setuptools       Do not install setuptools in the new virtualenv.
+      --no-pip              Do not install pip in the new virtualenv.
+      --no-wheel            Do not install wheel in the new virtualenv.
+      --extra-search-dir=DIR
+                            Directory to look for setuptools/pip distributions in. This option can be used multiple times.
+      --download            Download pre-installed packages from PyPI.
+      --no-download, --never-download
+                            Do not download pre-installed packages from PyPI.
+      --prompt=PROMPT       Provides an alternative prompt prefix for this environment.
+      --setuptools          DEPRECATED. Retained only for backward compatibility.
+                            This option has no effect.
+      --distribute          DEPRECATED. Retained only for backward compatibility.
+                            This option has no effect.
+      --unzip-setuptools    DEPRECATED.  Retained only for backward compatibility.
+                            This option has no effect.
 
-C:\virtualenvs>
+    C:\virtualenvs>
 
 
 Microsoft Windows [Version 6.1.7601]
-Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+    Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 
-C:\>pip install pillow      // PILLOW
-Collecting pillow
-  Downloading https://files.pythonhosted.org/packages/ec/ca/7af5b6628ecf770645f8cc3c9da3c2bb5c5ffc7384a9ff0666fdb818b4d5/Pillow-5.4.1-cp36-cp36m-win_amd64.whl 
-  (1.9MB)
-    100% |████████████████████████████████| 1.9MB 22kB/s
-Installing collected packages: pillow
-Successfully installed pillow-5.4.1
+    C:\>pip install pillow      // PILLOW
+    Collecting pillow
+      Downloading https://files.pythonhosted.org/packages/ec/ca/7af5b6628ecf770645f8cc3c9da3c2bb5c5ffc7384a9ff0666fdb818b4d5/Pillow-5.4.1-cp36-cp36m-win_amd64.whl 
+      (1.9MB)
+        100% |████████████████████████████████| 1.9MB 22kB/s
+    Installing collected packages: pillow
+    Successfully installed pillow-5.4.1
 
-C:\>
+    C:\>
 
 C:\virtualenvs\myproject_env>virtualenv --system-site-packages .  // Notice the 'dot' at the end, indicates to make this folder a virtual environment
-Using base prefix 'c:\\python36'
-New python executable in C:\virtualenvs\myproject_env\Scripts\python.exe
-Installing setuptools, pip, wheel...
-done.
+    Using base prefix 'c:\\python36'
+    New python executable in C:\virtualenvs\myproject_env\Scripts\python.exe
+    Installing setuptools, pip, wheel...
+    done.
 
-C:\virtualenvs\myproject_env\Scripts>activate
+    C:\virtualenvs\myproject_env\Scripts>activate
 
-(myproject_env) C:\virtualenvs\myproject_env\Scripts>cd..
+    (myproject_env) C:\virtualenvs\myproject_env\Scripts>cd..
 
-(myproject_env) C:\virtualenvs\myproject_env>pip install django==1.8    // DJANGO
-Collecting django==1.8
-  Downloading https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl 
-  (6.2MB)
-    100% |████████████████████████████████| 6.2MB 33kB/s
-Installing collected packages: django
-Successfully installed django-1.8
+    (myproject_env) C:\virtualenvs\myproject_env>pip install django==1.8    // DJANGO
+    Collecting django==1.8
+      Downloading https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl 
+      (6.2MB)
+        100% |████████████████████████████████| 6.2MB 33kB/s
+    Installing collected packages: django
+    Successfully installed django-1.8
 
 
 (myproject_env) C:\virtualenvs\myproject_env>project>django-admin.py startproject myproject
 
-(myproject_env) C:\virtualenvs\myproject_env>project>cd myproject
+    (myproject_env) C:\virtualenvs\myproject_env>project>cd myproject
 
-(myproject_env) C:\virtualenvs\myproject_env\project\myproject>dir
- Volume in drive C has no label.
- Volume Serial Number is F215-C6CD
-    // We rename this folder as django-myproject:
-    Directory of C:\virtualenvs\myproject_env\project\myproject   
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>dir
+     Volume in drive C has no label.
+     Volume Serial Number is F215-C6CD
+        // We rename this folder as django-myproject:
+        Directory of C:\virtualenvs\myproject_env\project\myproject   
 
-    01/18/2019  12:44 AM               252 manage.py
-    01/18/2019  12:44 AM    <DIR>          myproject    
-                   1 File(s)            252 bytes
-                   3 Dir(s)  61,986,332,672 bytes free
+        01/18/2019  12:44 AM               252 manage.py
+        01/18/2019  12:44 AM    <DIR>          myproject    
+                       1 File(s)            252 bytes
+                       3 Dir(s)  61,986,332,672 bytes free
 
-(myproject_env) C:\virtualenvs\myproject_env\project\myproject>
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>
 
-(myproject_env) C:\virtualenvs\myproject_env\project\myproject>cd..
+    (myproject_env) C:\virtualenvs\myproject_env\project\myproject>cd..
 
-(myproject_env) C:\virtualenvs\myproject_env\project>cd django-myproject    // renamed myproject (top-folder) to django-myproject
+    (myproject_env) C:\virtualenvs\myproject_env\project>cd django-myproject    // renamed myproject (top-folder) to django-myproject
 
-(myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>dir
- Volume in drive C has no label.
- Volume Serial Number is F215-C6CD
-    // ...to be used under version control (.git):
-    Directory of C:\virtualenvs\myproject_env\project\django-myproject  
+    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>dir
+     Volume in drive C has no label.
+     Volume Serial Number is F215-C6CD
+        // ...to be used under version control (.git):
+        Directory of C:\virtualenvs\myproject_env\project\django-myproject  
 
-    01/18/2019  12:44 AM               252 manage.py
-    01/18/2019  12:44 AM    <DIR>          myproject
-                   1 File(s)            252 bytes
-                   3 Dir(s)  61,983,170,560 bytes free
+        01/18/2019  12:44 AM               252 manage.py
+        01/18/2019  12:44 AM    <DIR>          myproject
+                       1 File(s)            252 bytes
+                       3 Dir(s)  61,983,170,560 bytes free
 
-(myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
 
 
 (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>pip install -r requirements/dev.txt
-Requirement already satisfied: Django==1.8 in c:\virtualenvs\myproject_env\lib\site-packages (from -r requirements\base.txt (line 4)) (1.8)
-Collecting djangorestframework (from -r requirements\base.txt (line 5))
-  Downloading https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl 
-(950kB)
-    100% |████████████████████████████████| 952kB 234kB/s
-Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
-  Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79)
-to c:\virtualenvs\myproject_env\src\python-social-auth
-  Error [WinError 2] The system cannot find the file specified while executing command git clone -q git://github.com/omab/python-social-auth.git 
-  c:\virtualenvs\myproject_env\src\python-social-auth
-Cannot find command 'git' - do you have 'git' installed and in your PATH?   // Because i had not yet "git init" django-myproject
+    Requirement already satisfied: Django==1.8 in c:\virtualenvs\myproject_env\lib\site-packages (from -r requirements\base.txt (line 4)) (1.8)
+    Collecting djangorestframework (from -r requirements\base.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl 
+    (950kB)
+        100% |████████████████████████████████| 952kB 234kB/s
+    Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
+      Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79)
+    to c:\virtualenvs\myproject_env\src\python-social-auth
+      Error [WinError 2] The system cannot find the file specified while executing command git clone -q git://github.com/omab/python-social-auth.git 
+      c:\virtualenvs\myproject_env\src\python-social-auth
+    Cannot find command 'git' - do you have 'git' installed and in your PATH?   // Because i had not yet "git init" django-myproject
 
 
-(myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
+ (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>
 
+ # OWNER@OWNER-PC MINGW32 /c   // GIT  (Git was installed as a dependency for SourceTree)
 
-# OWNER@OWNER-PC MINGW32 /c   // GIT  (Git was installed as a dependency for SourceTree)
+    $ cd virtualenvs/myproject_env/project/django-myproject
 
-$ cd virtualenvs/myproject_env/project/django-myproject
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject
+    $ git init
+    Initialized empty Git repository in C:/virtualenvs/myproject_env/project/django-myproject/.git/
 
-OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject
-$ git init
-Initialized empty Git repository in C:/virtualenvs/myproject_env/project/django-myproject/.git/
-
-OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)   // django-project now has a .git file
-$
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)   // django-project now has a .git file
+    $
 
 
 OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
-$ pip install -r requirements/dev.txt
-Collecting Django==1.8 (from -r requirements\base.txt (line 4))
-  Using cached https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl
-Collecting djangorestframework (from -r requirements\base.txt (line 5))
-  Using cached https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl
- 
-# You can directly install from a specific commit at the Git repository for the python-socialauth in our example. 
-# In practice, installing from a specific commit would rarely be useful, for instance, only when having third-party dependencies 
-# in your project with specific functionality that are not supported in the recent versions anymore.
+ $ pip install -r requirements/dev.txt
+    Collecting Django==1.8 (from -r requirements\base.txt (line 4))
+      Using cached https://files.pythonhosted.org/packages/4e/1c/17a429cfb79c1814d1ec31939fc5cf4a8ac68fe934279e095fb6160123a9/Django-1.8-py2.py3-none-any.whl
+    Collecting djangorestframework (from -r requirements\base.txt (line 5))
+      Using cached https://files.pythonhosted.org/packages/ef/13/0f394111124e0242bf3052c5578974e88e62e3715f0daf76b7c987fc6705/djangorestframework-3.9.1-py2.py3-none-any.whl
+     
+    # You can directly install from a specific commit at the Git repository for the python-socialauth in our example. 
+    # In practice, installing from a specific commit would rarely be useful, for instance, only when having third-party dependencies 
+    # in your project with specific functionality that are not supported in the recent versions anymore.
+      
+    Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
+      Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79) to c:\virtualenvs\myproject_env/project/django-myproject                                                        yproject_env\project\django-myproject\src\python-social-auth
+      Did not find branch or tag '6b1e301c79', assuming revision or ref.
+    Collecting django-debug-toolbar (from -r requirements/dev.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/01/9a/3db232bd15882d90d3c53de1f34ce0a522327849593c9198899713267cfe/django_debug_toolbar-1.11-py2.py3-none-any.whl (201kB)
+    Collecting selenium (from -r requirements/dev.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/80/d6/4294f0b4bce4de0abf13e17190289f9d0613b0a44e5dd6a7f5ca98459853/selenium-3.141.0-py2.py3-none-any.whl (904kB)
+    Collecting python3-openid>=3.0.1 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/bd/de/52c5699f52dcee3037db587196dcaf63ffedf5fbeba3183afe9b21a3a89f/python3_openid-3.1.0-py3-none-any.whl (130kB)
+    Collecting requests>=1.1.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/7d/e3/20f3d364d6c8e5d2353c72a67778eb189176f08e873c9900e10c0287b84b/requests-2.21.0-py2.py3-none-any.whl (57kB)
+    Collecting oauthlib>=0.3.8 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/b8/03/ec2be6c125f330361afe33bff48ef7549c47da8fefc658a2df2242175b4b/oauthlib-3.0.0-py2.py3-none-any.whl (142kB)
+    Collecting requests-oauthlib>0.3.2 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/c2/e2/9fd03d55ffb70fe51f587f20bcf407a6927eb121de86928b34d162f0b1ac/requests_oauthlib-1.2.0-py2.py3-none-any.whl
+    Collecting six>=1.2.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
+    Collecting PyJWT>=1.0.0 (from python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/87/8b/6a9f14b5f781697e51259d81657e6048fd31a113229cf346880bb7545565/PyJWT-1.7.1-py2.py3-none-any.whl
+    Collecting sqlparse>=0.2.0 (from django-debug-toolbar->-r requirements/dev.txt (line 5))
+      Downloading https://files.pythonhosted.org/packages/65/85/20bdd72f4537cf2c4d5d005368d502b2f464ede22982e724a82c86268eda/sqlparse-0.2.4-py2.py3-none-any.whl
+    Collecting urllib3 (from selenium->-r requirements/dev.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/62/00/ee1d7de624db8ba7090d1226aebefab96a2c71cd5cfa7629d6ad3f61b79e/urllib3-1.24.1-py2.py3-none-any.whl (118kB)
+    Collecting defusedxml (from python3-openid>=3.0.1->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/87/1c/17f3e3935a913dfe2a5ca85fa5ccbef366bfd82eb318b1f75dadbf0affca/defusedxml-0.5.0-py2.py3-none-any.whl
+    Collecting certifi>=2017.4.17 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/9f/e0/accfc1b56b57e9750eba272e24c4dddeac86852c2bebd1236674d7887e8a/certifi-2018.11.29-py2.py3-none-any.whl (154kB)
+    Collecting idna<2.9,>=2.5 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
+      Downloading https://files.pythonhosted.org/packages/14/2c/cd551d81dbe15200be1cf41cd03869a46fe7226e7450af7a6545bfc474c9/idna-2.8-py2.py3-none-any.whl (58kB)
+    Collecting chardet<3.1.0,>=3.0.2 (from requests>=1.1.0->python-social-auth->-r requirements\base.tx                                                          t (line 6))
+      Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
+    django-debug-toolbar 1.11 has requirement Django>=1.11, but you'll have django 1.8 which is incompatible.
+    Installing collected packages: Django, djangorestframework, defusedxml, python3-openid, certifi, urllib3, idna, 
+    chardet, requests, oauthlib, requests-oauthlib, six, PyJWT, python-social-auth, sqlparse, django-debug-toolbar, selenium
+      Running setup.py develop for python-social-auth
+    Successfully installed Django-1.8 PyJWT-1.7.1 certifi-2018.11.29 chardet-3.0.4 defusedxml-0.5.0 django-debug-toolbar-1.11 
+    djangorestframework-3.9.1 idna-2.8 oauthlib-3.0.0 python-social-auth python3-openid-3.1.0 requests-2.21.0 requests-oauthlib-1.2.0 
+    selenium-3.141.0 six-1.12.0 sqlparse-0.2.4 urllib3-1.24.1
+
+    OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
+    $
   
-Obtaining python-social-auth from git+git://github.com/omab/python-social-auth.git@6b1e301c79#egg=python-social-auth (from -r requirements\base.txt (line 6))
-  Cloning git://github.com/omab/python-social-auth.git (to revision 6b1e301c79) to c:\virtualenvs\myproject_env/project/django-myproject                                                        yproject_env\project\django-myproject\src\python-social-auth
-  Did not find branch or tag '6b1e301c79', assuming revision or ref.
-Collecting django-debug-toolbar (from -r requirements/dev.txt (line 5))
-  Downloading https://files.pythonhosted.org/packages/01/9a/3db232bd15882d90d3c53de1f34ce0a522327849593c9198899713267cfe/django_debug_toolbar-1.11-py2.py3-none-any.whl (201kB)
-Collecting selenium (from -r requirements/dev.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/80/d6/4294f0b4bce4de0abf13e17190289f9d0613b0a44e5dd6a7f5ca98459853/selenium-3.141.0-py2.py3-none-any.whl (904kB)
-Collecting python3-openid>=3.0.1 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/bd/de/52c5699f52dcee3037db587196dcaf63ffedf5fbeba3183afe9b21a3a89f/python3_openid-3.1.0-py3-none-any.whl (130kB)
-Collecting requests>=1.1.0 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/7d/e3/20f3d364d6c8e5d2353c72a67778eb189176f08e873c9900e10c0287b84b/requests-2.21.0-py2.py3-none-any.whl (57kB)
-Collecting oauthlib>=0.3.8 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/b8/03/ec2be6c125f330361afe33bff48ef7549c47da8fefc658a2df2242175b4b/oauthlib-3.0.0-py2.py3-none-any.whl (142kB)
-Collecting requests-oauthlib>0.3.2 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/c2/e2/9fd03d55ffb70fe51f587f20bcf407a6927eb121de86928b34d162f0b1ac/requests_oauthlib-1.2.0-py2.py3-none-any.whl
-Collecting six>=1.2.0 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
-Collecting PyJWT>=1.0.0 (from python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/87/8b/6a9f14b5f781697e51259d81657e6048fd31a113229cf346880bb7545565/PyJWT-1.7.1-py2.py3-none-any.whl
-Collecting sqlparse>=0.2.0 (from django-debug-toolbar->-r requirements/dev.txt (line 5))
-  Downloading https://files.pythonhosted.org/packages/65/85/20bdd72f4537cf2c4d5d005368d502b2f464ede22982e724a82c86268eda/sqlparse-0.2.4-py2.py3-none-any.whl
-Collecting urllib3 (from selenium->-r requirements/dev.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/62/00/ee1d7de624db8ba7090d1226aebefab96a2c71cd5cfa7629d6ad3f61b79e/urllib3-1.24.1-py2.py3-none-any.whl (118kB)
-Collecting defusedxml (from python3-openid>=3.0.1->python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/87/1c/17f3e3935a913dfe2a5ca85fa5ccbef366bfd82eb318b1f75dadbf0affca/defusedxml-0.5.0-py2.py3-none-any.whl
-Collecting certifi>=2017.4.17 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/9f/e0/accfc1b56b57e9750eba272e24c4dddeac86852c2bebd1236674d7887e8a/certifi-2018.11.29-py2.py3-none-any.whl (154kB)
-Collecting idna<2.9,>=2.5 (from requests>=1.1.0->python-social-auth->-r requirements\base.txt (line 6))
-  Downloading https://files.pythonhosted.org/packages/14/2c/cd551d81dbe15200be1cf41cd03869a46fe7226e7450af7a6545bfc474c9/idna-2.8-py2.py3-none-any.whl (58kB)
-Collecting chardet<3.1.0,>=3.0.2 (from requests>=1.1.0->python-social-auth->-r requirements\base.tx                                                          t (line 6))
-  Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
-django-debug-toolbar 1.11 has requirement Django>=1.11, but you'll have django 1.8 which is incompatible.
-Installing collected packages: Django, djangorestframework, defusedxml, python3-openid, certifi, urllib3, idna, 
-chardet, requests, oauthlib, requests-oauthlib, six, PyJWT, python-social-auth, sqlparse, django-debug-toolbar, selenium
-  Running setup.py develop for python-social-auth
-Successfully installed Django-1.8 PyJWT-1.7.1 certifi-2018.11.29 chardet-3.0.4 defusedxml-0.5.0 django-debug-toolbar-1.11 
-djangorestframework-3.9.1 idna-2.8 oauthlib-3.0.0 python-social-auth python3-openid-3.1.0 requests-2.21.0 requests-oauthlib-1.2.0 
-selenium-3.141.0 six-1.12.0 sqlparse-0.2.4 urllib3-1.24.1
-
-OWNER@OWNER-PC MINGW32 /c/virtualenvs/myproject_env/project/django-myproject (master)
-$
 
 # If you have already manually installed the project requirements with pip one by one, 
 # you can generate the requirements/base.txt file using the following command:
@@ -370,7 +370,7 @@ $
 
 --> Project setup & configuration
 
-   - PLANNING the project
+  1a - PLANNING the project
             
          # REMEMBER: All django apps (from command startapp) shall be created directly in this django-myproject (the startproject folder)
             # We renamed the high-level folder "myproject" to "django-myproject"
@@ -451,11 +451,8 @@ $
             
               # Lastly, make sure that you myproject folder contain: settings.py, urls.py, models.py and wsgi.py (generated after startproject command)
             
-            
 
-
-
-   - SETTINGS files...
+  1b - SETTINGS files...
     
         # Adding external libs/apps under python path:
         
@@ -624,7 +621,7 @@ $
                     # You can find it at https://www.python.org/dev/peps/pep-0008/.
 
             
-    - APP Configuration...
+  1c - APP Configuration...
     
         # Creating app configuration
         
@@ -945,7 +942,7 @@ $
     
     
     
-    - INITIATING GIT (works with GitHub)
+  1d - INITIATING GIT (works with GitHub)
        
          # Using Git bash to push our local repository (first time)
          
@@ -1129,7 +1126,7 @@ $
  
  
  
-    - DATABASE STRUCTURE
+  2 - DATABASE STRUCTURE
     
          # Introduction
         
@@ -1696,7 +1693,7 @@ $
 
 
 
-    - FORMS & VIEWS
+  3 - FORMS & VIEWS
 
          # Introduction
 
@@ -1748,9 +1745,539 @@ $
                     In the view, we will pass the HttpRequest object as the first argument in both situations.
                     when the form is posted, as well as when it is loaded for the first time.
             
+        
+         # Utilizing the save method of the form
+        
+            To make your views clean and simple, it is good practice to move the handling of the form data to the form itself
+            whenever possible and makes sense. The common practice is to have a save() method that will save the data,
+            perform search, or do some other smart actions. We will extend the form that is defined in the previous
+            recipe with the save() method, which will send an e-mail to the selected recipient.
+            
+            To complete this section, execute the following two steps:
+            
+                - From Django, import the function in order to send an e-mail. 
+                    Then, add the save() method to MessageForm. It will try to send an e-mail to the selected recipient,
+                    and will fail silently if any errors occur.
+                    
+                            # The save() method uses the cleaned data from the form to read the recipient's e-mail address and the message.
+                            # The sender of the e-mail is the current user from the request.
+                            # If the e-mail cannot be sent due to an incorrect mail server configuration or another reason,
+                            # it will fail silently; that is, no error will be raised.
+                    
+                - Then, call the save() method from the form in the view if the posted data is valid.
+                
+                            # Now, let's look at the view. When the posted form is valid, the save() method of the form will be called
+                            # and the user will be redirected to the success page.
             
             
+         # Uploading images
+         
+            In this section, we will take a look at the easiest way to handle image uploads. 
+            You will see an example of an app, where the visitors can upload images with inspirational quotes.
             
+                   # Make sure to have Pillow or PIL installed in your virtual environment or globally.
+                
+                - Create a "quotes" app and put it in INSTALLED_APPS in the settings. 
+                
+                - To the quotes/models.py, we add an InspirationalQuote model with three fields; 
+                    (1) the author, (2) quote text, and (3) picture.
+                
+                - Create the quotes/forms.py file and put a simple model form there.
+                
+                - In the quotes/views.py file, put a view that handles the form. 
+                    Don't forget to pass the FILES dictionary-like object to the form. 
+                    When the form is valid, trigger the save method.
+                
+                - And then, create a template for the view in templates/quotes/change_quote.html. 
+                    It is very important to set the "enctype" attribute to "multipart/form-data" for the HTML form,
+                    otherwise the file upload won't work:
+                    
+                         # Django model forms are forms that are created from models. 
+                         # They provide all the fields from the model so you don't need to define them again. 
+                         
+                         # In the preceding example, we created a `model form for the InspirationalQuote model. 
+                         # When we save the form, the form knows how to save each field in the database, 
+                         # as well as to upload the files and save them in the media directory.
+                
+                - There is more:
+                    As an option, we will see an example of how to generate a thumbnail out of the uploaded image.
+                    Using this technique, you could also generate several other specific versions of the image,
+                    such as the list version, mobile version, and desktop computer version.
+                    
+                    We will add three methods to the InspirationalQuote model (quotes/models.py).
+                    They are save(), create_thumbnail(), and get_thumbnail_picture_url(). 
+                    When the model is being saved, we will trigger the creation of the thumbnail. 
+                    When we need to show the thumbnail in a template, we can get its URL using 
+                        {{ quote.get_thumbnail_picture_url }}.
+                    
+                    - How does the creating the thumbnail work?:
+                        If we had the original file saved as quotes/2014/04/20140424140000.png, 
+                        we check whether the quotes/2014/04/20140424140000_thumbnail.jpg file doesn't exist and, 
+                        in that case, we open the original image, cropping it from the center, 
+                        resizing it to 50 x 50 pixels, and saving it to the storage.
+                        
+                        The get_thumbnail_picture_url() method checks whether the thumbnail version exists
+                        in the storage and returns its URL. If the thumbnail version does not exist, the URL of
+                        the original image is returned as a fallback.
+                        
+                              # From Python
+                        
+                          - os.path.splitext(path):
+                            Split the pathname path into a pair (root, ext) such that root + ext == path, 
+                            and ext is empty or begins with a period and contains at most one period.  
+                            Leading periods on the basename are ignored; splitext('.cshrc') returns ('.cshrc', '').
+
+                            Changed in version 3.6: Accepts a path-like object.
+
+                            path-like object:
+                            An object representing a file system path.
+                            A path-like object is either a str or bytes object representing a path, 
+                            or an object implementing the os.PathLike protocol. An object that supports the os.PathLike protocol 
+                            can be converted to a str or bytes file system path by calling the os.fspath() function; 
+                            os.fsdecode() and os.fsencode() can be used to guarantee a str or bytes result instead, respectively.
+        
+        
+         # Creating a form layout with django-crispy-forms
+         
+            The django-crispy-forms app allows you to build, customize, and reuse forms using one of these CSS frameworks:
+                (1) Uni-Form, (2) Bootstrap, or (3) Foundation. 
+                
+            The usage of django-crispy-forms is analogous to fieldsets in the Django contributed administration;
+            however, it is more advanced and customizable. You define form layout in the Python code and you don't need
+            to worry about how each field is presented in HTML. 
+            
+            However, if you need to add specific HTML attributes or wrapping, you can easily do that too. 
+            Moreover, all the markup used by django-crispy-forms is located in the templates that can be overwritten
+            for specific needs.
+            
+            In this section, we will see an example of how to use django-crispy-forms with Bootstrap 3,
+            which is the most popular frontend framework to develop responsive, mobile-first web projects.
+            
+            - To install django-cripy-forms, i copied it's files (crispy_forms and django_crispy_forms-1.7.2.dist-info)
+                from another project and copied the folder to (C:\Python36\Lib\site-packages)
+                
+                   # Run pip install django-crispy-forms confirms that the app is already a global python package now
+                C:\Users\OWNER>pip install django-crispy-forms
+                Requirement already satisfied: django-crispy-forms in c:\python36\lib\site-packages (1.7.2)
+                
+                (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>pip freeze
+                    backports.functools-lru-cache==1.5
+                    certifi==2018.11.29
+                          # .....
+                    Django==1.11.1
+                    django-crispy-forms==1.7.2
+                    django-debug-toolbar==1.11
+                    djangorestframework==3.9.1
+                          # .....
+                    virtualenv==16.2.0
+                    zc.lockfile==1.4
+
+            - Also for bootstrap, i copied it's folder (bootstrap or bootstrap-material-design) from another project and 
+                copied it to the path (C:\Users\OWNER\AppData\Roaming\npm\node_modules)
+            
+                   # Run npm -g list confirms that the app is already a global node package now (opted to use the bootstrap-material-design/bmd)
+                C:\Users\OWNER>npm -g list --depth=0
+                    C:\Users\OWNER\AppData\Roaming\npm
+                        +-- bootstrap@3.3.7
+                        +-- bootstrap-material-design@4.1.1
+                        +-- gulp-cli@2.0.1
+                        +-- jasmine@3.3.1
+                        +-- karma@3.1.4
+                        `-- stylelint-cli@1.0.0
+            
+            - Create a "bulletin_board app" to utilize django-crispy-forms and put it in INSTALLED_APPS in the 'base' settings.
+                   # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py startapp bulletin_board
+            
+                Then we will have a Bulletin model there with these fields: 
+                    (1) bulletin_type, (2) title, (3) description, (4) contact_person, (5) phone, (6) email, and (7) image
+            
+            - Then add a model form for the bulletin in the newly created app. 
+                We will attach a form helper to the form in the initialization method itself. 
+                The form helper will have the layout property that will define the layout for the form.
+                
+                Note: 
+                      # All the fields are grouped by fieldsets. 
+                    The first argument of the Fieldset object defines the legend, 
+                    the other positional arguments define the fields.
+                    
+                      # You can also pass named arguments to define the HTML attributes for the fieldset; 
+                    for example, for the second fieldset, we pass title and css_id to set the title and id HTML attributes.
+                    
+                      # Fields can also have additional attributes passed by named arguments; 
+                    for example, for the description field, we pass css_class and rows to set the class and rows HTML attributes.
+                    
+                      # Besides the normal fields, you can pass HTML snippets 
+                    as this is done with the help block for the image field. 
+                    
+                      # You can also have prepended text fields in the layout. 
+                    For example, we added a phone icon to the Phone field and an @ sign for the Email field. 
+                    
+                      # Notice from the example with the contact fields, 
+                    we can easily wrap fields in the HTML <div> elements using the Div objects. 
+                    This is useful when specific JavaScript needs to be applied to some form fields.
+                    
+                      # The action attribute for the HTML form is defined by the form_action property of the form helper. 
+                    If you use the empty string as an action, the form will be submitted to the same view, 
+                    where the form is included. 
+                    
+                      # The method attribute of the HTML form is defined by the form_method property of the form helper. 
+                    As you know, the HTML forms allow the GET and POST methods. 
+                    
+                      # Finally, there is a Submit object 
+                    in order to render the submit button, which takes the name of the button as the first positional argument
+                    and the value of the button as the second argument.
+                    
+                Remember: 
+                    If you need a specific markup for the forms in your project, 
+                    you can still overwrite and modify templates of the django-crispy-forms app 
+                    as there is no markup hardcoded in the Python files, rather all the generated markup 
+                    is rendered through the templates. Just copy the templates from the django-crispy-forms app
+                    to your project's template directory and change them as required.
+            
+            - To render the form in the template, we just need to load the crispy_forms_tags template tag library 
+                and use the {% crispy %} template tag as follows.
+                   # We shall create the base.html template.
+                    {# templates/bulletin_board/change_form.html #}
+                    {% extends "base.html" %}
+                    {% load crispy_forms_tags %}
+                    
+                    {% block content %}
+                       {% crispy form %}
+                    {% endblock content %}
+            
+            
+         # Downloading authorized files
+         
+            Sometimes, you might need to allow only specific people to download intellectual property from your website.
+            For example, music, videos, literature, or other artistic works should be accessible only to the paid members.
+            In this section, we'll learn how to restrict image downloads only to the authenticated users using 
+            the contributed Django auth app.
+            
+            Using the "quotes" app, please execute these steps one by one:
+            
+                - Within the quotes/views.py, create a view function that will require authentication to download a file
+                
+                - Add the view function to the URL configuration (quotes/urls.py)
+                
+                - Then, we need to set the login view in project URL configuration (myproject/urls.py). 
+                        # Note how we are also adding login_helper for django-crispy-forms
+                
+                - Create a template for the login form, within templates/registration/login.html
+                
+                - Create the login.css file to add some style to the login form. 
+                    Lastly, you should restrict the users from bypassing Django and downloading restricted files directly.
+                    To do so on an Apache web server, you can put the .htaccess file in the media/quotes directory 
+                    with the following content if you are using Apache 2.2:
+                            # media/quotes/.htaccess
+                        Order deny,allow
+                        Deny from all
+                        
+                    You can put the following content if you are using Apache 2.4:
+                            # media/quotes/.htaccess
+                            Require all denied
+                    
+                    - How it works:
+                    
+                        The download_quote_picture() view streams the picture from a specific inspirational quote. 
+                        The Content-Disposition header that is set to attachment makes the file downloadable instead of being
+                        immediately shown in the browser. The filename for the file will be something similar to
+                                    # walt-disney---if-you-can-dream-it-you-can-do-it.png
+                        
+                        The @login_required decorator will redirect the visitor to the login page if he or she tries to
+                        access the downloadable file without being logged in.
+                        
+                        As we want to have a nice Bootstrap-style login form, we are using django-crispy-forms again
+                        and define a helper for the login_helper form. The helper is passed to the authorization form as an
+                        extra context variable and then used as the second parameter in the {% crispy %} template tag.
+        
+        
+         # Filtering object lists
+         
+            In web development, besides views with forms, it is typical to have object-list views and detail views.
+            List views can simply list objects that are ordered, for example, alphabetically or by creation date;
+            however, that is not very user-friendly with huge amounts of data. For the best accessibility 
+            and convenience, you should be able to filter the content by all possible categories.
+            In this section, we will see the pattern that is used to filter list views by any number
+            of categories. What we'll be creating is a list view of movies that can be filtered by genre, 
+            director, actor, or rating.
+            
+            For this filtering example, we will use the Movie model with relations to genres, directors, and
+            actors to filter by. It will also be possible to filter by ratings, which is PositiveIntegerField with choices. 
+            
+            - Create a "movies" app, put it in INSTALLED_APPS in the settings, and define the mentioned models in the new app.
+            
+            - Then, create MovieFilterForm with all the possible categories to be used in filtering.
+            
+            - Now, create a movie_list view that will use MovieFilterForm to validate the request query parameters and 
+                perform the filtering for chosen categories. Note the facets dictionary that is used here to list the 
+                categories and also the currently selected choices.
+            
+            - Finally, create the template for the list view (templates/movies/movie_list.html dir). 
+                We will use the facets dictionary here to list the categories and know which category is currently selected. 
+                To generate URLs for the filters, we will use the {% modify_query %} template tag, which will be described 
+                later in the Creating a template tag to modify request query parameters recipe in section 5, 
+                Custom Template Filters and Tags.
+            
+            - Add then, just add a simple base template with two-column layout
+            
+            - Create the base.html template. You can utilize the example provided in the Arranging the base.html 
+                template recipe in section 4, Templates and JavaScript.
+                
+            - How it work:
+            
+                   # We are using the facets dictionary that is passed to the template context to know which filters we have and which filters are selected.
+                
+                To look deeper, the facets dictionary consists of two sections:
+                    (1) the categories dictionary which contains QuerySets or choices of all filterable categories
+                and (2) the selected dictionary which contains the currently selected values for each category.
+                
+                In the view, we check whether the query parameters are valid in the form and then drill down
+                QuerySet of objects from the selected categories. Additionally, we set the selected values to
+                the facets dictionary, which will be passed to the template.
+                
+                In the template, for each categorization from the facets dictionary, we list all the categories
+                and mark the currently selected category as active. It is as simple as that.
+            
+            
+         # Managing paginated lists
+         
+            If you have dynamically changing lists of objects or the amount of them is greater than 30,
+            you will surely need pagination for the list. With pagination, instead of the full QuerySet,
+            you provide a fraction of the dataset that is limited to a specific amount per page and you will
+            also show the links to get to the other pages of the list. Django has classes to manage the paginated data,
+            and we will see how to do that in this section for the example provided in the previous section.
+            
+              # Let's start with the forms and views of the movies app from the Filtering object lists section.
+            
+            - To add pagination to the list view of the movies, follow these steps:
+            
+                - First, import the necessary pagination classes from Django. 
+                    We will add pagination management to the movie_list view just after filtering. 
+                    Also, we will slightly modify the context dictionary by assigning page instead 
+                    of the movie QuerySet to the object_list key.
+                
+                - In the movie_list.html, we will add pagination controls after the list of movies.
+                
+                - How do we achieve this?:
+
+                    When the QuerySet is filtered out, we will create a paginator object passing QuerySet 
+                    and the maximal amount of items that we want to show per page, which is 15 here. 
+                    Then, we will read the current page number from the query parameter, page. 
+                    
+                    The next step is to retrieve the current page object from paginator. 
+                    If the page number is not an integer, we get the first page. 
+                    If the number exceeds the amount of possible pages, the last page is retrieved. 
+                    
+                    The page object has methods and attributes necessary for the pagination widget. 
+                    Also, the page object acts like QuerySet so that we can iterate through it and 
+                    get the items from the fraction of the page.
+                    
+                    The snippet marked in the template creates a pagination widget with the markup for the
+                    Bootstrap 3 frontend framework (to be edited for b-m-d). We show the pagination controls 
+                    only if there are more pages than the current one. We have the links to the previous and next pages, 
+                    and the list of all page numbers in the widget. The current page number is marked as active.
+                    
+                    To generate URLs for the links, we use the {% modify_query %} template tag, which will be described
+                    later in the Creating a template tag to modify request query parameters recipe in Section 5,
+                    Custom Template Filters and Tags.
+            
+            
+         # Composing class-based views
+         
+              # Django views are callables that take requests and return responses. 
+              
+            In addition to the function-based views, Django provides an alternative way to define views as classes. 
+            This approach is useful when you want to create reusable modular views or combine views of the
+            generic mixins. In this section, we will convert the previously shown function-based movie_list view 
+            to a class-based MovieListView view.
+            
+            - We will need to create a URL rule in the URL configuration and add a class-based view. 
+                To include a class-based view in the URL rules, use the as_view() method.
+            
+            - Our class-based view, MovieListView, will inherit the Django View class and override the 
+                get() and post() methods, which are used to distinguish between the requests by GET and POST.
+                We will also add the get_queryset_and_facets() and get_page() methods to make the class more modular.
+                
+                   # How it work:
+                
+                    The following are the things happening in the get() method:
+                    
+                        - First, we create the form object passing the GET dictionary-like object to it. 
+                            The GET object contains all the query variables that are passed using the GET method.
+                        
+                        - Then, the form is passed to the get_queryset_and_facets() method, 
+                            which returns a tuple of the following two elements: 
+                                the QuerySet and the facets dictionary respectively.
+                    
+                        - Then, the current request object and QuerySet is passed to the get_page() method,
+                            which returns the current page object.
+                        
+                        - Lastly, we create a context dictionary and render the response.
+                
+                   # There's more:
+                    As you see, the get(), post(), and get_page() methods are generic so that we could
+                    create a generic FilterableListView class with these methods in the utils app. 
+                    Then, in any app that requires a filterable list, we could create a class-based view that extends
+                    FilterableListView and defines only the form_class and template_name attributes
+                    and the get_queryset_and_facets() method. This is how class-based views work.
+        
+        
+         # Generating PDF documents
+         
+              # Django views allow you to create much more than just HTML pages. 
+            
+                You can generate files of any type. 
+                For example, you can create PDF documents for invoices, tickets, booking confirmations, and so on. 
+                In this section, we will show you how to generate resumes (curriculum vitae) in the PDF format out of 
+                the data from the database. We will be using the Pisa xhtml2pdf library, 
+                which is very practical as it allows you to use HTML templates to make PDF documents.
+                
+                - First of all, we need to install the xhtml2pdf Python library in your virtual environment
+                        # Decided to install this package globally
+                        # C:\Users\OWNER>pip install xhtml2pdf
+                    Collecting xhtml2pdf
+                      Downloading https://files.pythonhosted.org/packages/d1/94/a9b4e0ecb472f4d2bcb277524b586d9c8ee6c50745614f1b340c69bf2a3e/xhtml2pdf-0.2.3.tar.gz 
+                    (99kB)
+                        100% |████████████████████████████████| 102kB 85kB/s
+                    Collecting html5lib>=1.0 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/a5/62/bbd2be0e7943ec8504b517e62bab011b4946e1258842bc159e5dfde15b96/html5lib-1.0.1-py2.py3-none-any.whl 
+                    (117kB)
+                        100% |████████████████████████████████| 122kB 117kB/s
+                    Collecting pyPdf2 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/b4/01/68fcc0d43daf4c6bdbc6b33cc3f77bda531c86b174cac56ef0ffdb96faab/PyPDF2-1.26.0.tar.gz 
+                    (77kB)
+                        100% |████████████████████████████████| 81kB 201kB/s
+                    Requirement already satisfied: Pillow in c:\python36\lib\site-packages (from xhtml2pdf) (5.4.1)
+                    Collecting reportlab>=3.0 (from xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/ac/2d/f25099332ac11ade06321690c3343fc3d46e7b935dc37f672b154940fc9f/reportlab-3.5.13-cp36-cp36m-win_amd64.whl 
+                    (2.2MB)
+                        100% |████████████████████████████████| 2.2MB 44kB/s
+                    Requirement already satisfied: six in c:\python36\lib\site-packages (from xhtml2pdf) (1.12.0)
+                    Collecting webencodings (from html5lib>=1.0->xhtml2pdf)
+                      Downloading https://files.pythonhosted.org/packages/f4/24/2a3e3df732393fed8b3ebf2ec078f05546de641fe1b667ee316ec1dcf3b7/webencodings-0.5.1-py2.py3-none-any.whl
+
+                    Installing collected packages: webencodings, html5lib, pyPdf2, reportlab, xhtml2pdf
+                      Running setup.py install for pyPdf2 ... done
+                      Running setup.py install for xhtml2pdf ... done
+                    Successfully installed html5lib-1.0.1 pyPdf2-1.26.0 reportlab-3.5.13 webencoding s-0.5.1 xhtml2pdf-0.2.3
+                        # You are using pip version 18.1, however version 19.0.1 is available.
+                        # You should consider upgrading via the 'python -m pip install --upgrade pip' command.
+                
+                - Then, let's create a cv app containing a simple CV model with the Experience model that is
+                    attached to it through a foreign key. The CV model will have these fields - first name, last name, and e-mail.
+                    The Experience model will have these fields - the start date of a job, the end date of a job, company, 
+                    position at that company, and the skills gained.
+                
+                - In the URL rules, let's create a rule for the view that will download a PDF document 
+                    of a resume by the ID of the CV model.
+                
+                - Now, let's create the download_cv_pdf() view. 
+                    This view renders an HTML template and then passes the rendered string to the pisaDocument PDF creator.
+                
+                - Lastly, we will create the template (cv/cv_pdf.html) with which the document will be rendered.
+                
+                - Go to model administration and enter a CV document. 
+                    Then, if you access the document's URL at http://127.0.0.1:8000/en/cv/1/pdf/, 
+                    you will be asked to download a PDF document.
+                
+                   # How does the view work? 
+                   
+                - First, we load a curriculum vitae by its ID, if it exists, or raise the page not found error, if it doesn't.
+                
+                - Then, we create the response object with the content type of the PDF document. 
+                
+                - We set the Content-Disposition header to attachment with the specified filename. 
+                    This will force the browsers to open a dialog box prompting us to save the PDF document and 
+                    suggesting the specified name for the file. 
+                
+                - Then, we render the HTML template as a string passing cv object and the MEDIA_ROOT and STATIC_ROOT paths.
+                
+                            # Note that the src attribute of the <img> tag that is used for the PDF creation needs to point to the file in the filesystem
+                            # or the full URL of the online image. Pisa xhtml2pdf will download the image and include it in the PDF document.
+
+                - Then, we create a pisaDocument file with the UTF-8-encoded HTML as source and response object as the destination. 
+                    The response object is a file-like object and pisaDocument writes the content of the document to it. 
+                    The response object is returned by the view as expected.
+                
+                   # Let's take a look at the HTML template that is used to create this document. 
+                   # The template has some unusual markup tags and CSS rules. 
+                    
+                    If we want to have some elements on each page of the document, we can create CSS frames for that. 
+                    In the preceding example, the <div> tag with the footerContent ID is marked as a frame, 
+                    which will be repeated at the bottom of each page. 
+                    
+                    In a similar way, we can have a header or background image for each page.
+                    The following are the specific markup tags used in this document:
+                        - <pdf:nextpage> tag sets a manual page break
+                        - <pdf:pagenumber> tag returns the number of the current page
+                        - <pdf:pagecount> tag returns the total number of pages
+                    
+                    The version 0.0.6 (My version is xhtml2pdf-0.2.3) of the Pisa xhtml2pdf library doesn't fully support 
+                    all HTML tags and CSS rules. There are no publicly-accessible benchmarks to see what exactly is 
+                    supported and at what level. Therefore, you would need to experiment in order to make a PDF document 
+                    look like in the design requirements. However, this library is still mighty enough for customized
+                    layouts, which can be basically created just with the knowledge of HTML and CSS.
+                
+                
+         # Implementing a multilingual search with Haystack
+        
+              # One of the main functionalities of content-driven websites is a full-text search. 
+            
+            Haystack is a modular search API that supports the Solr, Elasticsearch, Whoosh, and Xapian search engines. 
+            For each model in your project that has to be findable in the search, you need to define an index that will 
+            read out the textual information from the models and place it into the backend. 
+            In this section, you will learn how to set up a search with Haystack and the Python-based 
+            Whoosh search engine for a multilingual website.
+            
+            - The "myapp1" app with Ideas and Category models shall be indexed in the search.
+            
+            - The "quotes" app with the InspirationalQuote model, where each quote can just be in any one language from the
+                languages defined in the settings.LANGUAGES and each quote doesn't necessarily have a translation.
+            
+            - Put these two apps in INSTALLED_APPS in the settings, 
+                create and apply database migrations, and create the model administration for these models to add some data. 
+                Also, create list and detail views for these models and plug them in the URL rules.
+            
+                   # Applying database migrations...
+
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py makemigrations --name changes_in_myapp1_and_quotes
+                    Migrations for 'myapp1':
+                      myapp1\migrations\0006_changes_in_myapp1_and_quotes.py
+                        - Change Meta options on category
+                        - Remove field title from category
+                        - Add field title_sw to category
+                        - Add field is_original to idea
+                        - Add field subtitle_sw to idea
+
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py migrate
+                    Operations to perform:
+                      Apply all migrations: admin, auth, contenttypes, magazine, myapp1, quotes, sessions
+                    Running migrations:
+                      Applying myapp1.0006_changes_in_myapp1_and_quotes... OK
+                      Applying quotes.0001_initial... OK
+
+                   # I registered the respective models from myapp1 and quotes, to their admin.py
+                
+                   Using "admin.site.register(models.class)"
+                
+                   # Then i creates a superuser to access the Django admin site
+                
+                        # (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py createsuperuser
+                    Username (leave blank to use 'owner'): tovi
+                    Email address:
+                    Password: mee2uu
+                    Password (again): mee2uu
+                    Superuser created successfully.
+
+                        # Then i ran the command "manage.py runserver" to launch the app
+                    (myproject_env) C:\virtualenvs\myproject_env\project\django-myproject>python manage.py runserver
+                    Performing system checks...
+                    System check identified no issues (0 silenced).
+                    January 31, 2019 - 20:01:24
+                    Django version 1.11.1, using settings 'myproject.settings'
+                    Starting development server at http://127.0.0.1:8000/
+                    Quit the server with CTRL-BREAK.
+
             
             
             
