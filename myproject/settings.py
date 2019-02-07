@@ -46,14 +46,14 @@ FILE_UPLOAD_TEMP_DIR = os.path.join(
 	BASE_DIR, "myproject", "tmp"
 )
 
-LANGUAGE_CODE = "en"
-
 LANGUAGES = (
 	("en", "English"),
 	("de", "Deutsch"),
 	("fr", "Français"),
 	("sw", "Swahili"),
 )
+
+LANGUAGE_CODE = "en"
 
 # overwrite the STATUS_CHOICE from magazine/app_settings.py
 MYAPP1_STATUS_CHOICES = (
