@@ -10,7 +10,7 @@
 # Project files and directories
 /myproject/local_settings.py
 /myproject/static/
-/myproject/tmp/
+*/myproject/tmp/
 /myproject/media/
 
 # Byte-compiled / optimized / DLL files
