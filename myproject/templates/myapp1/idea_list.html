@@ -2,9 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>My Ideas...</title>
 </head>
 <body>
-$END$
+{% block content %}
+    <h1>Idea List</h1>
+    {% if idea_list %}
+        <ul>
+          {% for idea in idea_list %}
+          <li>
+            <a href="{% url 'myapp1:idea-detail' pk=idea.id %}">{{ idea.title }}</a>
+              (subtitle: {{idea.subtitle}})
+              (description: {{idea.description}})
+              (Is it original? {{idea.is_original}})
+          </li>
+          {% endfor %}
+        </ul>
+    {% else %}
+        <p>Oops!! You have no ideas yet.</p>
+    {% endif %}
+{% endblock content %}
 </body>
 </html>

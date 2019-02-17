@@ -57,7 +57,13 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "myproject", "templates")],
+        'DIRS': [   # We are telling...
+                    # django.template.loaders.filesystem.Loader: 
+                    # to look into this folder...
+                    # C:\virtualenvs\myproject_env\project\django-myproject\myproject\templates\ (myapp1\idea_list.html)
+	                # The last part in brackets is generated from myapp1/views.py - template_name
+                    os.path.join(BASE_DIR, "templates")
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

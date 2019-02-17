@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>{{ idea.title }}</title>
 </head>
 <body>
-$END$
+{% block content %}
+  <h1>Title: {{ idea.title }}</h1>
+
+  <p><strong>Subtitle:</strong> <a href="#">{{ idea.subtitle }}</a></p>
+  <p><strong>Description:</strong> {{ idea.description }}</p>
+  <p><strong>Is it original? </strong> {{ idea.is_original }}</p>
+  <p><strong>Categories:</strong>
+      {% for category in idea.categories.all %}
+        {{ category }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+
+{% endblock content %}
 </body>
 </html>
