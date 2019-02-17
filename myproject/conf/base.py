@@ -30,9 +30,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 'debug_toolbar.apps.DebugToolbarConfig',
     'crispy_forms',
+    'haystack',
     'magazine',
     'myapp1',
     'quotes',
+    'search',
+    'utils',
     # "bulletin_board",
     # "cv",
     # 'email_messages',
@@ -67,14 +70,14 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
             'debug': DEBUG,
         },
@@ -114,3 +117,35 @@ STATIC_URL = '/static/'
 
 # Crispy forms template 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# HayStack connections
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'search.multilingual_whoosh_backend.MultilingualWhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'myproject', 'tmp','whoosh_index_en'),
+    },
+    'default_en': {
+        'ENGINE': 'search.multilingual_whoosh_backend.MultilingualWhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'myproject', 'tmp', 'whoosh_index_en'),
+    },
+    'default_de': {
+        'ENGINE': 'search.multilingual_whoosh_backend.MultilingualWhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'myproject', 'tmp', 'whoosh_index_de'),
+    },
+    "default_fr": {
+        'ENGINE': 'search.multilingual_whoosh_backend.MultilingualWhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'myproject', 'tmp', 'whoosh_index_fr'),
+    },
+    'default_sw': {
+        'ENGINE': 'search.multilingual_whoosh_backend.MultilingualWhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'myproject', 'tmp', 'whoosh_index_sw'),
+    },
+}
+
+
+
+
+
+
+
+
