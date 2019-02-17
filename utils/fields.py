@@ -43,19 +43,24 @@ class MultilingualCharField(models.CharField):
                     choices=self.choices,
                     help_text=self.help_text,
                     db_column=None,
-                    db_tablespace=self.db_tablespace
+                    # db_tablespace=self.db_tablespace, supported for Oracle DB
                 )
 
                 localized_field.contribute_to_class(cls, "%s_%s" % (name, lang_code),)
 
-            def translated_value(self):
-                language = get_language()
-                val = self.__dict__["%s_%s" % (name, language)]
-                if not val:
-                    val = self.__dict__["%s_%s" % (name, settings.LANGUAGE_CODE)]
-                    return val
+        # self.set_attributes_from_name(name)
+        # self.model = cls
+        # cls._meta.add_field(self, virtual=True)
+        # super(MultilingualCharField, self).contribute_to_class(cls, name, virtual_only=True)
 
-            setattr(cls, name, property(translated_value))
+        def translated_value(self):
+            language = get_language()
+            val = self.__dict__.get("%s_%s" % (name, language))
+            if not val:
+                val = self.__dict__.get("%s_%s" % (name, settings.LANGUAGE_CODE))
+            return val
+
+        setattr(cls, name, property(translated_value))
 
 
 class MultilingualTextField(models.TextField):
@@ -81,8 +86,7 @@ class MultilingualTextField(models.TextField):
                     max_length=self.max_length,
                     unique=self.unique,
                     blank=_blank,
-                    null=False,
-                    # we ignore the null argument!
+                    null=False,  # we ignore the null argument!
                     db_index=self.db_index,
                     rel=self.rel,
                     default=self.default or "",
@@ -91,16 +95,21 @@ class MultilingualTextField(models.TextField):
                     choices=self.choices,
                     help_text=self.help_text,
                     db_column=None,
-                    db_tablespace=self.db_tablespace
+                    # db_tablespace=self.db_tablespace, supported for Oracle DB
                 )
 
                 localized_field.contribute_to_class(cls, "%s_%s" % (name, lang_code),)
 
-            def translated_value(self):
-                language = get_language()
-                val = self.__dict__["%s_%s" % (name, language)]
-                if not val:
-                    val = self.__dict__["%s_%s" % (name, settings.LANGUAGE_CODE)]
-                    return val
+        # self.set_attributes_from_name(name)
+        # self.model = cls
+        # cls._meta.add_field(self, virtual=True)
+        # super(MultilingualTextField, self).contribute_to_class(cls, name, virtual_only=True)
 
-            setattr(cls, name, property(translated_value))
+        def translated_value(self):
+            language = get_language()
+            val = self.__dict__.get("%s_%s" % (name, language))
+            if not val:
+                val = self.__dict__.get("%s_%s" % (name, settings.LANGUAGE_CODE))
+            return val
+
+        setattr(cls, name, property(translated_value))
