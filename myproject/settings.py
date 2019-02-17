@@ -11,7 +11,6 @@ from utils.misc import get_git_changeset
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-
 EXTERNAL_LIBS_PATH = os.path.join(BASE_DIR, "externals", "libs")
 
 EXTERNAL_APPS_PATH = os.path.join(BASE_DIR, "externals", "apps")
@@ -35,42 +34,42 @@ STATIC_ROOT = os.path.join(BASE_DIR, "myproject", "static")
 STATIC_URL = "/static/%s/" % get_git_changeset(BASE_DIR)
 
 STATICFILES_DIRS = (
-	os.path.join(BASE_DIR, "myproject", "site_static"),
+    os.path.join(BASE_DIR, "myproject", "site_static"),
 )
 
 LOCALE_PATHS = (
-	os.path.join(BASE_DIR, "locale"),
+    os.path.join(BASE_DIR, "locale"),
 )
 
 FILE_UPLOAD_TEMP_DIR = os.path.join(
-	BASE_DIR, "myproject", "tmp"
+    BASE_DIR, "myproject", "tmp"
 )
 
 LANGUAGES = (
-	("en", "English"),
-	("de", "Deutsch"),
-	("fr", "Français"),
-	("sw", "Swahili"),
+    ("en", "English"),
+    ("de", "Deutsch"),
+    ("fr", "Français"),
+    ("sw", "Swahili"),
 )
 
 LANGUAGE_CODE = "en"
 
 # overwrite the STATUS_CHOICE from magazine/app_settings.py
 MYAPP1_STATUS_CHOICES = (
-	("imported",   _("Imported")),
-	("draft",      _("Draft")),
-	("published",  _("Published")),
-	("not_listed", _("Not Listed")),
-	("expired",    _("Expired")),
+    ("imported",   _("Imported")),
+    ("draft",      _("Draft")),
+    ("published",  _("Published")),
+    ("not_listed", _("Not Listed")),
+    ("expired",    _("Expired")),
 )
 
 # local_settings.py
 try:
-	# execfile( os.path.join(os.path.dirname(__file__), "local_settings.py" ) )
-	# execfile was removed in python 3+, replaced with exec(open(fn).read())
-	exec( open(os.path.join(
-		os.path.dirname(__file__), "local_settings.py" )
-	).read() )
+    # execfile( os.path.join(os.path.dirname(__file__), "local_settings.py" ) )
+    # execfile was removed in python 3+, replaced with exec(open(fn).read())
+    exec( open(os.path.join(
+        os.path.dirname(__file__), "local_settings.py" )
+    ).read() )
 except IOError:
     pass
 
