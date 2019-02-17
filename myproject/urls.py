@@ -9,9 +9,15 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 from django.conf.urls.i18n import i18n_patterns
+
 from crispy_forms.helper import FormHelper
-from crispy_forms import layout
-# from crispy_forms import bootstrap
+from crispy_forms import layout, bootstrap
+from haystack.views import SearchView
+
+
+admin.site.site_header = "MyProject administration"
+admin.site.site_title = "MyAdmin Portal"
+admin.site.index_title = "Welcome to MyProject"
 
 
 login_helper = FormHelper()
@@ -27,9 +33,14 @@ login_helper.layout = layout.Layout(layout.HTML(
     layout.Submit("submit", _("Login"), css_class="btn-lg"),
 )
 
-admin.site.site_header = "MyProject administration"
-admin.site.site_title = "MyAdmin Portal"
-admin.site.index_title = "Welcome to MyProject"
+
+class CrispySearchView(SearchView):
+    def extra_context(self):
+        helper = FormHelper()
+        helper.form_tag = False
+        helper.disable_csrf = True
+        return {"search_helper": helper}
+
 
 urlpatterns = i18n_patterns(
     # Examples:
@@ -41,4 +52,5 @@ urlpatterns = i18n_patterns(
         {"extra_context": {"login_helper": login_helper}}, name="my_login_page"),
     url(r'^myapp1/', include('myapp1.urls', namespace='myapp1')),
     url(r'^quotes/', include('quotes.urls')),
+    url(r'^search/', CrispySearchView(), name='haystack_search'),
 )
