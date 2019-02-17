@@ -20,13 +20,14 @@ class Category(models.Model):
         verbose_name_plural = _("Idea Categories")
 
     def __str__(self):
-        return "{} - {} - {} - {}".format(self.title_en, self.title_de, self.title_fr, self.title_sw)
+        # return "{} - {} - {} - {}".format(self.title_en, self.title_de, self.title_fr, self.title_sw)
+        return self.title
 
 
 @python_2_unicode_compatible
-# class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin):
 class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin):
     # title = models.CharField(_("Title"), max_length=200)
+    id = models.IntegerField(primary_key=True,)
     title = MultilingualCharField(_("Title"), max_length=200,)
     subtitle = MultilingualCharField(_("Subtitle"), max_length=200, blank=True,)
     # content = models.TextField(_("Content"))
@@ -39,12 +40,13 @@ class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin):
         verbose_name_plural = _("Ideas")
 
     def __str__(self):
-        return "{} - {} - {} - {}".format(self.title_en, self.title_de, self.title_fr, self.title_sw)
+        # return "{} - {} - {} - {}".format(self.title_en, self.title_de, self.title_fr, self.title_sw)
+        return self.title
 
     def get_url_path(self):
         try:
             # return reverse("idea_details", kwargs={ "idea_id": str(self.pk),} )
-            return reverse("myproject:idea_detail", kwargs={"id": self.pk})
+            return reverse("myapp1:idea_detail", kwargs={"pk": self.pk})
         except NoReverseMatch:
             return ""
 
