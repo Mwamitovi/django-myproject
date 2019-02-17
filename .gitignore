@@ -4,6 +4,9 @@
 # Personal guideline
 .django-Learn.yaml
 
+# Code styles and Inspection profile (PyCharm)
+.idea
+
 # Project files and directories
 /myproject/local_settings.py
 /myproject/static/
