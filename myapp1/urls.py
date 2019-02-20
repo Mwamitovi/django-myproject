@@ -6,6 +6,6 @@ from myapp1 import views
 
 
 urlpatterns = [
-    url(r'ideas/', views.IdeaListView.as_view(), name='idea_list'),
+    url(r'ideas/', views.IdeaListView.as_view(), name='idea-list'),
     url(r'idea/(?P<pk>\d+)$', views.IdeaDetailView.as_view(), name='idea-detail'),
 ]
