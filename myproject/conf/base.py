@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'myapp1',
     'quotes',
     'search',
+    'locations',
     'utils',
     # "bulletin_board",
     # "cv",
@@ -64,7 +65,7 @@ TEMPLATES = [
                     # django.template.loaders.filesystem.Loader: 
                     # to look into this folder...
                     # C:\virtualenvs\myproject_env\project\django-myproject\myproject\templates\ (myapp1\idea_list.html)
-	                # The last part in brackets is generated from myapp1/views.py - template_name
+                    # The last part in brackets is generated from myapp1/views.py - template_name
                     os.path.join(BASE_DIR, "templates")
             ],
         'APP_DIRS': True,
