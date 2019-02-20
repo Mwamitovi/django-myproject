@@ -9,9 +9,9 @@ from locations.models import Location
 class LocationListView(ListView):
     model = Location
     context_object_name = 'location_list'
-    template_name = 'locations.html'
+    template_name = 'locations/location_list.html'
 
 
 class LocationDetailView(DetailView):
     model = Location
-    template_name = 'location/location_detail.html'
+    template_name = 'locations/location_detail.html'
