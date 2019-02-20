@@ -1,4 +1,4 @@
-# templates/settings.js
+// templates/settings.js
 
 window.settings = {
     MEDIA_URL: '{{ MEDIA_URL|escapejs }}',

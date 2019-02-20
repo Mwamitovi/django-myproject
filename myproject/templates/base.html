@@ -6,29 +6,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}{% endblock title %}{% trans "My Website" %}</title>
-    <link rel="icon" href="{{ STATIC_URL }}site/img/favicon.ico" type="image/png" />
+    <!--<link rel="icon" href="{{ STATIC_URL }}site/img/favicon.ico" type="image/png" />-->
     {% block meta_tags %}{% endblock meta_tags %}
     {% block base_stylesheet %}
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-        -->
-    <link href="{{ STATIC_ROOT }}site/css/bootstrap-material-design.css" rel="stylesheet" media="screen" type="text/css" />
-    <link href="{% static_root 'site/css/style.css' %}" rel="stylesheet" media="screen" type="text/css" />
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />-->
+    <link href="{{ STATIC_URL }}site/css/bootstrap-material-design.min.css" rel="stylesheet" media="screen" type="text/css" />
+    <link href="{{ STATIC_URL }}site/css/style.css" rel="stylesheet" media="screen" type="text/css" />
     {% endblock base_stylesheet %}
     {% block stylesheet %}{% endblock stylesheet %}
     {% block base_js %}
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+    <script src="{{ STATIC_URL }}site/js/jquery-3.3.1.min.js"></script>
+    <script src="{{ STATIC_URL }}site/js/popper.min.js"></script>
+    <script src="{{ STATIC_URL }}site/js/bootstrap-material-design.min.js"></script>
     <script src="{% url 'js_settings' %}"></script>
     {% endblock base_js %}
     {% block js %}{% endblock js %}
     {% block extrahead %}{% endblock extrahead %}
 </head>
-<body class="{% block bodyclass %}{% endblock bodyclass %}">
+<body class="{% block bodyclass %}container{% endblock bodyclass %}">
     {% block page %}
     <section class="wrapper">
         <header class="clearfix container">
-            <h1>{% trans "My Website" %}</h1>
+            <h1>{% block header %}
+                {% trans "My Locations" %}
+                {% endblock header %}</h1>
             <!--
             {% block header_navigation %}
                 {#% include "utils/header_navigation.html" %#}
