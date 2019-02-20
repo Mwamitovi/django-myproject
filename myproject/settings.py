@@ -41,8 +41,12 @@ MEDIA_URL = "/media/"
 
 
 # URL to use when referring to static files located in STATIC_ROOT.
+# Below, we had set the STATIC_URL dynamically with a varying path component - get_git_changeset
+# So whenever the code is updated, the visitor's browser will force loading of all-new uncached static files.
 
 # STATIC_URL = "/static/%s/" % get_git_changeset(BASE_DIR)
+# Changed to serve files from myproject/site_static
+STATIC_URL = "/site_static/"
 
 
 # This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled,
