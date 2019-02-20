@@ -1,0 +1,11 @@
+{# templates/base_simple.html #}
+{% extends "base.html" %}
+
+{% block page %}
+    <section class="wrapper">
+        <div id="content" class="clearfix">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </section>
+{% endblock page %}
