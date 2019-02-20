@@ -13,12 +13,12 @@ from django.conf.urls.i18n import i18n_patterns
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout, bootstrap
 from haystack.views import SearchView
+import utils.views
 
 
 admin.site.site_header = "MyProject administration"
 admin.site.site_title = "MyAdmin Portal"
 admin.site.index_title = "Welcome to MyProject"
-
 
 login_helper = FormHelper()
 login_helper.form_action = reverse_lazy("my_login_page")
@@ -51,6 +51,11 @@ urlpatterns = i18n_patterns(
     url(r'login/$', views.LoginView.as_view(),
         {"extra_context": {"login_helper": login_helper}}, name="my_login_page"),
     url(r'^myapp1/', include('myapp1.urls', namespace='myapp1')),
-    url(r'^quotes/', include('quotes.urls')),
+    url(r'^quotes/', include('quotes.urls', namespace='quotes')),
+    url(r'^locations/', include('locations.urls', namespace='locations')),
     url(r'^search/', CrispySearchView(), name='haystack_search'),
+    url(r'^js-settings/$', utils.views.render_js,
+        {"template_name": "settings.js"},
+        name='js_settings'
+        ),
 )
