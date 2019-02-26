@@ -83,7 +83,8 @@ MYAPP1_STATUS_CHOICES = (
     ("expired",    _("Expired")),
 )
 
-# local_settings.py
+# local_settings.py - which might not be added to version control
+# This entirely depends on how simple you keep things
 try:
     # execfile( os.path.join(os.path.dirname(__file__), "local_settings.py" ) )
     # execfile was removed in python 3+, replaced with exec(open(fn).read())
