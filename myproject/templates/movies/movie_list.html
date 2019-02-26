@@ -2,6 +2,7 @@
 {% extends "base_two_columns.html" %}
 {% load i18n utility_tags %}
 
+{% block header %} Movies & More {% endblock header %}
 {% block sidebar %}
 <div class="filters panel-group" id="accordion">
    <div class="panel panel-default">
@@ -107,7 +108,10 @@
 </div>
 {% endblock sidebar %}
 
-{% block content %}
+{% block page_content %}
+
+{% comment %}
+<!-- from filtering objects section
 <div class="movie_list">
    {% for movie in object_list %}
       <div class="movie alert alert-info">
@@ -115,28 +119,56 @@
       </div>
    {% endfor %}
 </div>
+
 {% if object_list.has_other_pages %}
    <ul class="pagination">
       {% if object_list.has_previous %}
-          <li><a href="{% modify_query page = object_list.previous_page_number %}">&laquo;</a></li>
+          <li><a href="{% modify_query page=object_list.previous_page_number %}">&laquo;</a></li>
       {% else %}
           <li class="disabled"><span>&laquo;</span></li>
       {% endif %}
       {% for page_number in object_list.paginator.page_range %}
          {% if page_number == object_list.number %}
             <li class="active">
-               <span>{{ page_number }} <span class="sronly">(current)</span>
+               <span>{{ page_number }} <span class="sr-only">(current)</span>
                 </span>
             </li>
          {% else %}
-            <li><a href="{% modify_query page = page_number %}">{{ page_number }}</a></li>
+            <li><a href="{% modify_query page=page_number %}">{{ page_number }}</a></li>
          {% endif %}
       {% endfor %}
       {% if object_list.has_next %}
-          <li><a href="{% modify_query page = object_list.next_page_number %}">&raquo;</a></li>
+          <li><a href="{% modify_query page=object_list.next_page_number %}">&raquo;</a></li>
       {% else %}
           <li class="disabled"><span>&raquo;</span></li>
       {% endif %}
    </ul>
-{% endif %}
-{% endblock content %}
+{% endif %} -->
+{% endcomment %}
+
+<!-- from continuous scroll section -->
+<h2>{% trans "Top Movies" %}</h2>
+<div class="object_list">
+   {% for movie in object_list %}
+      <div class="item">
+         <p style="padding: 25px 0;">{{ movie.rank }}
+            <strong>{{ movie.title }}</strong> ({{ movie.year }})
+            <span class="badge">{% trans "IMDB rating" %}: {{ movie.rating }}</span>
+         </p>
+      </div>
+   {% endfor %}
+   {% if object_list.has_next %}
+      <p class="pagination">
+         <a class="next_page" href="{% modify_query page=object_list.next_page_number %}">
+            {% trans "More…" %}
+         </a>
+      </p>
+   {% endif %}
+</div>
+
+{% endblock page_content %}
+
+{% block extrabody %}
+<script src="{{ STATIC_URL }}site/js/jquery.jscroll.js"></script>
+<script src="{{ STATIC_URL }}site/js/list.js"></script>
+{% endblock extrabody %}
