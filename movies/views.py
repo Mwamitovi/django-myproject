@@ -3,9 +3,11 @@
 from __future__ import unicode_literals
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import view
+from django.views.generic import View
 from .models import Genre, Director, Actor, Movie, RATING_CHOICES
 from .forms import MovieFilterForm
+from django.utils.encoding import python_2_unicode_compatible
+
 
 """
 # function-based view
@@ -72,6 +74,7 @@ def movie_list(request):
 """
 
 
+@python_2_unicode_compatible
 class MovieListView(View):
 	form_class = MovieFilterForm
 	template_name = "movies/movie_list.html"
@@ -91,7 +94,8 @@ class MovieListView(View):
 	def post(self, request, *args, **kwargs):
 		return self.get(request, *args, **kwargs)
 
-	def get_queryset_and_facets(self, form):
+	@staticmethod
+	def get_queryset_and_facets(form):
 		qs = Movie.objects.order_by("title")
 		facets = {
 			"selected": {},
@@ -140,4 +144,3 @@ class MovieListView(View):
 			page = paginator.page(paginator.num_pages)
 		
 		return page
-
