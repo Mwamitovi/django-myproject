@@ -17,6 +17,11 @@ def upload_to(instance, filename):
     - Instance is a positional argument to help load more than one image
     """
     now = timezone_now()
+    """
+    os.path.splitext(path) - splits the pathname path into a pair (root, ext) such that 
+    root + ext == path, (ext is empty or begins with a period and contains at most one period).
+    Leading periods on the basename are ignored; splitext('.js') returns ('.js', '').
+    """
     filename_base, filename_ext = os.path.splitext(filename)
     return "location/%s%s" % (now.strftime("%Y%m/%Y%m%d%H%M%S"), filename_ext.lower(), )
 
