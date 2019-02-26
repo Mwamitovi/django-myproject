@@ -1,7 +1,7 @@
 {# base_two_columns.html #}
 {% extends "base.html" %}
 
-{% block container %}
+{% block content %}
 <div class="container">
    <div class="row">
       <div id="sidebar" class="col-md-4">
@@ -9,9 +9,9 @@
          {% endblock sidebar %}
       </div>
       <div id="content" class="col-md-8">
-         {% block content %}
-         {% endblock content %}
+         {% block page_content %}
+         {% endblock page_content %}
       </div>
    </div>
 </div>
-{% endblock container %}
+{% endblock content %}
