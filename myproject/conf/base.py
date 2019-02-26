@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'debug_toolbar.apps.DebugToolbarConfig',
+    'ajaxuploader',
     'crispy_forms',
     'haystack',
     'magazine',
@@ -36,11 +37,11 @@ INSTALLED_APPS = (
     'quotes',
     'search',
     'locations',
+    "movies",
     'utils',
     # "bulletin_board",
     # "cv",
     # 'email_messages',
-    # "movies",
 )
 
 MIDDLEWARE_CLASSES = (
