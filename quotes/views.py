@@ -8,6 +8,8 @@ from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from .models import InspirationalQuote
 from .forms import InspirationalQuoteForm
+from ajaxuploader.views import AjaxFileUploader
+ajax_uploader = AjaxFileUploader()
 
 
 def add_quote(request):
@@ -22,7 +24,7 @@ def add_quote(request):
 	return render(request, "quotes/change_quote.html", {"form": form} )
 
 
-@login_required( login_url="my_login_page" )
+@login_required(login_url="my_login_page")
 def download_quote_picture(request, quote_id):
 	quote = get_object_or_404( InspirationalQuote, pk=quote_id )
 	file_name, file_extension = os.path.splitext( quote.picture.file.name )
