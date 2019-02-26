@@ -1,0 +1,12 @@
+{# templates/locations/location_detail_popup.html #}
+{% load i18n %}
+
+<p><img src="{{ location.small_image.url }}" alt="{{ location.title|escape }}" />
+    </p>
+<p class="clearfix">
+    <a href="{% url 'locations:location-detail' slug=location.slug %}"
+        class="btn btn-default pull-right">
+        {% trans "More" %}
+        <i class="material-icons">&#x5cc;</i>
+    </a>
+    </p>
