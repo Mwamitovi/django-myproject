@@ -11,15 +11,13 @@ register = template.Library()
 
 
 if sys.version_info.major == 3:
-    """In python 3, unicode was replaced strings because of it's abundance
+    """In python 3, unicode was replaced by strings because of it's abundance
     Therefore if using python 2 & 3, we need to define unicode
     """
     unicode = str
 
 
-"""TAGS"""
-
-
+# TAGS #
 @python_2_unicode_compatible
 @register.tag
 def get_objects(parser, token):
