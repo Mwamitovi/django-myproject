@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'likes',
     'locations',
     "movies",
+    "products",
     'utils',
     # "bulletin_board",
     # "cv",
