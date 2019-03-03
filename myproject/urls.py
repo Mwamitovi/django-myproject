@@ -54,6 +54,7 @@ urlpatterns = i18n_patterns(
         {"extra_context": {"login_helper": login_helper}}, name="my_login_page"),
     url(r'^myapp1/', include('myapp1.urls', namespace='myapp1')),
     url(r'^quotes/', include('quotes.urls', namespace='quotes')),
+    url(r'^likes/', include('likes.urls')),
     url(r'^locations/', include('locations.urls', namespace='locations')),
     url(r'^movies/', include('movies.urls', namespace='movies')),
     url(r'^search/', CrispySearchView(), name='haystack_search'),
