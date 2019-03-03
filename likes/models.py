@@ -16,8 +16,8 @@ class LikeThis(CreationModificationDateMixin,
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     class Meta:
-        verbose_name = _("like")
-        verbose_name_plural = _("likes")
+        verbose_name = _("like this")
+        verbose_name_plural = _("likes this")
         ordering = ("-created",)
 
     def __str__(self):
