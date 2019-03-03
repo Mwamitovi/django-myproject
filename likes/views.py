@@ -26,7 +26,7 @@ def json_set_like(request, content_type_id, object_id):
     """
     Sets the object as a favorite for the current user
     """
-    result = {"success": False,}
+    result = {"success": False, }
 
     if request.user.is_authenticated() and request.method == "POST":
         content_type = ContentType.objects.get(id=content_type_id)
@@ -47,5 +47,7 @@ def json_set_like(request, content_type_id, object_id):
             "count": get_likes_count(obj),
         }
 
-    json_str = json.dumps(result, ensure_ascii=False, encoding="utf8")
-    return HttpResponse(json_str, mimetype="application/json; charset=utf-8")
+    # json_str = json.dumps(result, ensure_ascii=False, encoding="utf8")
+    json_str = json.dumps(result, ensure_ascii=False)
+    # return HttpResponse(json_str, mimetype="application/json; charset=utf-8")
+    return HttpResponse(json_str, content_type="application/json; charset=utf-8")
