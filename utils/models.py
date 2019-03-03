@@ -136,8 +136,8 @@ def object_relation_mixin_factory(
         prefix=None,
         prefix_verbose=None,
         add_related_name=False,
-        limit_content_type_choices_to={},
-        limit_object_choices_to={},
+        limit_content_type_choices_to=None,
+        limit_object_choices_to=None,
         is_required=False,
 ):
     """
@@ -157,6 +157,11 @@ def object_relation_mixin_factory(
         <<prefix>>_object_id : Field name for the "object Id"
         <<prefix>>_content_object : Field name for the "content	object"
     """
+    if limit_content_type_choices_to is None:
+        limit_content_type_choices_to = {}
+    if limit_object_choices_to is None:
+        limit_object_choices_to = {}
+
     p = ""
     if prefix:
         p = "%s_" % prefix
@@ -166,39 +171,56 @@ def object_relation_mixin_factory(
     content_object_field = "%scontent_object" % p
 
     class TheClass(models.Model):
+
         class Meta:
             abstract = True
 
     if add_related_name:
         if not prefix:
-            raise FieldError("if add_related_name is set to True, prefix must be given")
+            raise FieldError(
+                "if add_related_name is set to True, prefix must be given"
+            )
         related_name = prefix
     else:
         related_name = None
 
     optional = not is_required
 
-    ct_verbose_name = (_("%s's type (model)") % prefix_verbose
-                       if prefix_verbose else _("Related object's type (model)")
-                       )
+    ct_verbose_name = (
+        _("%s's type (model)") % prefix_verbose
+        if prefix_verbose
+        else _("Related object's type (model)")
+    )
 
-    content_type = models.ForeignKey(ContentType, verbose_name=ct_verbose_name, related_name=prefix,
-                                     blank=optional, null=optional,
-                                     help_text=_("Please select the type (model) for the relation, you want to build."),
-                                     limit_choices_to=limit_content_type_choices_to,
-                                     )
+    content_type = models.ForeignKey(
+        ContentType,
+        verbose_name=ct_verbose_name,
+        related_name=related_name,
+        blank=optional,
+        null=optional,
+        help_text=_("Please select the type (model) for the relation, you want to build."),
+        limit_choices_to=limit_content_type_choices_to,
+    )
 
     fk_verbose_name = (prefix_verbose or _("Related	object"))
 
-    object_id = models.CharField(fk_verbose_name, blank=optional, null=False, max_length=255,
-                                 default="",  # for south migrations
-                                 help_text=_("Please enter the ID of the related object."),
-                                 )
+    object_id = models.CharField(
+        fk_verbose_name,
+        blank=optional,
+        null=False,
+        max_length=255,
+        default="",  # for south migrations
+        help_text=_("Please enter the ID of the related object."),
+    )
 
     object_id.limit_choices_to = limit_object_choices_to
-    # can be retrieved by - MyModel._meta.get_field("object_id").limit_choices_to
+    # can be retrieved by,
+    # MyModel._meta.get_field("object_id").limit_choices_to
 
-    content_object = fields.GenericForeignKey(ct_field=content_type_field, fk_field=object_id_field, )
+    content_object = fields.GenericForeignKey(
+        ct_field=content_type_field,
+        fk_field=object_id_field,
+    )
 
     TheClass.add_to_class(content_type_field, content_type)
     TheClass.add_to_class(object_id_field, object_id)
