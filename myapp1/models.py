@@ -51,7 +51,9 @@ class Idea(UrlMixin, CreationModificationDateMixin, MetaTagsMixin):
             return ""
 
 
-FavoriteObjectMixin = object_relation_mixin_factory(is_required=True,)
+FavoriteObjectMixin = object_relation_mixin_factory(
+    is_required=True,
+)
 
 
 OwnerMixin = object_relation_mixin_factory(
