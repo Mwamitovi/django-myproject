@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.template import loader
 from likes.models import LikeThis
 from django.utils.encoding import python_2_unicode_compatible
+
 register = template.Library()
 
 
@@ -31,23 +32,30 @@ class ObjectLikeWidget(template.Node):
         # obj = template.resolve_variable(self.obj, context)
         obj = template.Variable(self.obj).resolve(context)
         ct = ContentType.objects.get_for_model(obj)
-        is_liked_by_user = bool(LikeThis.objects.filter(
-            user=context["request"].user,
-            content_type=ct,
-            object_id=obj.pk,
-        ))
+        is_liked_by_user = bool(
+            LikeThis.objects.filter(
+                user=context["request"].user,
+                content_type=ct,
+                object_id=obj.pk,
+            )
+        )
 
-        context.push()
-        context["object"] = obj
-        context["content_type_id"] = ct.pk
-        context["is_liked_by_user"] = is_liked_by_user
-        context["count"] = get_likes_count(obj)
+        # context.push()
+        # context["object"] = obj
+        # context["content_type_id"] = ct.pk
+        # context["is_liked_by_user"] = is_liked_by_user
+        # context["count"] = get_likes_count(obj)
         # output = loader.render_to_string("likes/includes/like.html", context)
         output = loader.render_to_string(
             "likes/includes/like.html",
-            context={}
+            {
+                "object": obj,
+                "content_type_id": ct.pk,
+                "is_liked_by_user": is_liked_by_user,
+                "count": get_likes_count(obj)
+            }
         )
-        context.pop()
+        # context.pop()
         return output
 
 
