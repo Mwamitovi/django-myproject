@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'myapp1',
     'quotes',
     'search',
+    'likes',
     'locations',
     "movies",
     'utils',
@@ -63,7 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [   # We are telling...
-                    # django.template.loaders.filesystem.Loader: 
+                    # django.template.loaders.filesystem.Loader:
                     # to look into this folder...
                     # C:\virtualenvs\myproject_env\project\django-myproject\myproject\templates\ (myapp1\idea_list.html)
                     # The last part in brackets is generated from myapp1/views.py - template_name
@@ -117,7 +118,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# Crispy forms template 
+# Crispy forms template
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # HayStack connections
