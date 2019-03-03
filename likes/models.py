@@ -10,7 +10,9 @@ from utils.models import object_relation_mixin_factory
 
 
 @python_2_unicode_compatible
-class Like(CreationModificationDateMixin, object_relation_mixin_factory(is_required=True)):
+class LikeThis(CreationModificationDateMixin,
+               object_relation_mixin_factory(is_required=True)
+               ):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     class Meta:
