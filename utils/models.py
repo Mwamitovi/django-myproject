@@ -142,9 +142,10 @@ def object_relation_mixin_factory(
 ):
     """
     returns a mixin class for generic foreign keys using
-    "Content type - object Id" with dynamic field names.
-    This function is just a class generator Parameters:
-    prefix : a prefix, which is added in front of the fields
+    "Content type" and "object Id" with dynamic field names.
+    This function is just a class generator with Parameters:
+    prefix:
+        a prefix, which is added in front of the fields
     prefix_verbose :
         a verbose name of the prefix, used	to generate a title for the field
         column of the content object in the Admin.
@@ -153,9 +154,9 @@ def object_relation_mixin_factory(
         content type foreign key should be added. This value should be true,
         if you use more than one ObjectRelationMixin in your model.
     The model fields are created like this:
-        <<prefix>>_content_type : Field name for the "content type"
-        <<prefix>>_object_id : Field name for the "object Id"
-        <<prefix>>_content_object : Field name for the "content	object"
+        <prefix>_content_type : Field name for the "content type"
+        <prefix>_object_id : Field name for the "object Id"
+        <prefix>_content_object : Field name for the "content object"
     """
     if limit_content_type_choices_to is None:
         limit_content_type_choices_to = {}
