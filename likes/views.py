@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.encoding import python_2_unicode_compatible
-from likes.models import Like
+from likes.models import LikeThis
 from likes.templatetags.likes_tags import get_likes_count
 
 
@@ -26,12 +26,12 @@ def json_set_like(request, content_type_id, object_id):
     """
     Sets the object as a favorite for the current user
     """
-    result = {"success": False, }
+    result = {"success": False,}
 
     if request.user.is_authenticated() and request.method == "POST":
         content_type = ContentType.objects.get(id=content_type_id)
         obj = content_type.get_object_for_this_type(pk=object_id)
-        like, is_created = Like.objects.get_or_create(
+        like, is_created = LikeThis.objects.get_or_create(
             content_type=ContentType.objects.get_for_model(obj),
             object_id=obj.pk,
             user=request.user,
