@@ -5,7 +5,13 @@ import sys
 # import urllib - replaced with import below...
 from django.utils.http import urlencode
 from django.utils.encoding import force_str
+import datetime
 from django import template
+from django.template.loader import get_template
+from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import now as tz_now
+import re
+from django.utils.safestring import mark_safe
 from django.utils.encoding import python_2_unicode_compatible
 register = template.Library()
 
@@ -18,6 +24,39 @@ if sys.version_info.major == 3:
 
 
 # TAGS #
+@python_2_unicode_compatible
+@register.tag
+def try_to_include(parser, token):
+    """Usage: {% try_to_include "sometemplate.html" %}
+    This will fail silently if the template doesn't exist.
+    If it does exist, it will be rendered with the current
+    context."""
+    try:
+        tag_name, template_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            "%r tag requires a single argument" % token.contents.split()[0]
+        )
+    return IncludeNode(template_name)
+
+
+@python_2_unicode_compatible
+class IncludeNode(template.Node):
+    def __init__(self, template_name):
+        self.template_name = template_name
+
+    def render(self, context):
+        try:
+            # Loading the template and rendering it
+            # django.template.resolve_variable is "Deprecated" for sometime
+            # template_name = template.resolve_variable(self.template_name, context)
+            template_name = template.Variable(self.template_name).resolve(context)
+            included_template = get_template(template_name).render(context)
+        except template.TemplateDoesNotExist:
+            included_template = ""
+        return included_template
+
+
 @python_2_unicode_compatible
 @register.tag
 def get_objects(parser, token):
@@ -178,3 +217,60 @@ def remove_from_query(context, *args, **kwargs):
             for (key, value) in query_params if value
         ]).replace("&", "&amp;")
     return query_string
+
+
+# FILTERS #
+@register.filter
+def days_since(value):
+    """ Returns number of days between today and value."""
+
+    today = tz_now().date()
+    if isinstance(value, datetime.datetime):
+        value = value.date()
+    diff = today - value
+
+    if diff.days > 1:
+        return _("%s days ago") % diff.days
+    elif diff.days == 1:
+        return _("yesterday")
+    elif diff.days == 0:
+        return _("today")
+    else:
+        # Date is in the future; return formatted date.
+        return value.strftime("%B %d, %Y")
+
+
+media_tags_regex = re.compile(
+    r"<figure[\S\s]+?</figure>|"
+    r"<object[\S\s]+?</object>|"
+    r"<video[\S\s]+?</video>|"
+    r"<audio[\S\s]+?</audio>|"
+    r"<iframe[\S\s]+?</iframe>|"
+    r"<(img|embed)[^>]+>",
+    re.MULTILINE
+)
+
+
+@register.filter
+def first_media(content):
+    """ Returns the first image or flash file from the html
+    content """
+    m = media_tags_regex.search(content)
+    media_tag = ""
+
+    if m:
+        media_tag = m.group()
+    return mark_safe(media_tag)
+
+
+@register.filter
+def humanize_url(url, letter_count):
+    """ Returns a shortened human-readable URL """
+    letter_count = int(letter_count)
+    re_start = re.compile(r"^https?://")
+    re_end = re.compile(r"/$")
+    url = re_end.sub("", re_start.sub("", url))
+
+    if len(url) > letter_count:
+        url = "%s…" % url[:letter_count - 1]
+    return url
