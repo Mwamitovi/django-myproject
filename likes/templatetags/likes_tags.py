@@ -3,7 +3,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.template import loader
-from likes.models import Like
+from likes.models import LikeThis
 from django.utils.encoding import python_2_unicode_compatible
 register = template.Library()
 
@@ -15,9 +15,10 @@ def like_widget(parser, token):
     try:
         tag_name, for_str, obj = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError("%r tag requires a following syntax: {%% %r for <object> %%}" % (
-            token.contents[0], token.contents[0]
-        ))
+        raise template.TemplateSyntaxError(
+            "%r tag requires a following syntax: {%% %r for <object> %%}" %
+            (token.contents[0], token.contents[0])
+        )
     return ObjectLikeWidget(obj)
 
 
@@ -28,10 +29,9 @@ class ObjectLikeWidget(template.Node):
 
     def render(self, context):
         # obj = template.resolve_variable(self.obj, context)
-        obj = template.Variable.resolve(self.obj, context)
-
+        obj = template.Variable(self.obj).resolve(context)
         ct = ContentType.objects.get_for_model(obj)
-        is_liked_by_user = bool(Like.objects.filter(
+        is_liked_by_user = bool(LikeThis.objects.filter(
             user=context["request"].user,
             content_type=ct,
             object_id=obj.pk,
@@ -42,7 +42,11 @@ class ObjectLikeWidget(template.Node):
         context["content_type_id"] = ct.pk
         context["is_liked_by_user"] = is_liked_by_user
         context["count"] = get_likes_count(obj)
-        output = loader.render_to_string("likes/includes/like.html", context)
+        # output = loader.render_to_string("likes/includes/like.html", context)
+        output = loader.render_to_string(
+            "likes/includes/like.html",
+            context={}
+        )
         context.pop()
         return output
 
@@ -52,7 +56,7 @@ class ObjectLikeWidget(template.Node):
 @register.filter
 def get_likes_count(obj):
     ct = ContentType.objects.get_for_model(obj)
-    return Like.objects.filter(
+    return LikeThis.objects.filter(
         content_type=ct,
         object_id=obj.pk,
     ).count()
