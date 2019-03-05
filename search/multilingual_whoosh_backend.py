@@ -7,11 +7,9 @@ from haystack.backends.whoosh_backend import \
     WhooshSearchBackend, WhooshSearchQuery, WhooshEngine
 from haystack import connections
 from haystack.constants import DEFAULT_ALIAS
-from django.utils.encoding import python_2_unicode_compatible
 
 
 # noinspection PyAbstractClass
-@python_2_unicode_compatible
 class MultilingualWhooshSearchBackend(WhooshSearchBackend):
     def update(self, index, iterable, commit=True, language_specific=False):
         if not language_specific and self.connection_alias == "default":
@@ -26,15 +24,13 @@ class MultilingualWhooshSearchBackend(WhooshSearchBackend):
             super(MultilingualWhooshSearchBackend, self).update(index, iterable, commit)
 
 
-@python_2_unicode_compatible
 class MultilingualWhooshSearchQuery(WhooshSearchQuery):
     def __init__(self, using=DEFAULT_ALIAS):
-        self.lang_code = translation.get_language()# [:2]
+        self.lang_code = translation.get_language() # [:2]
         self._using = "default_%s" % self.lang_code
         super(MultilingualWhooshSearchQuery, self).__init__(using)
 
 
-@python_2_unicode_compatible
 class MultilingualWhooshEngine(WhooshEngine):
     backend = MultilingualWhooshSearchBackend
     query = MultilingualWhooshSearchQuery

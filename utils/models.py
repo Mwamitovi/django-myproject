@@ -13,10 +13,8 @@ from django.contrib.contenttypes import fields
 from django.conf import settings
 from django.core.exceptions import FieldError
 from django.template.defaultfilters import escape
-from django.utils.encoding import python_2_unicode_compatible
 
 
-@python_2_unicode_compatible
 class UrlMixin(models.Model):
     """
     A replacement for get_absolute_url()
@@ -59,7 +57,6 @@ class UrlMixin(models.Model):
         return self.get_url_path()
 
 
-@python_2_unicode_compatible
 class CreationModificationDateMixin(models.Model):
     """
     Abstract base class with a creation and modification date and time
@@ -83,7 +80,6 @@ class CreationModificationDateMixin(models.Model):
         abstract = True
 
 
-@python_2_unicode_compatible
 class MetaTagsMixin(models.Model):
     """
     Abstract base class for meta tags in the <head> section
@@ -131,7 +127,6 @@ class MetaTagsMixin(models.Model):
         )
 
 
-@python_2_unicode_compatible
 def object_relation_mixin_factory(
         prefix=None,
         prefix_verbose=None,

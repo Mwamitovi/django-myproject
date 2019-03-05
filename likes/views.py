@@ -7,7 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.encoding import python_2_unicode_compatible
 from likes.models import LikeThis
 from likes.templatetags.likes_tags import get_likes_count
 
@@ -19,7 +18,6 @@ if sys.version_info.major == 3:
     unicode = str
 
 
-@python_2_unicode_compatible
 @never_cache
 @csrf_exempt
 def json_set_like(request, content_type_id, object_id):

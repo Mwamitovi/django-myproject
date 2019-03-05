@@ -6,7 +6,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View
 from .models import Genre, Director, Actor, Movie, RATING_CHOICES
 from .forms import MovieFilterForm
-from django.utils.encoding import python_2_unicode_compatible
 
 
 """
@@ -74,7 +73,6 @@ def movie_list(request):
 """
 
 
-@python_2_unicode_compatible
 class MovieListView(View):
 	form_class = MovieFilterForm
 	template_name = "movies/movie_list.html"

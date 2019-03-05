@@ -9,11 +9,9 @@ from django.contrib.auth.decorators import login_required
 from .models import InspirationalQuote
 from .forms import InspirationalQuoteForm
 from ajaxuploader.views import AjaxFileUploader
-from django.utils.encoding import python_2_unicode_compatible
 ajax_uploader = AjaxFileUploader()
 
 
-@python_2_unicode_compatible
 def add_quote(request):
 	if request.method == "POST":
 		form = InspirationalQuoteForm(data=request.POST, files=request.FILES,)
@@ -26,7 +24,6 @@ def add_quote(request):
 	return render(request, "quotes/change_quote.html", {"form": form})
 
 
-@python_2_unicode_compatible
 @login_required(login_url="my_login_page")
 def download_quote_picture(request, quote_id):
 	quote = get_object_or_404(InspirationalQuote, pk=quote_id)

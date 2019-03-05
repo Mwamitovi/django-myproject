@@ -3,10 +3,8 @@
 from __future__ import unicode_literals
 import subprocess
 from datetime import datetime
-from django.utils.encoding import python_2_unicode_compatible
 
 
-@python_2_unicode_compatible
 def get_git_changeset(absolute_path):
     repo_dir = absolute_path
     git_show = subprocess.Popen(

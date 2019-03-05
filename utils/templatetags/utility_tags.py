@@ -12,7 +12,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now as tz_now
 import re
 from django.utils.safestring import mark_safe
-from django.utils.encoding import python_2_unicode_compatible
 register = template.Library()
 
 
@@ -24,7 +23,6 @@ if sys.version_info.major == 3:
 
 
 # TAGS #
-@python_2_unicode_compatible
 @register.tag
 def try_to_include(parser, token):
     """Usage: {% try_to_include "sometemplate.html" %}
@@ -40,7 +38,6 @@ def try_to_include(parser, token):
     return IncludeNode(template_name)
 
 
-@python_2_unicode_compatible
 class IncludeNode(template.Node):
     def __init__(self, template_name):
         self.template_name = template_name
@@ -57,7 +54,6 @@ class IncludeNode(template.Node):
         return included_template
 
 
-@python_2_unicode_compatible
 @register.tag
 def get_objects(parser, token):
     """
@@ -97,7 +93,6 @@ def get_objects(parser, token):
     )
 
 
-@python_2_unicode_compatible
 class ObjectsNode(template.Node):
     def __init__(self, model, manager_method, amount, var_name):
         self.model = model
@@ -130,7 +125,6 @@ class ObjectsNode(template.Node):
 
 
 # noinspection PyProtectedMember
-@python_2_unicode_compatible
 @register.simple_tag(takes_context=True)
 def modify_query(context, *params_to_remove, **params_to_change):
     """ Renders a link with modified current query parameters """
@@ -164,7 +158,6 @@ def modify_query(context, *params_to_remove, **params_to_change):
 
 
 # noinspection PyProtectedMember
-@python_2_unicode_compatible
 @register.simple_tag(takes_context=True)
 def add_to_query(context, *params_to_remove, **params_to_add):
     """ Renders a link with modified current query parameters """
@@ -195,7 +188,6 @@ def add_to_query(context, *params_to_remove, **params_to_add):
 
 
 # noinspection PyProtectedMember
-@python_2_unicode_compatible
 @register.simple_tag(takes_context=True)
 def remove_from_query(context, *args, **kwargs):
     """ Renders a link with modified current query parameters """

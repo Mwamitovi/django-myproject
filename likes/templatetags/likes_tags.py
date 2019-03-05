@@ -4,13 +4,10 @@ from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.template import loader
 from likes.models import LikeThis
-from django.utils.encoding import python_2_unicode_compatible
-
 register = template.Library()
 
 
 # TAGS #
-@python_2_unicode_compatible
 @register.tag
 def like_widget(parser, token):
     try:
@@ -23,7 +20,6 @@ def like_widget(parser, token):
     return ObjectLikeWidget(obj)
 
 
-@python_2_unicode_compatible
 class ObjectLikeWidget(template.Node):
     def __init__(self, obj):
         self.obj = obj
@@ -60,7 +56,6 @@ class ObjectLikeWidget(template.Node):
 
 
 # FILTERS #
-@python_2_unicode_compatible
 @register.filter
 def get_likes_count(obj):
     ct = ContentType.objects.get_for_model(obj)
