@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     # 'debug_toolbar.apps.DebugToolbarConfig',
     'ajaxuploader',
     'crispy_forms',
+    'custom_admin',
     'haystack',
     'magazine',
     'myapp1',
