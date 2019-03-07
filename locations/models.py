@@ -39,7 +39,7 @@ class Location(models.Model):
     title = models.CharField(_("Title"), max_length=200)
     slug = models.SlugField(help_text="A short label, generally used in URLs.")
     description = models.TextField(_("description"), blank=True)
-    street_address = models.CharField(_("street_address"), max_length=255, blank=True)
+    street_address = models.CharField(_("street address"), max_length=255, blank=True)
     village = models.CharField(_("village"), max_length=255, blank=True)
     postal_code = models.CharField(_("postal code"), max_length=10, blank=True)
     city = models.CharField(_("city"), max_length=255, blank=True)
@@ -78,7 +78,6 @@ class Location(models.Model):
                     "The anti-meridian of Greenwich is both 180 "
                     "(direction to east) and -180 (direction to west)."),
         blank=True, null=True
-
     )
 
     class Meta:
