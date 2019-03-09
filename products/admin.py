@@ -1,7 +1,7 @@
 # products/admin.py
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
-# import xlwt
+import xlwt
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
@@ -9,47 +9,6 @@ from django.http import HttpResponse
 from .models import Product, ProductPhoto
 
 
-class ProductPhotoInline(admin.StackedInline):
-    model = ProductPhoto
-    extra = 0
-
-
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ["title", "get_photo", "price"]
-    list_editable = ["price"]
-    # list_filter = [PhotoFilter]
-
-    fieldsets = (
-        (_("Product"), {
-            "fields": ("title", "slug", "description", "price"),
-        }),
-    )
-
-    prepopulated_fields = {"slug": ("title",)}
-    inlines = [ProductPhotoInline]
-
-    def get_photo(self, obj):
-        project_photos = obj.productphoto_set.all()[:1]
-
-        if project_photos.count() > 0:
-            return \
-                """<a href="%(product_url)s" target="_blank">
-                <img src="%(photo_url)s" alt="" width="100" /></a>""" % \
-                {
-                    "product_url": obj.get_url_path(),
-                    "photo_url": project_photos[0].photo.url,
-                }
-
-        return ""
-
-    get_photo.short_description = _("Preview")
-    get_photo.allow_tags = True
-    # actions = [export_xls]
-
-
-admin.site.register(Product, ProductAdmin)
-
-"""
 def export_xls(modeladmin, request, queryset):
     response = HttpResponse(
         content_type="application/ms-excel"
@@ -114,7 +73,6 @@ def export_xls(modeladmin, request, queryset):
 
 
 export_xls.short_description = _("Export XLS")
-"""
 
 
 class PhotoFilter(admin.SimpleListFilter):
@@ -155,3 +113,44 @@ class PhotoFilter(admin.SimpleListFilter):
         elif self.value() == "many":
             qs = qs.filter(num_photos__gte=2)
         return qs
+
+
+class ProductPhotoInline(admin.StackedInline):
+    model = ProductPhoto
+    extra = 0
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ["title", "get_photo", "price"]
+    list_editable = ["price"]
+    list_filter = [PhotoFilter]
+
+    fieldsets = (
+        (_("Product"), {
+            "fields": ("title", "slug", "description", "price"),
+        }),
+    )
+
+    prepopulated_fields = {"slug": ("title",)}
+    inlines = [ProductPhotoInline]
+
+    def get_photo(self, obj):
+        project_photos = obj.productphoto_set.all()[:1]
+
+        if project_photos.count() > 0:
+            return \
+                """<a href="%(product_url)s" target="_blank">
+                <img src="%(photo_url)s" alt="" width="100" /></a>""" % \
+                {
+                    "product_url": obj.get_url_path(),
+                    "photo_url": project_photos[0].photo.url,
+                }
+
+        return ""
+
+    get_photo.short_description = _("Preview")
+    get_photo.allow_tags = True
+    actions = [export_xls]
+
+
+admin.site.register(Product, ProductAdmin)
