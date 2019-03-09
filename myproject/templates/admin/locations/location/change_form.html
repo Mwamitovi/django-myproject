@@ -1,10 +1,11 @@
 {# myproject/templates/admin/locations/location/change_form.html #}
 {% extends "admin/change_form.html" %}
-{% load i18n admin_static admin_modify %}
-{% load url from future %}
-{% load admin_urls %}
+{% load i18n admin_static admin_urls admin_modify %}
 
 {% block extrastyle %}
+<!-- Django’s admin_change_form_document_ready block contains
+     JavaScript code to handle various operations in the change
+     form and we need that to be rendered, add "block super". -->
     {{ block.super }}
     <link rel="stylesheet" type="text/css"
           href="{{ STATIC_URL }}site/css/locating.css" />
