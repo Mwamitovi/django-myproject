@@ -10,6 +10,7 @@ from django.utils.translation import string_concat
 from django.utils.translation import ugettext_lazy as _
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 
 from crispy_forms.helper import FormHelper
@@ -48,18 +49,24 @@ urlpatterns = i18n_patterns(
     # Examples:
     # url(r'^$', myproject.views.home, name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    # Comment out movies, to be included in djangoCMS
+    # url(r'^movies/', include('movies.urls', namespace='movies')),
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('cms.urls')),
     url(r'login/$', views.LoginView.as_view(),
-        {"extra_context": {"login_helper": login_helper}}, name="my_login_page"),
+        {"extra_context": {"login_helper": login_helper}},
+        name='my_login_page'
+        ),
     url(r'^myapp1/', include('myapp1.urls', namespace='myapp1')),
     url(r'^quotes/', include('quotes.urls', namespace='quotes')),
     url(r'^likes/', include('likes.urls')),
     url(r'^locations/', include('locations.urls', namespace='locations')),
-    url(r'^movies/', include('movies.urls', namespace='movies')),
     url(r'^search/', CrispySearchView(), name='haystack_search'),
     url(r'^js-settings/$', utils.views.render_js,
         {"template_name": "settings.js"},
         name='js_settings'
         ),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
