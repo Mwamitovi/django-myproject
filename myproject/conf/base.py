@@ -1,10 +1,8 @@
-
 # myproject/conf/base.py - shared settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
-from myproject.conf.dev import *
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,7 +43,28 @@ INSTALLED_APPS = (
     # "bulletin_board",
     # "cv",
     # 'email_messages',
+    # added from cmstart/settings.py
+    'djangocms_admin_style',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    'cms',
+    'menus',
+    'sekizai',
+    'treebeard',
+    'djangocms_text_ckeditor',
+    'filer',
+    'easy_thumbnails',
+    'djangocms_column',
+    'djangocms_file',
+    'djangocms_link',
+    'djangocms_picture',
+    'djangocms_style',
+    'djangocms_snippet',
+    'djangocms_googlemap',
+    'djangocms_video',
 )
+
+SITE_ID = 1
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
