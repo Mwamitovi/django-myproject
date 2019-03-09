@@ -17,6 +17,11 @@ EXTERNAL_APPS_PATH = os.path.join(BASE_DIR, "externals", "apps")
 sys.path = ["", EXTERNAL_LIBS_PATH, EXTERNAL_APPS_PATH] + sys.path
 
 
+CMS_APPHOOKS = (
+    "movies.cms_app.MoviesApphook",
+)
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -49,8 +54,9 @@ MEDIA_URL = "/media/"
 STATIC_URL = "/site_static/"
 
 
-# This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled,
-# e.g. if you use the collectstatic or findstatic management command or use the static file serving view.
+# This setting defines the additional locations the staticfiles app will traverse
+# if the FileSystemFinder finder is enabled, e.g. if you use the collectstatic
+# or findstatic management command or use the static file serving view.
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "myproject", "site_static"),
@@ -89,8 +95,7 @@ try:
     # execfile( os.path.join(os.path.dirname(__file__), "local_settings.py" ) )
     # execfile was removed in python 3+, replaced with exec(open(fn).read())
     exec( open(os.path.join(
-        os.path.dirname(__file__), "local_settings.py" )
+        os.path.dirname(__file__), "local_settings.py")
     ).read() )
 except IOError:
     pass
-
