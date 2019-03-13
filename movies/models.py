@@ -65,13 +65,16 @@ class Movie(CreationModificationDateMixin):
 
 @python_2_unicode_compatible
 class Category(MPTTModel, CreationModificationDateMixin):
-    parent = TreeForeignKey("self", blank=True, null=True)
+    parent = TreeForeignKey("self", blank=True, null=True, related_name='children', db_index=True)
     title = models.CharField(_("Title"), max_length=200)
-
-    def __str__(self):
-        return self.title
 
     class Meta:
         ordering = ["tree_id", "lft"]
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
+
+    class MPTTMeta:
+        order_insertion_by = ['title']
+
+    def __str__(self):
+        return self.title
