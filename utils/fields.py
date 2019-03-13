@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
+from django import forms
 from django.utils.translation import get_language
 from django.utils.translation import string_concat
 
@@ -112,3 +113,10 @@ class MultilingualTextField(models.TextField):
             return val
 
         setattr(cls, name, property(translated_value))
+
+
+class MultipleChoiceTreeField(forms.ModelMultipleChoiceField):
+    widget = forms.CheckboxSelectMultiple
+
+    def label_from_instance(self, obj):
+        return obj
