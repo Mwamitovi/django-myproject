@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View
-from .models import Genre, Director, Actor, Movie, RATING_CHOICES
+from .models import Genre, Director, Category, Actor, Movie, RATING_CHOICES
 from .forms import MovieFilterForm
 
 
@@ -142,3 +142,13 @@ class MovieListView(View):
 			page = paginator.page(paginator.num_pages)
 		
 		return page
+
+
+def movie_category_list(request):
+	context = {"categories": Category.objects.all(),}
+
+	return render(
+		request,
+		"movies/movie_category_list.html",
+		context
+	)
