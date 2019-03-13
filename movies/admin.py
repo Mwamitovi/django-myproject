@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
 from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
 from django_mptt_admin.admin import DjangoMpttAdmin
 from mptt_tree_editor.admin import TreeEditor
 from .models import Actor, Director, Genre, Movie, Category
@@ -11,6 +12,9 @@ admin.site.register(Actor)
 admin.site.register(Director)
 admin.site.register(Genre)
 admin.site.register(Movie)
+
+
+# admin.site.register(Category, MPTTModelAdmin)
 
 
 # Extending django-mptt-admin
