@@ -49,7 +49,7 @@ class Command(BaseCommand):
                         title=title,
                         genre=genre,
                         release_year=release_year,
-                )
+                    )
                 if verbosity >= NORMAL:
                     self.stdout.write("{}. {}".format(
                         rownum, movie.title
