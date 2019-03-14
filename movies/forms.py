@@ -12,45 +12,46 @@ from .models import Movie, Genre, Director, Category, Actor, RATING_CHOICES
 
 
 class MovieFilterForm(forms.Form):
-	genre = forms.ModelChoiceField(
-		label=_("Genre"), required=False, queryset=Genre.objects.all(),
-	)
-	director = forms.ModelChoiceField(
-		label=_("Director"), required=False, queryset=Director.objects.all(),
-	)
-	actor = forms.ModelChoiceField(
-		label=_("Actor"), required=False, queryset=Actor.objects.all(),
-	)
-	rating = forms.ChoiceField(
-		label=_("Rating"), required=False, choices=RATING_CHOICES,
-	)
-	category = TreeNodeChoiceField(
-		label=_("Category"), required=False, queryset=Category.objects.all(),
-		level_indicator=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;"),
-	)
+    genre = forms.ModelChoiceField(
+        label=_("Genre"), required=False, queryset=Genre.objects.all(),
+    )
+    director = forms.ModelChoiceField(
+        label=_("Director"), required=False, queryset=Director.objects.all(),
+    )
+    actor = forms.ModelChoiceField(
+        label=_("Actor"), required=False, queryset=Actor.objects.all(),
+    )
+    rating = forms.ChoiceField(
+        label=_("Rating"), required=False, choices=RATING_CHOICES,
+    )
+    category = TreeNodeChoiceField(
+        label=_("Category"), required=False, queryset=Category.objects.all(),
+        level_indicator=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;"),
+    )
 
 
 class MovieForm(forms.ModelForm):
-	categories = MultipleChoiceTreeField(
-		label=_("Categories"), required=False, queryset=Category.objects.all(),
-	)
+    categories = MultipleChoiceTreeField(
+        label=_("Categories"), required=False, queryset=Category.objects.all(),
+    )
 
-	class Meta:
-		model = Movie
+    class Meta:
+        model = Movie
+        fields = ['title', 'categories', 'genres', 'year']
 
-	def __init__(self, *args, **kwargs):
-		super(MovieForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(MovieForm, self).__init__(*args, **kwargs)
 
-		self.helper = FormHelper()
-		self.helper.form_action = ""
-		self.helper.form_method = "POST"
-		self.helper.layout = layout.Layout(
-			layout.Field("title"),
-			layout.Field(
-				"categories",
-				template="utils/checkbox_select_multiple_tree.html"
-			),
-			bootstrap.FormActions(
-				layout.Submit("submit", _("Save")),
-			)
-		)
+        self.helper = FormHelper()
+        self.helper.form_action = ""
+        self.helper.form_method = "POST"
+        self.helper.layout = layout.Layout(
+            layout.Field("title"),
+            layout.Field(
+                "categories",
+                template="utils/checkbox_select_multiple_tree.html"
+            ),
+            bootstrap.FormActions(
+                layout.Submit("submit", _("Save")),
+            )
+        )
