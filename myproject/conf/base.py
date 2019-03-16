@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'haystack',
     'magazine',
     'myapp1',
+    'music',
     'quotes',
     'search',
     'likes',
