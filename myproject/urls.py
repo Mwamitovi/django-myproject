@@ -66,6 +66,7 @@ urlpatterns = i18n_patterns(
         {"template_name": "settings.js"},
         name='js_settings'
         ),
+    url(r'^bulletin', include('bulletin_board.urls', namespace='bulletin')),
 )
 
 urlpatterns += staticfiles_urlpatterns()
