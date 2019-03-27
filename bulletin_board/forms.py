@@ -4,7 +4,20 @@ from django import forms
 from django.utils.translation import ugettext, ugettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout, bootstrap
-from .models import Bulletin
+from .models import TYPE_CHOICES, Category, Bulletin
+
+
+class BulletinFilterForm(forms.Form):
+    bulletin_type = forms.ChoiceField(
+        label=_("Bulletin Type"),
+        required=False,
+        choices=(("", "---------"),) + TYPE_CHOICES,
+    )
+    category = forms.ModelChoiceField(
+        label=_("Category"),
+        required=False,
+        queryset=Category.objects.all(),
+    )
 
 
 class BulletinForm(forms.ModelForm):
