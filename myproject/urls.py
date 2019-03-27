@@ -21,7 +21,7 @@ import utils.views
 # commented out bulletin_board and tastypie
 # from tastypie.api import Api
 # from bulletin_board.api import CategoryResource, BulletinResource
-from bulletin_board.views import RESTBulletinList, RESTBulletinDetail
+# from bulletin_board.views import RESTBulletinList, RESTBulletinDetail
 
 admin.autodiscover()
 admin.site.site_header = "MyProject administration"
@@ -61,7 +61,8 @@ urlpatterns = i18n_patterns(
     # Comment out movies, to be included in djangoCMS
     # url(r'^movies/', include('movies.urls', namespace='movies')),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('cms.urls')),
+    # Commented out, was blocking proper url-config
+    # url(r'^', include('cms.urls')),
     url(r'login/$', views.LoginView.as_view(),
         {"extra_context": {"login_helper": login_helper}},
         name='my_login_page'
@@ -83,14 +84,15 @@ urlpatterns = i18n_patterns(
         include("rest_framework.urls",
                 namespace="rest_framework")
         ),
-    url(r"^rest-api/bulletin-board/$",
-        RESTBulletinList.as_view(),
-        name="rest_bulletin_list"
-        ),
-    url(r"^rest-api/bulletin-board/(?P<pk>[0-9]+)/$",
-        RESTBulletinDetail.as_view(),
-        name="rest_bulletin_detail"
-        ),
+    # Affected by commenting out bulletin_board
+    # url(r"^rest-api/bulletin-board/$",
+    #     RESTBulletinList.as_view(),
+    #     name="rest_bulletin_list"
+    #     ),
+    # url(r"^rest-api/bulletin-board/(?P<pk>[0-9]+)/$",
+    #     RESTBulletinDetail.as_view(),
+    #     name="rest_bulletin_detail"
+    #     ),
 )
 
 urlpatterns += staticfiles_urlpatterns()

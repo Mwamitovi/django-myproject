@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     "movies",
     "products",
     'utils',
-    "bulletin_board",
+    # "bulletin_board",
     # "cv",
     # 'email_messages',
     # added from cmstart/settings.py
