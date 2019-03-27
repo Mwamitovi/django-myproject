@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'mptt',
     'django_mptt_admin',
+    'rest_framework',
     'Tastypie',
     'mptt_tree_editor',
     'custom_admin',
@@ -171,7 +172,15 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-
+# django-restframework config
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions."
+        "DjangoModelPermissionsOrAnonReadOnly"
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
+}
 
 
 
