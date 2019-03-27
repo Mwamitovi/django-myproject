@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'mptt',
     'django_mptt_admin',
+    'Tastypie',
     'mptt_tree_editor',
     'custom_admin',
     'haystack',
