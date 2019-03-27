@@ -32,7 +32,7 @@ INSTALLED_APPS = (
     'mptt',
     'django_mptt_admin',
     'rest_framework',
-    'Tastypie',
+    # 'tastypie',
     'mptt_tree_editor',
     'custom_admin',
     'haystack',
@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     "movies",
     "products",
     'utils',
-    # "bulletin_board",
+    "bulletin_board",
     # "cv",
     # 'email_messages',
     # added from cmstart/settings.py

@@ -18,19 +18,19 @@ from crispy_forms import layout, bootstrap
 from haystack.views import SearchView
 import utils.views
 
-from tastypie.api import Api
-from bulletin_board.api import CategoryResource
-from bulletin_board.api import BulletinResource
-
+# commented out bulletin_board and tastypie
+# from tastypie.api import Api
+# from bulletin_board.api import CategoryResource, BulletinResource
+from bulletin_board.views import RESTBulletinList, RESTBulletinDetail
 
 admin.autodiscover()
 admin.site.site_header = "MyProject administration"
 admin.site.site_title = "MyAdmin Portal"
 admin.site.index_title = "Welcome to MyProject"
 
-v1_api = Api(api_name="v1")
-v1_api.register(CategoryResource())
-v1_api.register(BulletinResource())
+# v1_api = Api(api_name="v1")
+# v1_api.register(CategoryResource())
+# v1_api.register(BulletinResource())
 
 login_helper = FormHelper()
 login_helper.form_action = reverse_lazy("my_login_page")
@@ -75,8 +75,22 @@ urlpatterns = i18n_patterns(
         {"template_name": "settings.js"},
         name='js_settings'
         ),
-    url(r'^bulletin/', include('bulletin_board.urls', namespace='bulletin')),
-    url(r'^api/', include('v1_api.urls'))
+    # Have to solve some tastypie errors
+    # url(r'^bulletin/', include('bulletin_board.urls', namespace='bulletin')),
+    # url(r'^api/', include('v1_api.urls')),
+
+    url(r"^api-auth/",
+        include("rest_framework.urls",
+                namespace="rest_framework")
+        ),
+    url(r"^rest-api/bulletin-board/$",
+        RESTBulletinList.as_view(),
+        name="rest_bulletin_list"
+        ),
+    url(r"^rest-api/bulletin-board/(?P<pk>[0-9]+)/$",
+        RESTBulletinDetail.as_view(),
+        name="rest_bulletin_detail"
+        ),
 )
 
 urlpatterns += staticfiles_urlpatterns()

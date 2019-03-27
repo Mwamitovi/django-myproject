@@ -6,8 +6,8 @@ from .feeds import BulletinFeed
 # from bulletin_board import views
 
 
-urlpatterns = [
-    url(r"^$", "bulletin_list", name="bulletin_list"),
-    url(r"^(?P<bulletin_id>[0-9]+)/$", "bulletin_detail", name="bulletin_detail"),
-    url(r"^rss/$", BulletinFeed(), name="bulletin_rss"),
-]
+# urlpatterns = [
+#     url(r"^$", "bulletin_list", name="bulletin_list"),
+#     url(r"^(?P<bulletin_id>[0-9]+)/$", "bulletin_detail", name="bulletin_detail"),
+#     url(r"^rss/$", BulletinFeed(), name="bulletin_rss"),
+# ]
