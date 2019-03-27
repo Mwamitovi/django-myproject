@@ -1,6 +1,7 @@
 # locations/tests.py
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
+import os
 from time import sleep
 from django.test import LiveServerTestCase
 from django.contrib.contenttypes.models import ContentType
@@ -11,6 +12,9 @@ from likes.models import LikeThis
 from .models import Location
 
 
+BASE_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+
 class LiveLocationTest(LiveServerTestCase):
     browser = None
     location = None
@@ -19,7 +23,7 @@ class LiveLocationTest(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super(LiveLocationTest, cls).setUpClass()
-        cls.browser = webdriver.Chrome()
+        cls.browser = webdriver.Chrome(os.path.join(BASE_DIRECTORY, 'chromedriver'))
         cls.browser.delete_all_cookies()
         cls.location = Location.objects.create(
             title="Lubya Hill",
@@ -45,7 +49,13 @@ class LiveLocationTest(LiveServerTestCase):
 
     def test_login_and_like(self):
         # login
-        self.browser.get("%(website)s/admin/login"
+        # self.browser.get("%(website)s/admin/login"
+        #                  "?next=/locations/%(slug)s/" %
+        #                  {"website": self.live_server_url,
+        #                   "slug": self.location.slug,
+        #                   }
+        #                  )
+        self.browser.get("%(website)s/en/admin/login"
                          "?next=/locations/%(slug)s/" %
                          {"website": self.live_server_url,
                           "slug": self.location.slug,
