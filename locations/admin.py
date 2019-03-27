@@ -27,8 +27,14 @@ class LocationAdmin(admin.ModelAdmin):
         fieldsets = [
             (_("Main Data"), {"fields":
                                   ("title",
+                                   "slug",
                                    "description")}
              ),
+            (_("Images"), {"fields":
+                               ("small_image",
+                                "medium_image",
+                                "large_image")}
+            ),
             (_("Address"), {"fields":
                                 ("street_address",
                                  "village",
