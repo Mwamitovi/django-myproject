@@ -4,3 +4,17 @@ img.img-full-width {
 
 #map {
     height: 300px; }
+
+.modal-dialog {
+    max-width: 750px;
+    margin: .25rem 2rem .25rem 25rem; }
+
+.modal-body {
+    padding-bottom: 0; }
+
+.modal-body img {
+    width: auto;
+    height: 525px; }
+
+.modal-body p {
+    margin-bottom: 0; }
