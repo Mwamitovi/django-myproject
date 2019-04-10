@@ -14,7 +14,7 @@ SECRET_KEY = 'mfa!g+0p!9*asdei+9%l!*$bif+%wlt+lsbolgpr4-9ft00-i6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 
 
 # Application definition
