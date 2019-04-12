@@ -1,8 +1,8 @@
 
 # .gitignore
 
-# Personal guideline
-.django-Learn.yaml
+# standalone app/project
+ecomstore/
 
 # Code styles and Inspection profile (PyCharm)
 .idea
