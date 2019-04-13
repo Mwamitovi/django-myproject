@@ -8,6 +8,8 @@ from .conf.dev import *
 from utils.misc import get_git_changeset
 
 
+# Adding ".." tells django to look even two-levels deep from within
+# it shall look into myproject, as well as myproject/(folder) 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 EXTERNAL_LIBS_PATH = os.path.join(BASE_DIR, "externals", "libs")
